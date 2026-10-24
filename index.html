@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Speaking: chạy chữ</title>
+<meta name="description" content="Luyện đọc to tiếng Anh theo kiểu chạy chữ: chữ hiện đến đâu đọc đến đó.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%A4%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap">
+<style>
+:root{--bg:#eef3fb;--card:#fff;--fg:#14203a;--muted:#5f6c86;--line:#d9e1f0;--accent:#2f6bff;--accent-fg:#fff;--st:#0f1b3d;--st2:#1b2f6b;--hi:#ffd23f;--hi-fg:#0f1b3d;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0f1d;--card:#131b30;--fg:#e8edf8;--muted:#98a5c0;--line:#26314d;--accent:#6a95ff;--accent-fg:#071126;--st:#0b1430;--st2:#16275a;--hi:#ffd23f;--hi-fg:#0f1b3d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0f1d;--card:#131b30;--fg:#e8edf8;--muted:#98a5c0;--line:#26314d;--accent:#6a95ff;--accent-fg:#071126;--st:#0b1430;--st2:#16275a;--hi:#ffd23f;--hi-fg:#0f1b3d;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:500 16px/1.5 "Nunito",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:880px;margin:0 auto;padding:22px 16px 48px}
+h1{font-size:2rem;font-weight:800;margin:0;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:2px 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{font:inherit;font-weight:700;padding:8px 14px;min-height:40px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.tabs .chip{border-radius:12px}
+button:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.paste textarea{width:100%;margin-top:12px;padding:12px;font:inherit;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--fg)}
+.paste .chip{margin-top:8px;background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.stage{position:relative;overflow:hidden;margin-top:16px;border-radius:26px;background:linear-gradient(165deg,var(--st2),var(--st));color:#fff;padding:clamp(24px,5vw,48px) clamp(18px,5vw,48px) clamp(30px,5vw,48px);min-height:320px;display:flex;flex-direction:column;justify-content:center}
+.tag{position:absolute;top:16px;left:18px;font-size:.85rem;font-weight:700;color:#c9d4f5;background:rgba(255,255,255,.12);padding:4px 12px;border-radius:999px}
+#text{text-align:center;font-size:clamp(1.7rem,5.4vw,2.8rem);line-height:1.7;font-weight:800;margin:30px 0 8px}
+.w{display:inline-block;border-radius:12px;padding:0 8px;transition:opacity .2s,background-color .2s,transform .2s}
+.stage[data-mode="reveal"] .future{opacity:0}
+.stage[data-mode="glow"] .future{opacity:.3}
+.cur{background:var(--hi);color:var(--hi-fg);transform:scale(1.06)}
+.pb{position:absolute;left:0;right:0;bottom:0;height:7px;background:rgba(255,255,255,.14)}
+.pb i{display:block;height:100%;width:0;background:var(--hi);transition:width .2s}
+#cd{position:absolute;inset:0;display:grid;place-items:center;font-size:6.5rem;font-weight:800;color:var(--hi);background:linear-gradient(165deg,var(--st2),var(--st))}
+#cd[hidden]{display:none}
+.cnt{text-align:center;color:var(--muted);margin:12px 0 16px;font-weight:700}
+.dock{display:flex;justify-content:center;align-items:flex-start;gap:28px}
+.dock div{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted);font-size:.85rem;font-weight:700}
+.rb{width:56px;height:56px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--fg);display:grid;place-items:center;cursor:pointer;margin-top:10px}
+.rb.big{width:76px;height:76px;margin-top:0;background:var(--accent);color:var(--accent-fg);border-color:transparent;box-shadow:0 8px 22px rgba(47,107,255,.35)}
+.opt{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:20px}
+.opt>span{min-width:74px;color:var(--muted);font-weight:700}
+.opt .chips{margin:0}
+@media (prefers-reduced-motion:reduce){.w,.pb i,#text{transition:none}.cur{transform:none}}
+main{max-width:1180px}
+.app{display:grid;gap:18px}
+.chips.tabs{margin-top:0}
+.list{max-height:168px;overflow:auto;position:relative;padding:2px}
+.list .chip{padding:6px 12px;min-height:36px;font-size:.92rem}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 0 16px}
+.nav .cnt{margin:0;flex:1}
+.nav .chip{white-space:nowrap}
+@media (min-width:960px){
+ .app{grid-template-columns:340px 1fr;align-items:start;gap:28px}
+ .side{position:sticky;top:16px}
+ .list{max-height:calc(100vh - 230px)}
+ .work .stage{margin-top:0;min-height:420px}
+ #text{font-size:clamp(2rem,3.2vw,3.1rem)}
+}
+html,body{height:100%}
+main{height:100dvh;display:flex;flex-direction:column;padding:12px 14px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+h1{font-size:1.35rem}
+.sub{display:none;margin:0 0 10px}
+.app{flex:1;min-height:0;display:flex;flex-direction:column;gap:0}
+.work{flex:1;min-height:0;min-width:0;display:flex;flex-direction:column}
+.work .stage{flex:1;min-height:0;margin-top:0;padding:50px 14px 18px}
+#text{margin:auto 0;position:relative;transition:transform .35s}
+.work .stage{justify-content:flex-start}
+.tv{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.topbar h1{font-size:1.2rem;white-space:nowrap}
+#open{white-space:nowrap}
+.w{padding:0 .28em}
+.stage[data-mode="glow"] .future{opacity:.4}
+.nav{margin:8px 0 6px}
+.dock{gap:22px}
+.rb{margin-top:6px}.rb.big{margin-top:0}
+.opt{margin-top:10px}.opt>span{min-width:64px}
+button:disabled{opacity:.4;cursor:not-allowed}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.side{display:none}
+body.sheet .side{display:block;position:fixed;left:0;right:0;bottom:0;z-index:6;max-height:58dvh;overflow:auto;background:var(--card);border-radius:22px 22px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.3);padding:16px 14px calc(14px + env(safe-area-inset-bottom,0px))}
+#bd{display:none}
+body.sheet #bd{display:block;position:fixed;inset:0;z-index:5;background:rgba(8,14,30,.5)}
+.list{max-height:none}
+@media (min-width:960px){
+ main{padding:18px 24px}
+ .sub{display:block}
+ .app{flex-direction:row;align-items:stretch;gap:28px}
+ .side{display:flex;flex-direction:column;position:static;width:340px;flex:none;min-height:0;padding:0}
+ .list{flex:1;min-height:0;max-height:none}
+ .work .stage{padding:56px 40px 28px}
+ #open,.sheet-head{display:none}
+ .dock{gap:34px}
+}
+.topbar{display:block;margin-bottom:6px}
+.side{display:block;margin-bottom:8px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0}
+.tabs .chip{padding:8px 4px;font-size:.88rem;min-height:44px;border-radius:12px}
+.list{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;max-height:none;margin-top:8px;padding:2px 2px 6px}
+.list .chip{flex:none;min-height:42px;padding:8px 14px}
+.paste textarea{margin-top:8px}
+.nav,.opt,.sheet-head{display:none}
+.stage{cursor:pointer}
+.work .stage{padding:54px 34px 20px}
+.tag{max-width:calc(100% - 110px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cnt{position:absolute;top:16px;right:18px;margin:0;flex:none;font-size:.85rem;font-weight:700;color:#c9d4f5;background:rgba(255,255,255,.12);padding:4px 12px;border-radius:999px}
+.arr{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:30px;height:72px;border:0;border-radius:12px;background:rgba(255,255,255,.14);color:#fff;font-size:2rem;line-height:1;cursor:pointer;padding:0}
+.arr:hover{background:rgba(255,255,255,.28)}
+.arr.l{left:4px}.arr.r{right:4px}
+.arr:disabled{display:none}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.wide{font:inherit;font-weight:700;min-height:52px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+.wide:hover{border-color:var(--accent)}
+.wide:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media (min-width:960px){
+ .app{flex-direction:row;align-items:stretch;gap:28px}
+ .side{display:flex;flex-direction:column;width:340px;flex:none;min-height:0;margin:0}
+ .tabs{grid-template-columns:1fr 1fr}
+ .list{flex-direction:row;flex-wrap:wrap;flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;align-content:flex-start}
+ .work .stage{padding:60px 64px 28px}
+ .arr{width:40px}
+ .two{max-width:520px;margin-left:auto;margin-right:auto;width:100%}
+}
+</style>
+</head>
+<body>
+<main>
+<div class="topbar">
+ <h1>Speaking: chạy chữ</h1>
+ <p class="sub">Bấm vào khung chữ hoặc nút tròn để chạy. Mũi tên trái và phải để đổi đoạn.</p>
+</div>
+<div class="app">
+ <aside class="side">
+  <div class="chips tabs" id="tabs"></div>
+  <div class="chips list" id="chips"></div>
+  <div class="paste" id="paste" hidden>
+   <textarea id="ta" rows="3" placeholder="Dán một đoạn tiếng Anh vào đây"></textarea>
+   <button class="chip" id="use">Dùng đoạn này</button>
+  </div>
+ </aside>
+ <div class="work">
+  <section class="stage" id="stage" data-mode="reveal">
+   <span class="tag" id="tag"></span><span class="cnt" id="cnt"></span>
+   <button class="arr l" id="prev" aria-label="Đoạn trước">‹</button>
+   <button class="arr r" id="next" aria-label="Đoạn sau">›</button>
+   <div class="tv"><p id="text"></p></div>
+   <div class="pb"><i id="bar"></i></div>
+   <div id="cd" hidden></div>
+  </section>
+  <div class="dock">
+   <div><button class="rb" id="reset" aria-label="Đọc lại từ đầu"></button>Từ đầu</div>
+   <div><button class="rb big" id="play" aria-label="Bắt đầu"></button><span id="cap">Bắt đầu</span></div>
+   <div><button class="rb" id="listen" aria-label="Nghe mẫu"></button><span id="lcap">Nghe mẫu</span></div>
+  </div>
+  <div class="two"><button class="wide" id="spd"></button><button class="wide" id="md"></button></div>
+ </div>
+</div>
+</main>
+
+<script>
+const SHORT=[["/ɪ/","Jim sits in the kitchen with his sister Kim. They drink milk and finish a big fish dinner."],["/ɪ/","Is it a big city? Yes, it is. Many visitors swim, sing and sit near the river in the village."],["/ɪ/","Bill is in the middle of a long ticket line. He is willing to wait a little bit."],["/e/","Ben left his red pen on the desk. ‘Send me a message when you get to the hotel,’ says his friend."],["/e/","Ten men spend the best weekend at the seaside. They rest, eat eggs and bread, and never forget breakfast."],["/e/","Jenny is ready for the test next Wednesday. She says, ‘Let me check every sentence again.’"],["/æ/","A fat black cat sat on Dad’s bag. ‘Get that cat!’ shouts Sam, and Dad claps his hands."],["/æ/","Anna has a happy family and a fantastic flat. Her handsome husband plays badminton at the gym."],["/æ/","On Saturday, Jack and Janet had a chat in a café. They talked about maths and their travel plans."],["/ɒ/","Tom got a job in a shop. He often stops for a hot cup of coffee and a chocolate."],["/ɒ/","Rob wants a long holiday. ‘It’s not a problem,’ says his boss, ‘but stop watching the clock.’"],["/ɒ/","Bob forgot his wallet in the shop. ‘Oh, what a lot of problems,’ he says."],["/ʌ/","My mother loves sunny Sundays. She comes to lunch with my brother and gives us some honey buns."],["/ʌ/","What a lovely country! The sun is up, a bus is coming, and some young students are having fun."],["/ʌ/","Don’t worry, Mum! The money’s under the cup, and the others are in the cupboard."],["/ʊ/","Look at this good book! A woman is cooking pudding and putting sugar in the bowl."],["/ʊ/","Could you push the wooden step, please? I should stand on it to reach the books."],["/ʊ/","The footballer took a good look at the full cookbook. He couldn’t put it down."],["/ə/","A teacher is talking about a banana, a sofa and a computer. ‘Again, please,’ says a student, ‘a little slower.’"],["/ə/","Today I’m going to the market with a friend of my father’s. We’ll buy some butter, a lemon and an apple."],["/ə/","The doctor asked the actor about an important picture of an animal. ‘Another moment,’ said the author."],["/iː/","We need three green beans, a piece of cheese and some tea. Please keep the receipt."],["/iː/","Pete is reading an easy ebook on the beach. He eats peaches and sees the sea."],["/iː/","Believe me, the team meets every week. Sheila speaks three languages, and she teaches people to speak easily."],["/ɑː/","It’s a calm, dark afternoon at the farm. Mark can’t start the car, so he asks his aunt for a lift to the park."],["/ɑː/","Art class is at the large market. ‘Pass the plants, Barbara, and don’t be so hard on yourself,’ says Charles."],["/ɑː/","Can you pass the vase and the glass, Father? I can’t reach the bath towels in the garden."],["/ɔː/","Paul’s daughter always walks to the shore in the morning. They talk, and they watch the small boats."],["/ɔː/","Of course, I’d like more sports news. Four of us are at the door, and the ball is on the floor."],["/ɔː/","“Bought and caught are short words,” says Laura. “In August, I thought a storm was coming.”"],["/uː/","Choose a blue shoe or a new suit? Ruth, it’s up to you! The school group goes to the zoo at noon."],["/uː/","June eats fruit soup and moves the food into the room. ‘Too cool,’ she says. ‘It’s true!’"],["/uː/","In the afternoon, we use two spoons to eat a cool, smooth fruit salad. What do you think, Lou?"],["/ɜː/","‘Turn to the third word,’ says the nurse. ‘I’m learning a lot at work, and it’s already my first Thursday.’"],["/ɜː/","Her thirtieth birthday is on Thursday, the third of June. We’ll search for a perfect present: a purple skirt or a pearl necklace."],["/ɜː/","The nurse has earned her certificate. ‘Excuse me,’ she says to the person in the shirt, ‘I prefer to work early.’"],["/eɪ/","On Saturday, Kate takes a train to the lake. They stay all day and play a game on the bay."],["/eɪ/","Wait, Amy! Eight cakes are on the plate, and the waiter says they are great."],["/aɪ/","Mike likes to ride his bike at night. ‘My life is nice,’ he smiles, ‘and the sky is bright.’"],["/aɪ/","Hi! I’d like to buy five ice creams, Ivy. Is that a nice price? Right now, I’m fine with the size."],["/ɔɪ/","Roy enjoys his toy boat. ‘Oil and water don’t mix,’ says the boy. ‘It makes a noise!’"],["/ɔɪ/","Joyce has a choice: join the coin club or avoid the noisy point of the voice contest."],["/əʊ/","Hello, Joe! Where did you go? I know it’s cold, so don’t go alone on the road. Phone me, OK?"],["/əʊ/","Oh no! I only broke the window of the old boat. Show Joe the hole, and tell him I’m sorry."],["/aʊ/","How about now? Wow! A brown cow is in the town, and a loud sound comes from the house."],["/aʊ/","How about going out now? There’s a crowd downtown, and it’s loud, but the mouse in the house is quiet."],["/ɪə/","Dear Pete, I’m here, near the pier. I hear cheers, and it’s clear this year will be a great one."],["/ɪə/","I have no idea why Mr Beard is so serious. He appears weird, and his career is nearly over."],["/eə/","Excuse me, where is the nearest chair? It’s over there, near the stairs, and you can share it with the parents."],["/eə/","Mary is aware of the airport rules. She is careful with her bear, her hair, and the square bag she’s wearing."],["/ʊə/","The tourist is curious about Europe. During the tour, she’s sure it’s a pure and secure place."],["/ʊə/","My cousin is a tour guide in Europe. He gets insurance during the tour, just to be secure."],["/θ/","Thank you for the thirty books! On Thursday, I think we’ll have three thick ones."],["/θ/","Beth brushes her teeth after every meal. Both her mouth and her thumb feel healthy after a month."],["/θ/","Is anything wrong? ‘Nothing,’ he said, ‘but I’m thirsty. I need something thick and healthy, with a thin straw.’"],["/ð/","This is my mother and that’s my father. These are my brothers, and those are their friends."],["/ð/","Do they like the weather there? ‘Rather,’ says the other father, ‘but together we’d rather go further south.’"],["/ð/","Those clothes are for them, and these are for the others. Neither of them wants to bother with the weather."],["/ʃ/","Shall we wash the shirts and shoes in the shower? ‘Sure,’ Sharon says, ‘and buy fresh shampoo at the shop.’"],["/ʃ/","There is an information session at the station. ‘Special delivery,’ says the musician, ‘for the Russian official.’"],["/ʒ/","What a pleasure! After a long decision, we sit at leisure and watch television on a casual evening."],["/tʃ/","Which child wants chicken and chips for lunch? ‘Cheese sandwiches, please,’ says the teacher, ‘each with a cheerful chat.’"],["/tʃ/","Watch out, Charlie! The children are catching a chicken near the church. Choose a chair and have a nice chat."],["/dʒ/","Jack enjoys juice and jam in June. ‘Just a bit,’ he says. ‘I judge my jelly by the jar.’"],["/dʒ/","George is a gentle engineer. In January, he managed a huge project in Japan and changed the village bridge."],["/ŋ/","I’m going to sing a long song this morning. Listen to the ringing, banging and singing: everything is going wrong."],["/ŋ/","Thanks for the invitation! We’re planning to bring bananas, drinks and something strong to the pink building on King Street."],["/l/","Lily likes little yellow lemons. Let’s leave the lovely salad on the table until lunch."],["/l/","Will you help me pull the heavy bell? It’s really cold, and I feel a little ill, but I’ll still follow the plan."],["/r/","Rita ran around the river, right through the rain, to rescue a red rabbit from the road."],["/r/","‘Try the red rice and the roasted carrots,’ says Rory in the restaurant. ‘It’s very different from our regular food.’"],["/v/","I have a very nice view of the river valley. Every Tuesday, Eve visits the village and delivers vegetables."],["/v/","Victor loves Vietnamese movies. Every evening, he stays in the living room and watches five of them, even on very busy days."],["/w/","Why would we walk to work on Wednesday? We want to watch the water and wait for the warm weather."],["/s/","Steve says the sun is so strong that he sits inside and sips a cold soda. Surely, summer is his best season."],["/s/","Pass the sauce, please, Sue. Is this salt or sugar? ‘It’s sweet, so it’s surely the sugar.’"],["/z/","Zoe visits the zoo every Saturday. ‘Those zebras are amazing,’ she says, ‘and the buzzing bees are crazy!’"],["/z/","The boys’ voices were noisy. His cousins are easy to please, and Rosie’s music is as loud as ours."],["/h/","Hello, Harry! How are you? I hope your whole family is happy and healthy at home."],["/j/","Yes, your university has a huge yard. Yesterday, a few young Europeans used the music room in the beautiful old building."],["/p/, /b/","Peter put a big blue bag by the bed. ‘Be polite, Barbara, but please pick up the paper, the pen and the pillow.’"],["/t/, /d/","Did Ted take the ticket today? ‘Don’t tell Dad,’ says Tina. ‘I tried, but I didn’t do it right.’"],["/k/, /g/","Kate got a gift: a gold clock. ‘Great!’ said Gary. ‘Can you get me a cup of coffee, a good cake and a glass of cold milk?’"],["/f/","Fifty-five friends fly to France in February. ‘It’s fantastic for a few photos,’ says Phil, ‘and the food is fresh and fine.’"],["/m/, /n/","Nick makes noodles every Monday morning. ‘Mmm, nice!’ says Mum. ‘Not many of my neighbours make them on their own.’"],["-s /s/","Kate drinks black tea and eats soups, cakes and biscuits. Her friend Jack walks to work and talks about books."],["-s /z/","Anna’s dogs and cars are on the roads. She reads magazines, plays games, and says hello to her friends, sons and daughters."],["-es /ɪz/","Alice washes dishes, watches TV, and fixes glasses. Dad catches buses, uses boxes, and teaches classes."],["-ed /t/","Yesterday, I walked, talked, washed, cooked and watched TV. I also helped my brother and stopped at the shop."],["-ed /d/","We played, learned, cleaned, opened, called and enjoyed the party. My friend arrived and showed me how she changed her hair."],["-ed /ɪd/","He wanted a rest, needed a break, and decided to visit his aunt. She waited at the station, and they started and ended the day in the garden."],["final sounds","Sit, wait, and eat. The black cap, the red hat, the big bag and the cup are on the desk."],["final sounds","I made soup and bread at night. The cup is full, the cat is fat, and the ham is hot."],["/ɪ/ – /iː/","Is it a ship or a sheep? Please sit on that seat, and don’t leave if you live near. The bit of cheese is cheap."],["/æ/ – /e/","The man and ten men sat on a bad bed. Pat had a pan, Pet had a pen. Say ‘bad, bed, bad, bed’ ten times."],["/ʌ/ – /ɑː/","Mark, cut the bun, but don’t cart the bread. It’s luck, not a lark: a hut in the park, a cup in the car."],["/l/ – /r/","Is it a light or a right? Lake or rake? Larry likes the right light, and Rita likes the red lorry."],["/s/ – /ʃ/","Sue sees a ship at the seaside. She says, ‘Sip the soup, then shop at the station. See you, Sheila!’"],["/θ/ – /s/, /t/","Is Tom sick or thick? Thank you for the three trees! I think the sink is full of thin soup."],["/v/ – /w/","Will visits the vet on a wet Wednesday. Vera wears a vest in the west, and she drinks wine near the vine."]];
+const LONG=[["Introducing myself","/ɪ/, /iː/, /ə/","Hi, everyone! My name is Linh, and I’m a teacher from a small city near the sea. I live with my family in a big house with a green garden. In my free time, I like reading, cooking and meeting new people. I think English is really important, so I practise a little every day. This is my first time speaking in this class, and I’m a bit nervous, but I’m very happy to be here."],["My daily routine","-s, -ed endings","I usually get up at six, wash my face and brush my teeth. Then I make breakfast: eggs, bread and a cup of tea. I leave home at seven and take the bus to work. At twelve, I have lunch with my colleagues. Yesterday, I worked until six, cooked dinner, watched a movie and talked to my mother on the phone. After that, I washed the dishes and went to bed."],["At the restaurant","/ʃ/, /tʃ/, /s/, /z/","Good evening! Can we have a table for six, please? We’d like fish and chips, chicken soup and a fresh salad. Could we have some juice, a glass of water and cheese sandwiches for the children? Is there a special dish today? Thank you, the service is excellent! Please bring the bill when we finish. And could we have some more sugar and a few spoons? It’s a nice place, and the staff are very polite."],["Asking for directions","/eə/, /ɪə/, /əʊ/","Excuse me, is there a bank near here? Yes, there’s one near the station. Go straight ahead, turn left at the corner and walk past the post office. It’s on your right, next to the café, opposite the park. Is it far? No, it’s only five minutes on foot. Oh, I see. Thanks a lot! You’re welcome. Have a nice day, and take care on the road!"],["Shopping for clothes","/ʃ/, /θ/, /ð/","I’m looking for a shirt and some shoes. Do you have this in a different size? These shoes are too small, and those trousers are too long. The cotton one is thinner, so I think I’ll take both. How much is the black jacket? That’s cheaper than the other one, thank you. I’ll pay with cash. Could I have a bag for them, please? Thanks for your help, and have a lovely Thursday!"],["My family","/ʌ/, /ɑː/, /ð/","There are five people in my family: my mother, my father, my brother, my grandmother and me. My mother is a nurse, and my father works in a bank. My brother is younger than I am, and he loves football and computer games. My grandmother lives with us, and she cooks wonderful meals on Sundays. We often have lunch together, and afterwards we talk, laugh and walk in the park. I’m proud of my lovely, warm family."],["The weather","/θ/, /ð/, /w/","The weather in my country is very different in the north and the south. In the north, it’s cold and wet in winter, with thick clouds and a strong wind. In the south, it’s warm and sunny, and the weather is rather hot in the summer. Whether it rains or not, I like to walk by the water. This Thursday, the forecast says it’ll be thirty degrees, so I’ll wear a thin shirt and bring a bottle of water."],["At the airport","/eɪ/, /aɪ/, /əʊ/","Hello! I’d like to check in for my flight to Rome. Here’s my passport and my ticket. Is it a window or an aisle seat? I’d like a window, please. Can I take this bag on the plane? Yes, it’s fine, but the other one is too heavy. Oh no! I’ll pay for it. Which gate is it? Gate eight. The flight is on time, so you’ll board at nine. Thank you, and have a nice trip!"],["A job interview","/dʒ/, /ʒ/, /ŋ/","Good morning! Thank you for inviting me. My name is George, and I’m an engineer with five years of experience. I enjoy managing projects and working with young people. Last year, I joined a big company in Japan, and I changed many things in the team. My strengths are leadership, planning and good judgment: I make decisions quickly and measure the results. I’m looking for a challenge, and I think this job is a great match."],["Making plans by phone","/ɒ/, /əʊ/, /aʊ/","Hello, Tom? It’s Rob. What’s on for the weekend? I’d love to go out and have a good time. How about a boat trip on Saturday? Oh, I forgot, I’ve got a lot of homework. Okay, so shall we go on Sunday? Good idea! I’ll phone Joe and Rowan, and we’ll meet downtown around noon. Don’t be late, and don’t forget your coat; it’s going to be cold! See you soon."],["At the doctor’s","/θ/, /ɔː/","Good morning, doctor. I’ve got a sore throat and a cough, and I think I have a bit of a fever. It started on Thursday, and it’s getting worse. I can’t swallow anything, and my mouth feels dry. Should I take something for it? The doctor says, ‘Drink plenty of water, rest for three or four days, and take these tablets after meals.’ Thank you, doctor. I’ll come back if it doesn’t get better by next week."],["My hobbies","/h/, /ŋ/, /iː/","Hello! I have a few hobbies, and I enjoy them very much. I like reading, swimming and listening to music. Every weekend, I go hiking in the hills with my friends. We climb to the top, eat lunch, and take photos of the beautiful scenery. In the evening, I often play the guitar and sing a few songs. I also like learning new things, so I’m taking a cooking class. Hobbies keep me happy and healthy."],["Describing a friend","/dʒ/, /ɜː/, /j/","My best friend is Jenny. She’s a young, friendly nurse, and she works in a big hospital. She’s thirty and has curly brown hair and a warm smile. Jenny is generous, funny and very hard-working. We usually meet at a café on Thursdays, and she always tells me interesting stories about her work. I’m lucky to have such a good friend."],["Cooking a meal","/k/, /g/, /f/, /v/","Let’s cook a good dinner for the family. First, we cut the carrots, the onions and a few green vegetables. Then we fry the chicken in a pan with garlic and a bit of oil. Add some rice, a glass of water and a little salt, and cover the pan. After fifteen minutes, the food is fresh, hot and full of flavour. Don’t forget to serve it with a cold glass of juice. Everyone loves it!"],["A busy day at school","/æ/, /ɑː/, /e/","It’s Monday, and I’m at school. The first class is maths, and the teacher asks a lot of hard questions. After that, we have art, and I paint a picture of a farm with a black cat and a red car. At lunch, I have pasta and a glass of water, and I chat with my classmates about our plans for the weekend. In the afternoon, we practise English in the classroom. I’m happy and a bit tired."],["Weekend plans","/j/, /w/, /v/","What are you doing this weekend? We’re having a party on Saturday, and you’re very welcome to come. We have a big yard and a view of the river. Everyone will bring something: Victor will bring some wine and vegetables, and Will will bring a cake. We’ll play games, watch a movie and have a lot of fun. Please arrive around seven, and wear something warm in case it gets windy."],["The lost wallet","/ɒ/, /ɔː/, -ed endings","Yesterday morning, I lost my wallet. I walked to the shop, talked to the owner and looked in my bag, but it wasn’t there. I called my boss, and he said, ‘Don’t worry, we’ll look for it.’ We searched the office, checked the floor and asked my colleagues. Then a cleaner shouted, ‘I found it!’ It was in the corner, behind the box of coffee. What a lot of stress! I’m so glad, and I thanked everybody."],["Healthy habits","/ɪ/, /θ/, /iː/","I think healthy habits are very important. Every morning, I drink a big glass of water and eat fresh fruit with a little cheese. I exercise three times a week: I swim, jog and sometimes cycle. I also sleep eight hours every night and avoid sweets and fizzy drinks. Both my mind and my body feel better, and I’m less stressed. It’s easy to begin: start with one small thing this month."],["Booking a hotel","/eɪ/, /əʊ/, /aʊ/","Hello, I’d like to book a room for two nights, please. We’ll arrive on Friday and leave on Sunday. Do you have a double room with a nice view? How much is it per night? Does the price include breakfast? Oh, that sounds great! Is there a pool and Wi-Fi? Could you send me the confirmation by email? My name is Joan Brown. Thank you so much!"],["My dreams for the future","/ɜː/, /f/, /uː/","In the future, I want to learn more and work abroad. First, I’d like to improve my English so that I can talk to people from many countries. Then I hope to travel, try new food, and make friends around the world. My dream is to start a school for children, because I believe education is the best way to change the future. I’ll work hard, stay positive and never give up. What are your dreams for the future?"]];
+const TW=[["She sells seashells by the seashore.","/ʃ/ – /s/"],["Peter Piper picked a peck of pickled peppers.","/p/"],["Betty Botter bought some butter.","/b/, /t/"],["Red lorry, yellow lorry.","/r/ – /l/"],["How much wood would a woodchuck chuck if a woodchuck could chuck wood?","/w/, /ʊ/, /ʌ/, /tʃ/"],["Fuzzy Wuzzy was a bear. Fuzzy Wuzzy had no hair.","/f/, /z/, /w/"],["Unique New York.","/juː/, /n/"],["Whether the weather is warm, whether the weather is hot, we have to put up with the weather, whether we like it or not.","/w/, /ð/"],["I scream, you scream, we all scream for ice cream.","/s/, /iː/"],["Fred fed Ted bread, and Ted fed Fred bread.","/f/, /t/, /d/, /e/"]];
+
+const $=id=>document.getElementById(id);
+const G={
+ short:SHORT.map(([f,x],i)=>({chip:(i+1)+" "+f,text:x,tag:"Đoạn ngắn "+(i+1)+": âm "+f})),
+ long:LONG.map(([t,f,x],i)=>({chip:(i+1)+". "+t,text:x,tag:"Đoạn dài "+(i+1)+": "+t})),
+ tw:TW.map(([x,f],i)=>({chip:(i+1)+" "+f,text:x,tag:"Tongue twister "+(i+1)}))
+};
+const TABS=[["short","Đoạn ngắn"],["long","Đoạn dài"],["tw","Tongue twister"],["paste","Dán đoạn"]];
+const SPEEDS=[["Chậm",65],["Vừa",90],["Nhanh",120],["Rất nhanh",150]];
+const IC={
+ play:'<svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>',
+ pause:'<svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
+ redo:'<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>',
+ vol:'<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>'
+};
+let tab="short",cur=0,wpmV=90,words=[],spans=[],idx=-1,timer=null,cdTimer=null,playing=false;
+const stage=$("stage"),playBtn=$("play");
+
+function mk(parent,label,on,fn){const b=document.createElement("button");b.className="chip";b.textContent=label;b.setAttribute("aria-pressed",on);b.onclick=fn;parent.appendChild(b);}
+function drawTabs(){const el=$("tabs");el.textContent="";TABS.forEach(([k,l])=>mk(el,l,k===tab,()=>{tab=k;cur=0;drawTabs();if(k==="paste"){drawChips();clearStage();}else pick(0,true);}));}
+function drawChips(){const el=$("chips");el.textContent="";$("prev").disabled=$("next").disabled=tab==="paste";$("paste").hidden=tab!=="paste";el.hidden=tab==="paste";if(tab==="paste")return;G[tab].forEach((it,i)=>mk(el,it.chip,i===cur,()=>pick(i)));const a=el.querySelector('[aria-pressed="true"]');if(a){el.scrollTop=a.offsetTop-el.clientHeight/2;el.scrollLeft=a.offsetLeft-el.clientWidth/2+a.offsetWidth/2;}}
+function pick(i,keep){cur=i;const it=G[tab][i];load(it.text,it.tag);drawChips();if(!keep)closeSheet();}
+
+function delay(w){
+  let m=1;
+  if(/[.!?…]["”’)]*$/.test(w))m=2.4;
+  else if(/[,;:]["”’)]*$/.test(w))m=1.7;
+  const L=w.replace(/[^A-Za-z]/g,"").length;
+  m*=L>7?1.35:L>5?1.12:L<=2?0.8:1;
+  return 60000/wpmV*m;
+}
+function paint(){
+  spans.forEach((s,i)=>{s.className="w "+(i<idx?"past":i===idx?"cur":"future");});
+  const n=words.length,done=Math.min(idx+1,n);
+  $("bar").style.width=(n?done/n*100:0)+"%";
+  $("cnt").textContent=!n?"":idx>=n?"Xong":Math.max(done,0)+"/"+n;["play","reset","listen"].forEach(i=>{$(i).disabled=!n;});
+  const k=playing?"pause":idx>=n?"redo":"play";
+  const cap=playing?"Tạm dừng":idx>=n?"Đọc lại":idx>=0?"Tiếp tục":"Bắt đầu";
+  playBtn.innerHTML=IC[k];playBtn.setAttribute("aria-label",cap);$("cap").textContent=cap;follow();
+}
+function load(text,tag){
+  halt();stopSpeech();
+  words=text.trim().split(/\s+/);
+  const p=$("text");p.textContent="";spans=[];
+  words.forEach(w=>{const s=document.createElement("span");s.textContent=w;p.appendChild(s);p.appendChild(document.createTextNode(" "));spans.push(s);});
+  $("tag").textContent=tag;$("text").className="";idx=-1;paint();fit();
+}
+function step(){
+  idx++;paint();
+  if(idx>=words.length){playing=false;paint();return;}
+  timer=setTimeout(step,delay(words[idx]));
+}
+function halt(){playing=false;clearTimeout(timer);clearInterval(cdTimer);$("cd").hidden=true;}
+function start(){
+  if(!words.length)return;
+  if(idx>=words.length)idx=-1;
+  playing=true;paint();
+  if(idx===-1){
+    let n=3;const cd=$("cd");cd.hidden=false;cd.textContent=n;
+    cdTimer=setInterval(()=>{n--;if(n<=0){clearInterval(cdTimer);cd.hidden=true;step();}else cd.textContent=n;},800);
+  }else{timer=setTimeout(step,delay(words[idx]));}
+}
+function toggle(){if(playing){halt();paint();}else start();}
+function reset(){halt();idx=-1;paint();stopSpeech();}
+function stopSpeech(){if("speechSynthesis" in window)speechSynthesis.cancel();$("lcap").textContent="Nghe mẫu";}
+function speak(){
+  if(!("speechSynthesis" in window))return;
+  if(speechSynthesis.speaking){stopSpeech();return;}
+  const u=new SpeechSynthesisUtterance(words.join(" "));
+  u.lang="en-GB";u.rate=Math.min(1.3,Math.max(0.5,wpmV/130));
+  u.onend=u.onerror=()=>{$("lcap").textContent="Nghe mẫu";};
+  $("lcap").textContent="Dừng nghe";speechSynthesis.speak(u);
+}
+
+playBtn.onclick=toggle;
+$("reset").innerHTML=IC.redo;$("reset").onclick=reset;
+$("listen").innerHTML=IC.vol;$("listen").onclick=speak;
+if(!("speechSynthesis" in window))$("listen").parentElement.hidden=true;
+$("use").onclick=()=>{const t=$("ta").value.trim();if(t){load(t,"Đoạn của bạn");closeSheet();}};
+document.addEventListener("keydown",e=>{
+  const t=document.activeElement,own=["play","reset","listen","use","prev","next","spd","md"].includes(t.id);
+  if(t.tagName==="TEXTAREA")return;
+  if(e.code==="Space"&&!own){e.preventDefault();toggle();}
+  else if(e.code==="ArrowRight")nav(1);
+  else if(e.code==="ArrowLeft")nav(-1);
+});
+function nav(d){if(tab==="paste")return;const n=G[tab].length;pick((cur+d+n)%n);}
+function clearStage(){halt();stopSpeech();words=[];spans=[];idx=-1;$("text").textContent="";$("tag").textContent="";paint();}
+function closeSheet(){document.body.classList.remove("sheet");setTimeout(fit,0);}
+function fit(){
+  const t=$("text");if(!words.length)return;
+  const avail=t.parentElement.clientHeight;
+  let lo=innerWidth>=960?26:20,hi=innerWidth>=960?54:42;
+  while(hi-lo>.5){const m=(lo+hi)/2;t.style.fontSize=m+"px";if(t.offsetHeight>avail)hi=m;else lo=m;}
+  t.style.fontSize=lo+"px";follow();
+}
+function follow(){
+  const t=$("text");if(!words.length){t.style.transform="";return;}
+  const avail=t.parentElement.clientHeight;
+  const over=t.offsetHeight-avail;
+  if(over<=0){t.style.transform="";return;}
+  const s=spans[Math.max(idx,0)];
+  const y=s?s.offsetTop+s.offsetHeight/2-avail/2:0;
+  t.style.transform="translateY("+(-Math.min(over,Math.max(0,y)))+"px)";
+}
+let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(fit,100);});
+if(document.fonts)document.fonts.ready.then(fit);
+stage.onclick=e=>{if(e.target.closest(".arr"))return;toggle();};
+let tx=0,ty=0;
+stage.addEventListener("touchstart",e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+stage.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;if(Math.abs(dx)>70&&Math.abs(dy)<45){e.preventDefault();nav(dx<0?1:-1);}});
+$("prev").onclick=()=>nav(-1);$("next").onclick=()=>nav(1);
+const MODES=[["reveal","Hiện dần"],["glow","Tô sáng"]];let mi=0;
+function drawSpeed(){$("spd").textContent="Tốc độ: "+SPEEDS.find(x=>x[1]===wpmV)[0];}
+function drawMode(){$("md").textContent="Kiểu: "+MODES[mi][1];stage.dataset.mode=MODES[mi][0];}
+$("spd").onclick=()=>{const i=SPEEDS.findIndex(x=>x[1]===wpmV);wpmV=SPEEDS[(i+1)%SPEEDS.length][1];drawSpeed();};
+$("md").onclick=()=>{mi=(mi+1)%MODES.length;drawMode();};
+drawTabs();drawSpeed();drawMode();pick(0,true);
+</script>
+</body>
+</html>
