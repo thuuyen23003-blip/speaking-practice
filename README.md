@@ -1,28 +1,27 @@
-# Speaking: chạy chữ
+# Speaking: Read Along
 
-Trang luyện đọc to tiếng Anh theo kiểu chạy chữ: chữ hiện đến đâu, người học đọc đến đó. Chạy được trên máy tính và điện thoại.
+Everyday English speaking practice for office workers: the words appear as you read. Works on desktop and phones.
 
-- 100 đoạn ngắn, 20 đoạn dài, 10 tongue twisters
-- Chỉnh tốc độ (chậm, vừa, nhanh, rất nhanh) và kiểu chạy (hiện dần, tô sáng)
-- Dán đoạn văn riêng để luyện
-- Phím tắt trên máy tính: Space để chạy hoặc dừng, mũi tên trái và phải để đổi đoạn
+- Work Short and Work Long: meetings, phone calls and emails, small talk, clients, feedback and career conversations
+- Pronunciation sets: Short, Short 2, Long, Long 2 and 10 tongue twisters
+- Choose a group, then a category, then a sound or topic. Everything stays visible, with no pop-ups
+- Speed: Slow, Medium, Fast, Very fast. Style: Reveal (words appear) or Highlight (words light up)
+- Paste your own passage in the Paste group
+- Shortcuts: Space to start or pause, left and right arrows to change passage. On phones, tap the frame to start and swipe left or right to change passage
 
-## Đưa lên GitHub Pages
+## Publish with GitHub Pages
 
-1. Tạo repository mới trên GitHub, ví dụ `speaking-chay-chu`.
-2. Tải hai file `index.html` và `README.md` lên repository (Add file, Upload files).
-3. Vào Settings, chọn Pages. Ở mục Build and deployment, chọn nguồn là Deploy from a branch, branch `main`, thư mục `/ (root)`, rồi bấm Save.
-4. Đợi khoảng 1 đến 2 phút. Địa chỉ trang sẽ có dạng `https://<tên-tài-khoản>.github.io/speaking-chay-chu/`.
+1. Create a public repository and upload `index.html` and `README.md`.
+2. Go to Settings, then Pages. Choose Deploy from a branch, branch `main`, folder `/ (root)`, and Save.
+3. After a minute or two, the site is at `https://<your-username>.github.io/<repository-name>/`.
 
-## Thêm hoặc sửa đoạn văn
+## Add or edit passages
 
-Mở `index.html`, tìm ba danh sách `SHORT`, `LONG` và `TW` ở đầu phần script rồi thêm hoặc sửa nội dung.
+Open `index.html` and edit the lists `SHORT`, `LONG`, `TW`, `SHORT2`, `LONG2`, `WS` and `WL` at the top of the script.
 
-- `SHORT`: `["/ɪ/", "câu tiếng Anh"]`
-- `LONG`: `["Tên chủ đề", "Âm trọng tâm", "đoạn văn"]`
-- `TW`: `["tongue twister", "âm trọng tâm"]`
+- `SHORT` and `SHORT2`: `["/ɪ/", "sentence"]`
+- `WS`: `["Label", "sentence"]`, and `WL`: `["Title", "passage"]`
+- `LONG` and `LONG2`: `["Title", "focus sounds", "passage"]`
+- `TW`: `["tongue twister", "focus sounds"]`
 
-## Lưu ý
-
-- Nút Nghe mẫu dùng giọng đọc có sẵn trên thiết bị, nên giọng đọc sẽ khác nhau giữa các máy.
-- Trang dùng font Nunito từ Google Fonts. Nếu không có mạng, trang vẫn chạy bằng font hệ thống.
+The Listen button uses the voices installed on your device, so voices differ between devices.

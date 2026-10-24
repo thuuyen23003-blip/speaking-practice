@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="vi">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Speaking: chạy chữ</title>
-<meta name="description" content="Luyện đọc to tiếng Anh theo kiểu chạy chữ: chữ hiện đến đâu đọc đến đó.">
+<title>Speaking: Read Along</title>
+<meta name="description" content="Everyday English speaking practice for office workers: the words appear as you read.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%A4%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap">
 <style>
@@ -125,36 +125,69 @@ body.sheet #bd{display:block;position:fixed;inset:0;z-index:5;background:rgba(8,
  .arr{width:40px}
  .two{max-width:520px;margin-left:auto;margin-right:auto;width:100%}
 }
+#cat{display:block;width:100%;min-height:52px;font:inherit;font-weight:700;padding:0 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--fg)}
+#cat:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.list{flex-wrap:wrap;overflow-x:hidden;overflow-y:auto;max-height:150px;margin-top:10px}
+@media (min-width:960px){.list{max-height:none}#cat{min-height:48px}}
+#cat{display:none}
+.side .chip{min-height:36px;padding:5px 12px;font-size:.88rem}
+.grp{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0}
+.grp .chip{padding:5px 2px;border-radius:12px;font-size:.84rem;min-height:40px}
+.subs{gap:6px;margin-top:6px}
+.subs[hidden],.paste[hidden]{display:none}
+.list{gap:6px;margin-top:6px;max-height:118px}
+@media (min-width:960px){.list{max-height:none}}
+.grp .chip{font-size:.8rem;white-space:nowrap}
+.subs .chip{padding:4px 10px;font-size:.82rem;min-height:36px}
+.list .chip{padding:4px 9px;font-size:.84rem;min-height:36px}
+@media (max-width:959px){
+ .topbar{display:none}
+ main{padding-top:10px}
+ .side{margin-bottom:6px}
+ .dock{align-items:center;gap:20px}
+ .dock div{font-size:0;gap:0}
+ .rb{margin-top:0;width:50px;height:50px}
+ .rb.big{width:66px;height:66px}
+ .two{margin-top:8px}
+ .wide{min-height:44px}
+}
+.grp{grid-template-columns:repeat(4,1fr)}
+.grp .chip{font-size:.78rem}
+.grp .chip{min-height:36px}
+.work .stage{margin-bottom:12px}
+.dock{margin-top:2px;padding-bottom:2px}
+.stage{flex:1 1 0}
 </style>
 </head>
 <body>
 <main>
 <div class="topbar">
- <h1>Speaking: chạy chữ</h1>
- <p class="sub">Bấm vào khung chữ hoặc nút tròn để chạy. Mũi tên trái và phải để đổi đoạn.</p>
+ <h1>Speaking: Read Along</h1>
+ <p class="sub">Everyday speaking practice for office workers. Tap the text frame or the round button to start, and use the arrows to change passage.</p>
 </div>
 <div class="app">
  <aside class="side">
-  <div class="chips tabs" id="tabs"></div>
+  <div class="chips grp" id="groups"></div>
+  <div class="chips subs" id="subs"></div>
   <div class="chips list" id="chips"></div>
   <div class="paste" id="paste" hidden>
-   <textarea id="ta" rows="3" placeholder="Dán một đoạn tiếng Anh vào đây"></textarea>
-   <button class="chip" id="use">Dùng đoạn này</button>
+   <textarea id="ta" rows="3" placeholder="Paste an English passage here"></textarea>
+   <button class="chip" id="use">Use this passage</button>
   </div>
  </aside>
  <div class="work">
   <section class="stage" id="stage" data-mode="reveal">
    <span class="tag" id="tag"></span><span class="cnt" id="cnt"></span>
-   <button class="arr l" id="prev" aria-label="Đoạn trước">‹</button>
-   <button class="arr r" id="next" aria-label="Đoạn sau">›</button>
+   <button class="arr l" id="prev" aria-label="Previous passage">‹</button>
+   <button class="arr r" id="next" aria-label="Next passage">›</button>
    <div class="tv"><p id="text"></p></div>
    <div class="pb"><i id="bar"></i></div>
    <div id="cd" hidden></div>
   </section>
   <div class="dock">
-   <div><button class="rb" id="reset" aria-label="Đọc lại từ đầu"></button>Từ đầu</div>
-   <div><button class="rb big" id="play" aria-label="Bắt đầu"></button><span id="cap">Bắt đầu</span></div>
-   <div><button class="rb" id="listen" aria-label="Nghe mẫu"></button><span id="lcap">Nghe mẫu</span></div>
+   <div><button class="rb" id="reset" aria-label="Restart"></button>Restart</div>
+   <div><button class="rb big" id="play" aria-label="Start"></button><span id="cap">Start</span></div>
+   <div><button class="rb" id="listen" aria-label="Listen"></button><span id="lcap">Listen</span></div>
   </div>
   <div class="two"><button class="wide" id="spd"></button><button class="wide" id="md"></button></div>
  </div>
@@ -166,27 +199,45 @@ const SHORT=[["/ɪ/","Jim sits in the kitchen with his sister Kim. They drink mi
 const LONG=[["Introducing myself","/ɪ/, /iː/, /ə/","Hi, everyone! My name is Linh, and I’m a teacher from a small city near the sea. I live with my family in a big house with a green garden. In my free time, I like reading, cooking and meeting new people. I think English is really important, so I practise a little every day. This is my first time speaking in this class, and I’m a bit nervous, but I’m very happy to be here."],["My daily routine","-s, -ed endings","I usually get up at six, wash my face and brush my teeth. Then I make breakfast: eggs, bread and a cup of tea. I leave home at seven and take the bus to work. At twelve, I have lunch with my colleagues. Yesterday, I worked until six, cooked dinner, watched a movie and talked to my mother on the phone. After that, I washed the dishes and went to bed."],["At the restaurant","/ʃ/, /tʃ/, /s/, /z/","Good evening! Can we have a table for six, please? We’d like fish and chips, chicken soup and a fresh salad. Could we have some juice, a glass of water and cheese sandwiches for the children? Is there a special dish today? Thank you, the service is excellent! Please bring the bill when we finish. And could we have some more sugar and a few spoons? It’s a nice place, and the staff are very polite."],["Asking for directions","/eə/, /ɪə/, /əʊ/","Excuse me, is there a bank near here? Yes, there’s one near the station. Go straight ahead, turn left at the corner and walk past the post office. It’s on your right, next to the café, opposite the park. Is it far? No, it’s only five minutes on foot. Oh, I see. Thanks a lot! You’re welcome. Have a nice day, and take care on the road!"],["Shopping for clothes","/ʃ/, /θ/, /ð/","I’m looking for a shirt and some shoes. Do you have this in a different size? These shoes are too small, and those trousers are too long. The cotton one is thinner, so I think I’ll take both. How much is the black jacket? That’s cheaper than the other one, thank you. I’ll pay with cash. Could I have a bag for them, please? Thanks for your help, and have a lovely Thursday!"],["My family","/ʌ/, /ɑː/, /ð/","There are five people in my family: my mother, my father, my brother, my grandmother and me. My mother is a nurse, and my father works in a bank. My brother is younger than I am, and he loves football and computer games. My grandmother lives with us, and she cooks wonderful meals on Sundays. We often have lunch together, and afterwards we talk, laugh and walk in the park. I’m proud of my lovely, warm family."],["The weather","/θ/, /ð/, /w/","The weather in my country is very different in the north and the south. In the north, it’s cold and wet in winter, with thick clouds and a strong wind. In the south, it’s warm and sunny, and the weather is rather hot in the summer. Whether it rains or not, I like to walk by the water. This Thursday, the forecast says it’ll be thirty degrees, so I’ll wear a thin shirt and bring a bottle of water."],["At the airport","/eɪ/, /aɪ/, /əʊ/","Hello! I’d like to check in for my flight to Rome. Here’s my passport and my ticket. Is it a window or an aisle seat? I’d like a window, please. Can I take this bag on the plane? Yes, it’s fine, but the other one is too heavy. Oh no! I’ll pay for it. Which gate is it? Gate eight. The flight is on time, so you’ll board at nine. Thank you, and have a nice trip!"],["A job interview","/dʒ/, /ʒ/, /ŋ/","Good morning! Thank you for inviting me. My name is George, and I’m an engineer with five years of experience. I enjoy managing projects and working with young people. Last year, I joined a big company in Japan, and I changed many things in the team. My strengths are leadership, planning and good judgment: I make decisions quickly and measure the results. I’m looking for a challenge, and I think this job is a great match."],["Making plans by phone","/ɒ/, /əʊ/, /aʊ/","Hello, Tom? It’s Rob. What’s on for the weekend? I’d love to go out and have a good time. How about a boat trip on Saturday? Oh, I forgot, I’ve got a lot of homework. Okay, so shall we go on Sunday? Good idea! I’ll phone Joe and Rowan, and we’ll meet downtown around noon. Don’t be late, and don’t forget your coat; it’s going to be cold! See you soon."],["At the doctor’s","/θ/, /ɔː/","Good morning, doctor. I’ve got a sore throat and a cough, and I think I have a bit of a fever. It started on Thursday, and it’s getting worse. I can’t swallow anything, and my mouth feels dry. Should I take something for it? The doctor says, ‘Drink plenty of water, rest for three or four days, and take these tablets after meals.’ Thank you, doctor. I’ll come back if it doesn’t get better by next week."],["My hobbies","/h/, /ŋ/, /iː/","Hello! I have a few hobbies, and I enjoy them very much. I like reading, swimming and listening to music. Every weekend, I go hiking in the hills with my friends. We climb to the top, eat lunch, and take photos of the beautiful scenery. In the evening, I often play the guitar and sing a few songs. I also like learning new things, so I’m taking a cooking class. Hobbies keep me happy and healthy."],["Describing a friend","/dʒ/, /ɜː/, /j/","My best friend is Jenny. She’s a young, friendly nurse, and she works in a big hospital. She’s thirty and has curly brown hair and a warm smile. Jenny is generous, funny and very hard-working. We usually meet at a café on Thursdays, and she always tells me interesting stories about her work. I’m lucky to have such a good friend."],["Cooking a meal","/k/, /g/, /f/, /v/","Let’s cook a good dinner for the family. First, we cut the carrots, the onions and a few green vegetables. Then we fry the chicken in a pan with garlic and a bit of oil. Add some rice, a glass of water and a little salt, and cover the pan. After fifteen minutes, the food is fresh, hot and full of flavour. Don’t forget to serve it with a cold glass of juice. Everyone loves it!"],["A busy day at school","/æ/, /ɑː/, /e/","It’s Monday, and I’m at school. The first class is maths, and the teacher asks a lot of hard questions. After that, we have art, and I paint a picture of a farm with a black cat and a red car. At lunch, I have pasta and a glass of water, and I chat with my classmates about our plans for the weekend. In the afternoon, we practise English in the classroom. I’m happy and a bit tired."],["Weekend plans","/j/, /w/, /v/","What are you doing this weekend? We’re having a party on Saturday, and you’re very welcome to come. We have a big yard and a view of the river. Everyone will bring something: Victor will bring some wine and vegetables, and Will will bring a cake. We’ll play games, watch a movie and have a lot of fun. Please arrive around seven, and wear something warm in case it gets windy."],["The lost wallet","/ɒ/, /ɔː/, -ed endings","Yesterday morning, I lost my wallet. I walked to the shop, talked to the owner and looked in my bag, but it wasn’t there. I called my boss, and he said, ‘Don’t worry, we’ll look for it.’ We searched the office, checked the floor and asked my colleagues. Then a cleaner shouted, ‘I found it!’ It was in the corner, behind the box of coffee. What a lot of stress! I’m so glad, and I thanked everybody."],["Healthy habits","/ɪ/, /θ/, /iː/","I think healthy habits are very important. Every morning, I drink a big glass of water and eat fresh fruit with a little cheese. I exercise three times a week: I swim, jog and sometimes cycle. I also sleep eight hours every night and avoid sweets and fizzy drinks. Both my mind and my body feel better, and I’m less stressed. It’s easy to begin: start with one small thing this month."],["Booking a hotel","/eɪ/, /əʊ/, /aʊ/","Hello, I’d like to book a room for two nights, please. We’ll arrive on Friday and leave on Sunday. Do you have a double room with a nice view? How much is it per night? Does the price include breakfast? Oh, that sounds great! Is there a pool and Wi-Fi? Could you send me the confirmation by email? My name is Joan Brown. Thank you so much!"],["My dreams for the future","/ɜː/, /f/, /uː/","In the future, I want to learn more and work abroad. First, I’d like to improve my English so that I can talk to people from many countries. Then I hope to travel, try new food, and make friends around the world. My dream is to start a school for children, because I believe education is the best way to change the future. I’ll work hard, stay positive and never give up. What are your dreams for the future?"]];
 const TW=[["She sells seashells by the seashore.","/ʃ/ – /s/"],["Peter Piper picked a peck of pickled peppers.","/p/"],["Betty Botter bought some butter.","/b/, /t/"],["Red lorry, yellow lorry.","/r/ – /l/"],["How much wood would a woodchuck chuck if a woodchuck could chuck wood?","/w/, /ʊ/, /ʌ/, /tʃ/"],["Fuzzy Wuzzy was a bear. Fuzzy Wuzzy had no hair.","/f/, /z/, /w/"],["Unique New York.","/juː/, /n/"],["Whether the weather is warm, whether the weather is hot, we have to put up with the weather, whether we like it or not.","/w/, /ð/"],["I scream, you scream, we all scream for ice cream.","/s/, /iː/"],["Fred fed Ted bread, and Ted fed Fred bread.","/f/, /t/, /d/, /e/"]];
 
+const SHORT2=[["/ɪ/", "Chris is thinking about quitting his big city job. His wife insists he should visit Britain first."], ["/e/", "Our guests entered the restaurant and ordered steak, pepper sauce and extra bread."], ["/æ/", "The tall man in the plaid jacket had a map and a camera in his backpack."], ["/ɒ/", "Oliver dropped a coin in the pond and watched the frogs hop off the log."], ["/ʌ/", "Judge Cummings was stunned: the muddy duck jumped up and covered the umbrella."], ["/ʊ/", "The butcher put pudding, sugar and a hook beside the wooden bookshelf."], ["/iː/", "Steve sees a team leader eating peas and cheese beneath the green trees."], ["/ɑː/", "Margaret started a dark art class and laughed at her aunt’s smart farm cards."], ["/ɔː/", "Lord Gordon talked all morning about the awful storms on the north shore."], ["/uː/", "Lou chose a new blue suit, then drew two cool tunes on the school roof."], ["/ɜː/", "The urban nurse learned Turkish words, and her work earned her a firm reward."], ["/eɪ/", "Hayley made eight pancakes on Tuesday and gave the waiter a tray of grapes."], ["/aɪ/", "Why did Ryan try to fly a kite on the high, icy ridge at nine at night?"], ["/ɔɪ/", "The noisy boys enjoyed the royal toy parade and avoided the boiling oil."], ["/əʊ/", "Nobody knows why Rosa’s phone froze below the old window at home."], ["/aʊ/", "A proud crowd shouted loudly as the clown bowed down in the downtown fountain."], ["/ɪə/", "The engineer’s idea was clear: appear near the pier and cheer the sincere volunteers."], ["/eə/", "Claire’s parents shared a pair of pears upstairs, unaware of the bear."], ["/θ/", "Both the thin author and the thorough mathematician thought about the theory with thanks."], ["/ð/", "Whether the mother and the others bother with leather clothes is neither here nor there."], ["/ʃ/", "The shy sheriff wished the Swedish cashier a fresh, special English conversation."], ["/tʃ/", "Charlotte chose a cheap, chunky chocolate chip cheesecake for each child’s picnic."], ["/dʒ/", "Georgia managed a giant orange juice stand on the edge of the jungle in January."], ["/ŋ/", "Kingsley was longing for a strong evening swing along the winding path."], ["/r/", "Robert wrote a terrible report about the rural railway and the raw red carrots."], ["/l/", "Lola’s lazy llama loved lilies, lemon lollipops and long, lovely lullabies."], ["/v/", "Vivian drove seven vans over the river to deliver vivid velvet and vegetables."], ["/w/", "William wondered whether the wild west wind would wash away the wooden bridge."], ["-ed", "She hoped, jumped, danced, wanted and decided to rejoin the crowd, then waited for a ride."], ["/s/ – /z/", "Seven zebras sit zipping and sipping sodas, so the zoo seems busy and noisy."]];
+const LONG2=[["Renting an apartment", "/æ/, /aʊ/, /ɪ/", "Hello, I saw your advertisement for the two-bedroom apartment downtown. Is it still available? It sounds perfect, especially the balcony and the garage. How much is the monthly rent, and does it include water and electricity? I’d also like to know about the deposit. Could I visit this Saturday around ten? I’ll bring my passport and a letter from my employer."], ["At the bank", "/ʌ/, /ʊ/, /ə/", "Good afternoon. I’d like to open a savings account, please. Do I need to fill in a form? Here is my identity card and a recent utility bill. Could you tell me about the interest rate and the monthly fees? I also want to order a debit card. How long will it take to arrive? Thank you, you’ve been very helpful."], ["Returning a faulty product", "/ɔː/, /ɜː/, /f/", "Excuse me, I bought this toaster last week, but it doesn’t work properly. The bread burns on one side, and the lever keeps popping up. I have the receipt here. I’d prefer a refund, but I’m happy to exchange it for another model. Could you please check whether this brand is still under warranty? I’d appreciate your help."], ["A traffic jam", "/æ/, /ɒ/, /ɜː/", "I’m stuck in terrible traffic on the main road, and I’m going to be late for the meeting. An accident blocked two lanes, and the cars aren’t moving at all. Please start without me and share the first slides. I’ll join by phone if I can. If the road clears soon, I should arrive within thirty minutes. Sorry for the trouble."], ["Learning to swim", "/ɪ/, /w/, /iː/", "Last summer, I decided to learn how to swim. My instructor was patient and kind, and she taught me to float on my back before anything else. At first I was scared of the deep water, but soon I could kick and breathe properly. Now I swim twice a week, and I feel stronger and more confident every single time."], ["In the library", "/aɪ/, /b/, /l/", "Could you help me find a book about ancient Egypt? I tried the online catalogue, but I couldn’t locate it. Oh, it’s on the second floor, near the window. Can I borrow it for three weeks? How many books can I take at once? I’d also like to renew the novel I borrowed earlier. Thanks, I’ll return everything by the end of the month."], ["Planning a birthday party", "/b/, /p/, /eɪ/", "My sister’s birthday is next Friday, so let’s plan a surprise party. I’ll order a chocolate cake and some balloons, and you can invite her friends. We should keep it secret until the last minute. Can you decorate the garden while she’s at work? I’ll prepare snacks and a playlist. It will be a day she remembers."], ["Recycling at home", "/s/, /z/, /ɪ/", "We started recycling at home last year. First, we separate paper, plastic and glass into different bins. Then we reuse jars for storing rice and beans, and we compost vegetable scraps in the garden. It takes only a few extra minutes each day, but the amount of rubbish we throw away has dropped dramatically. Small changes really do make a difference."], ["A visit to the dentist", "/θ/, /ð/, /ʃ/", "I have an appointment with the dentist this Thursday because my tooth hurts whenever I drink something cold. He says I should brush gently, use dental floss and avoid sugary snacks. After the checkup, I felt relieved: there’s only one small cavity, and the filling takes about thirty minutes. Next time, I’ll book a cleaning as well."], ["Taking a taxi", "/ɑː/, /əʊ/, /ɔː/", "Hi, could you take me to the central station, please? I’m in a bit of a hurry because my train leaves at half past four. Do you accept cards, or should I pay in cash? Great. Could you open the boot for my luggage? Please drive carefully and, if possible, avoid the highway. I’ll give you a good tip if we arrive on time."], ["Starting a new job", "/dʒ/, /tʃ/, /ŋ/", "Today is my first day at the new company. My manager showed me around the office, introduced me to the team and explained my main responsibilities. I’m going to be managing customer enquiries and preparing weekly reports. Everyone seems friendly, though I’m still learning names and procedures. I hope I’ll quickly become a useful part of this group."], ["Moving to a new city", "/m/, /n/, /ɪ/", "Last month I moved to a new city for work, and everything feels different. The streets are noisy, the buildings are taller, and the food is much spicier. I miss my family, but I’m meeting wonderful neighbours who invited me for dinner. Slowly, I’m learning the bus routes and finding my favourite cafés. This city is starting to feel like home."], ["Watching a football match", "/f/, /v/, /uː/", "Did you watch the match last night? What a fantastic game! Our team scored twice in the first half, and the goalkeeper saved a penalty. In the final minutes, the fans were shouting and waving flags in the stadium. We won three to two, and everyone celebrated in the streets until midnight. I’d love to see another game soon."], ["A complaint at a café", "/ɔː/, /ɜː/, /s/", "Excuse me, I ordered a hot coffee thirty minutes ago, and it still hasn’t arrived. Also, the sandwich I asked for was cold and the wrong size. I understand you’re very busy, but could you please check my order? If it’s not possible, I’d prefer to cancel and have my money back. Thank you for being so understanding."], ["Volunteering at an animal shelter", "/æ/, /ʊ/, /ə/", "Every Saturday morning, I volunteer at an animal shelter near my house. I feed the cats, walk the dogs and clean their cages. The puppies are especially playful, and the older animals need extra care and attention. Last week, a family adopted a shy rabbit, and I was so happy. It’s tiring work, but it’s also the most rewarding part of my week."]];
+
+const WS=[["Opening", "Let’s get started. Thanks for joining on such short notice, everyone."], ["Agenda", "The agenda today is simple: progress updates, two risks, and next steps."], ["Opinion", "Sara, you’ve worked with this client before. What’s your take on their request?"], ["Cutting in", "Sorry to cut in, but could we go back to the budget for a second?"], ["Disagree", "I see your point, but I’m not sure the timeline is realistic."], ["Clarify", "Just to make sure I understand, you’re proposing we launch in March, not February?"], ["Notes", "I’ll write down the action items and send them out after the meeting."], ["Time", "We’re running out of time, so let’s park this issue and revisit it on Friday."], ["Summary", "To sum up, we agreed to cut the scope, hire one contractor and review progress weekly."], ["Closing", "Thanks, everyone. If there’s nothing else, we’ll wrap up here."], ["Answering", "Good morning, Finance department, Daniel speaking. How can I help you?"], ["Transfer", "One moment, please. I’ll transfer you to our sales team."], ["Message", "She’s in a meeting right now. Would you like to leave a message?"], ["Spelling", "Could you spell your surname for me, please? Is that M-O-R-A-N?"], ["Bad line", "I’m sorry, the line is breaking up. Could you repeat that more slowly?"], ["Follow up", "I’m following up on the invoice I sent last Monday. Have you had a chance to look at it?"], ["Attachment", "I’ve attached the revised proposal. Please let me know if anything is unclear."], ["Out of office", "I’m out of the office until Thursday, but I’ll reply as soon as I’m back."], ["Call back", "Sorry I missed your call. I was on another line. What can I do for you?"], ["End call", "Thanks for your time today. I’ll send a written summary by the end of the day."], ["Morning", "Morning! Did you have a good weekend? Mine was quiet, but I finally finished that book."], ["Coffee", "I’m heading to the kitchen. Can I get you a coffee or something?"], ["Lunch", "A few of us are ordering lunch. Do you want to join us?"], ["Help", "Do you have a minute? I’m stuck on this spreadsheet and could use a second pair of eyes."], ["Thanks", "Thanks so much for covering for me yesterday. I really owe you one."], ["New colleague", "You must be the new analyst. I’m Priya from procurement. Welcome to the team!"], ["Leaving", "I’m going to head out a bit early today. Let me know if anything urgent comes up."], ["Busy week", "Busy week, huh? I’ve got three deadlines and a client visit on Friday."], ["Printer", "The printer on our floor is jammed again. I’ll call the IT help desk."], ["Congrats", "Congratulations on your promotion! You absolutely deserve it."]];
+const WL=[["Opening a presentation", "Good morning, everyone, and thank you for coming. Today I’ll walk you through our quarterly results and our plans for the next six months. I’ll begin with the key numbers, then explain what worked and what didn’t. Please feel free to interrupt if something isn’t clear. We’ll leave time for questions at the end. Let’s get started."], ["Project update", "Here’s a quick update on the website project. We’ve completed the design, and testing is about seventy percent done. The main risk is the payment feature, which is two weeks behind schedule. To fix this, we’ve asked the vendor for extra support. If everything goes well, we can still launch on the original date."], ["Polite disagreement", "I appreciate the suggestion, and I understand why it’s attractive. However, I’m concerned about the cost, especially if we need extra training. Could we try a smaller pilot first? That would give us real data before we commit. I’m happy to prepare a short comparison for next week’s meeting if that helps."], ["Deadline extension", "Hi Mark, do you have a moment? I wanted to talk about the report due on Friday. I’ve run into a few data problems that need more time to fix. Would it be possible to extend the deadline until Tuesday? I’ll send a draft tomorrow so you can see my progress, and I’ll make sure the final version is accurate."], ["Scheduling a meeting", "I’d like to set up a meeting to discuss next quarter’s plan. Are you free on Wednesday afternoon or Thursday morning? It should take about forty-five minutes. If neither works, I can adjust. I’ll send a calendar invitation once we confirm. Please let me know who else should attend so we can include everyone."], ["Angry client", "I’m very sorry for the delay, Mr. Peterson, and I completely understand your frustration. Let me look into this right away. Could you tell me your order number? Thank you. It seems the shipment was held at customs. I’ll contact the carrier today and call you back before five with an exact delivery date."], ["Product pitch", "Thank you for your time today. Our software helps small teams manage projects without endless emails. You can assign tasks, track deadlines and share files in one place. Many of our clients save about five hours a week. If you’d like, I can arrange a free thirty-day trial so your team can test it."], ["Negotiating a price", "We’re very interested in working with you, but the quoted price is a little above our budget. Is there any flexibility if we sign a twelve-month contract? We could also increase the order size. If you can offer a ten percent discount, I’m confident we can finalize the agreement this week."], ["Follow-up email", "Dear Ms. Lopez, thank you for meeting with us yesterday. As discussed, I’m sending the revised proposal and a timeline for the first phase. Please review the pricing section and let me know if you have questions. I’d be glad to schedule a short call to go through the details whenever it suits you."], ["Rescheduling", "Hello, this is Karen from Brightline. I’m calling about our appointment on Monday at ten. Unfortunately, something urgent has come up and I need to reschedule. Would Tuesday afternoon be possible? I apologize for the inconvenience, and I really appreciate your flexibility."], ["Giving feedback", "Thanks for sending the draft. I like the structure, and the charts are very clear. One suggestion: the summary at the beginning is a bit long, so try shortening it to three sentences. Also, check the numbers on page four. Overall, it’s a strong piece of work, and I’m sure the final version will be excellent."], ["Asking for help", "Hi Nina, I hope you’re not too busy. I’m working on the monthly budget, and I can’t figure out why the totals don’t match. You’re much better with formulas than I am. Could you take a quick look at the file? I’d be really grateful, and I’m happy to return the favor anytime."], ["Too much work", "I’d like to talk about my current workload. Over the past month, I’ve taken on two extra projects, and it’s becoming difficult to meet every deadline. I want to deliver good quality, so could we prioritize my tasks together? Perhaps some can be shared with a colleague or postponed until next month."], ["Career talk", "Thank you for meeting with me. Over the last two years, I’ve led three major projects and trained several new employees. I’m very interested in taking on more responsibility, and I’d like to discuss a team leader role. Could you tell me what skills I should develop to be considered when a position opens?"], ["Farewell", "Today is my last day, and I wanted to thank all of you. I’ve learned so much here, and I’m grateful for your support and patience. I’ll miss our lunches and the Friday jokes. Please stay in touch. I’m only an email away, and I’d love to hear how the team grows."]];
+
 const $=id=>document.getElementById(id);
-const G={
- short:SHORT.map(([f,x],i)=>({chip:(i+1)+" "+f,text:x,tag:"Đoạn ngắn "+(i+1)+": âm "+f})),
- long:LONG.map(([t,f,x],i)=>({chip:(i+1)+". "+t,text:x,tag:"Đoạn dài "+(i+1)+": "+t})),
- tw:TW.map(([x,f],i)=>({chip:(i+1)+" "+f,text:x,tag:"Tongue twister "+(i+1)}))
-};
-const TABS=[["short","Đoạn ngắn"],["long","Đoạn dài"],["tw","Tongue twister"],["paste","Dán đoạn"]];
-const SPEEDS=[["Chậm",65],["Vừa",90],["Nhanh",120],["Rất nhanh",150]];
+const CATS=[];
+const S=SHORT.map(([f,x])=>({chip:f,text:x,tag:"Sound "+f}));
+const rg=(a,b)=>Array.from({length:b-a},(_,k)=>a+k);
+const pickS=ids=>ids.map(i=>S[i]);
+CATS.push({g:"Short",n:"Short vowels",items:pickS(rg(0,21))});
+CATS.push({g:"Short",n:"Long vowels",items:pickS(rg(21,36))});
+CATS.push({g:"Short",n:"Diphthongs",items:pickS(rg(36,52))});
+CATS.push({g:"Short",n:"Consonants: p b t d k g f v s z",items:pickS([80,81,82,83,71,72,74,75,76,77])});
+CATS.push({g:"Short",n:"Consonants: θ ð ʃ ʒ tʃ dʒ ŋ m n l r h w j",items:pickS([...rg(52,71),73,78,79,84])});
+CATS.push({g:"Short",n:"-s, -ed endings and final sounds",items:pickS(rg(85,93))});
+CATS.push({g:"Short",n:"Sound contrasts",items:pickS(rg(93,100))});
+const LG=[["Daily life",[0,1,5,11,12]],["Travel and shopping",[2,3,4,7,18]],["Work and health",[8,10,17,14,9]],["Life and dreams",[6,13,15,16,19]]];
+LG.forEach(([n,ids])=>CATS.push({g:"Long",n:n,items:ids.map(i=>({chip:LONG[i][0],text:LONG[i][2],tag:"Long: "+LONG[i][0]}))}));
+CATS.push({g:"Twister",n:"Tongue twisters",items:TW.map(([x,f],i)=>({chip:(i+1)+" "+f,text:x,tag:"Tongue twister "+(i+1)}))});
+const S2=SHORT2.map(([f,x])=>({chip:f,text:x,tag:"Sound "+f}));
+CATS.push({g:"Short 2",n:"Vowels",items:S2.slice(0,18)});
+CATS.push({g:"Short 2",n:"Consonants",items:S2.slice(18)});
+[["Services",[0,1,2,8,9,13]],["Work & city",[3,5,10,11]],["Leisure",[4,6,7,12,14]]].forEach(([n,ids])=>CATS.push({g:"Long 2",n:n,items:ids.map(i=>({chip:LONG2[i][0],text:LONG2[i][2],tag:"Long: "+LONG2[i][0]}))}));
+[["Meetings",0],["Phone & email",10],["Small talk",20]].forEach(([n,a])=>CATS.push({g:"Work Short",n:n,items:WS.slice(a,a+10).map(([c,x])=>({chip:c,text:x,tag:"Work: "+c}))}));
+[["Meetings",[0,1,2,3,4]],["Clients",[5,6,7,8,9]],["Teamwork",[10,11,12,13,14]]].forEach(([n,r])=>CATS.push({g:"Work Long",n:n,items:r.map(i=>({chip:WL[i][0],text:WL[i][1],tag:"Long: "+WL[i][0]}))}));
+["Short vowels","Long vowels","Diphthongs","Consonants 1","Consonants 2","-s, -ed","Contrast","Daily","Travel","Work","Life","Twister","Vowels","Consonants","Services","Work & city","Leisure","Meetings","Phone & email","Small talk","Meetings","Clients","Teamwork"].forEach((l,i)=>{CATS[i].s=l;});
+const SPEEDS=[["Slow",65],["Medium",90],["Fast",120],["Very fast",150]];
 const IC={
  play:'<svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>',
  pause:'<svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
  redo:'<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>',
  vol:'<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>'
 };
-let tab="short",cur=0,wpmV=90,words=[],spans=[],idx=-1,timer=null,cdTimer=null,playing=false;
+let ci=0,ii=0,wpmV=90,words=[],spans=[],idx=-1,timer=null,cdTimer=null,playing=false;
 const stage=$("stage"),playBtn=$("play");
 
 function mk(parent,label,on,fn){const b=document.createElement("button");b.className="chip";b.textContent=label;b.setAttribute("aria-pressed",on);b.onclick=fn;parent.appendChild(b);}
-function drawTabs(){const el=$("tabs");el.textContent="";TABS.forEach(([k,l])=>mk(el,l,k===tab,()=>{tab=k;cur=0;drawTabs();if(k==="paste"){drawChips();clearStage();}else pick(0,true);}));}
-function drawChips(){const el=$("chips");el.textContent="";$("prev").disabled=$("next").disabled=tab==="paste";$("paste").hidden=tab!=="paste";el.hidden=tab==="paste";if(tab==="paste")return;G[tab].forEach((it,i)=>mk(el,it.chip,i===cur,()=>pick(i)));const a=el.querySelector('[aria-pressed="true"]');if(a){el.scrollTop=a.offsetTop-el.clientHeight/2;el.scrollLeft=a.offsetLeft-el.clientWidth/2+a.offsetWidth/2;}}
-function pick(i,keep){cur=i;const it=G[tab][i];load(it.text,it.tag);drawChips();if(!keep)closeSheet();}
 
 function delay(w){
   let m=1;
@@ -200,9 +251,9 @@ function paint(){
   spans.forEach((s,i)=>{s.className="w "+(i<idx?"past":i===idx?"cur":"future");});
   const n=words.length,done=Math.min(idx+1,n);
   $("bar").style.width=(n?done/n*100:0)+"%";
-  $("cnt").textContent=!n?"":idx>=n?"Xong":Math.max(done,0)+"/"+n;["play","reset","listen"].forEach(i=>{$(i).disabled=!n;});
+  $("cnt").textContent=!n?"":idx>=n?"Done":Math.max(done,0)+"/"+n;["play","reset","listen"].forEach(i=>{$(i).disabled=!n;});
   const k=playing?"pause":idx>=n?"redo":"play";
-  const cap=playing?"Tạm dừng":idx>=n?"Đọc lại":idx>=0?"Tiếp tục":"Bắt đầu";
+  const cap=playing?"Pause":idx>=n?"Read again":idx>=0?"Resume":"Start";
   playBtn.innerHTML=IC[k];playBtn.setAttribute("aria-label",cap);$("cap").textContent=cap;follow();
 }
 function load(text,tag){
@@ -229,21 +280,21 @@ function start(){
 }
 function toggle(){if(playing){halt();paint();}else start();}
 function reset(){halt();idx=-1;paint();stopSpeech();}
-function stopSpeech(){if("speechSynthesis" in window)speechSynthesis.cancel();$("lcap").textContent="Nghe mẫu";}
+function stopSpeech(){if("speechSynthesis" in window)speechSynthesis.cancel();$("lcap").textContent="Listen";}
 function speak(){
   if(!("speechSynthesis" in window))return;
   if(speechSynthesis.speaking){stopSpeech();return;}
   const u=new SpeechSynthesisUtterance(words.join(" "));
   u.lang="en-GB";u.rate=Math.min(1.3,Math.max(0.5,wpmV/130));
-  u.onend=u.onerror=()=>{$("lcap").textContent="Nghe mẫu";};
-  $("lcap").textContent="Dừng nghe";speechSynthesis.speak(u);
+  u.onend=u.onerror=()=>{$("lcap").textContent="Listen";};
+  $("lcap").textContent="Stop";speechSynthesis.speak(u);
 }
 
 playBtn.onclick=toggle;
 $("reset").innerHTML=IC.redo;$("reset").onclick=reset;
 $("listen").innerHTML=IC.vol;$("listen").onclick=speak;
 if(!("speechSynthesis" in window))$("listen").parentElement.hidden=true;
-$("use").onclick=()=>{const t=$("ta").value.trim();if(t){load(t,"Đoạn của bạn");closeSheet();}};
+$("use").onclick=()=>{const t=$("ta").value.trim();if(t){load(t,"Your passage");closeSheet();}};
 document.addEventListener("keydown",e=>{
   const t=document.activeElement,own=["play","reset","listen","use","prev","next","spd","md"].includes(t.id);
   if(t.tagName==="TEXTAREA")return;
@@ -251,7 +302,24 @@ document.addEventListener("keydown",e=>{
   else if(e.code==="ArrowRight")nav(1);
   else if(e.code==="ArrowLeft")nav(-1);
 });
-function nav(d){if(tab==="paste")return;const n=G[tab].length;pick((cur+d+n)%n);}
+const GROUPS=[["Work Short","Work Short"],["Work Long","Work Long"],["Short","Short"],["Short 2","Short 2"],["Long","Long"],["Long 2","Long 2"],["Twister","Twister"],["","Paste"]];
+let gi=0;
+function catsOf(g){return CATS.map((c,i)=>[c,i]).filter(([c])=>c.g===GROUPS[g][0]);}
+function drawGroups(){const el=$("groups");el.textContent="";GROUPS.forEach(([,l],g)=>mk(el,l,g===gi,()=>selectGroup(g)));}
+function drawSubs(){const el=$("subs"),list=gi===7?[]:catsOf(gi);el.textContent="";el.hidden=list.length<2;if(el.hidden)return;list.forEach(([c,i])=>mk(el,c.s,i===ci,()=>setCat(i)));}
+function setCat(i){ci=i;pick(0);drawSubs();}
+function selectGroup(g){gi=g;drawGroups();if(g===7){ci=-1;drawSubs();drawChips();clearStage();return;}setCat(catsOf(g)[0][1]);}
+function drawChips(){
+  const el=$("chips"),paste=ci<0;
+  el.textContent="";$("paste").hidden=!paste;el.hidden=paste;
+  $("prev").disabled=$("next").disabled=paste;
+  if(paste)return;
+  const items=CATS[ci].items,seen=new Set();
+  items.forEach((it,i)=>{if(seen.has(it.chip))return;seen.add(it.chip);mk(el,it.chip,items[ii].chip===it.chip,()=>pick(i));});
+  const a=el.querySelector('[aria-pressed="true"]');if(a)el.scrollTop=Math.max(0,a.offsetTop-el.clientHeight/2);
+}
+function pick(i){ii=i;const it=CATS[ci].items[i];load(it.text,it.tag);drawChips();}
+function nav(d){if(ci<0)return;const n=CATS[ci].items.length;pick((ii+d+n)%n);}
 function clearStage(){halt();stopSpeech();words=[];spans=[];idx=-1;$("text").textContent="";$("tag").textContent="";paint();}
 function closeSheet(){document.body.classList.remove("sheet");setTimeout(fit,0);}
 function fit(){
@@ -277,12 +345,12 @@ let tx=0,ty=0;
 stage.addEventListener("touchstart",e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
 stage.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;if(Math.abs(dx)>70&&Math.abs(dy)<45){e.preventDefault();nav(dx<0?1:-1);}});
 $("prev").onclick=()=>nav(-1);$("next").onclick=()=>nav(1);
-const MODES=[["reveal","Hiện dần"],["glow","Tô sáng"]];let mi=0;
-function drawSpeed(){$("spd").textContent="Tốc độ: "+SPEEDS.find(x=>x[1]===wpmV)[0];}
-function drawMode(){$("md").textContent="Kiểu: "+MODES[mi][1];stage.dataset.mode=MODES[mi][0];}
+const MODES=[["reveal","Reveal"],["glow","Highlight"]];let mi=0;
+function drawSpeed(){$("spd").textContent="Speed: "+SPEEDS.find(x=>x[1]===wpmV)[0];}
+function drawMode(){$("md").textContent="Style: "+MODES[mi][1];stage.dataset.mode=MODES[mi][0];}
 $("spd").onclick=()=>{const i=SPEEDS.findIndex(x=>x[1]===wpmV);wpmV=SPEEDS[(i+1)%SPEEDS.length][1];drawSpeed();};
 $("md").onclick=()=>{mi=(mi+1)%MODES.length;drawMode();};
-drawTabs();drawSpeed();drawMode();pick(0,true);
+drawSpeed();drawMode();selectGroup(0);
 </script>
 </body>
 </html>
