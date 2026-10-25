@@ -157,6 +157,47 @@ body.sheet #bd{display:block;position:fixed;inset:0;z-index:5;background:rgba(8,
 .work .stage{margin-bottom:12px}
 .dock{margin-top:2px;padding-bottom:2px}
 .stage{flex:1 1 0}
+.tv{overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.4) transparent;user-select:none;-webkit-user-select:none;cursor:grab}
+.tv::-webkit-scrollbar{width:8px}
+.tv::-webkit-scrollbar-thumb{background:rgba(255,255,255,.35);border-radius:4px}
+.navbar{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:48px;padding:0 14px;font:inherit;font-weight:700;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer;text-align:left}
+.navbar span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.panel{display:none;position:relative}
+body.open .panel{display:block;margin-top:8px;max-height:44dvh;overflow:auto;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:6px}
+.phead{display:flex;align-items:center;gap:10px;padding:6px 6px 8px}
+.back{font:inherit;font-weight:700;padding:6px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+.back[hidden]{display:none}
+.gh{font-size:.82rem;font-weight:800;color:var(--muted);padding:12px 10px 4px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:46px;padding:8px 12px;border:0;border-radius:10px;background:transparent;color:var(--fg);font:inherit;font-weight:700;text-align:left;cursor:pointer}
+.row:hover{background:var(--bg)}
+.row[aria-current="true"]{background:var(--accent);color:var(--accent-fg)}
+.row small{font-weight:500;font-size:.82rem;color:var(--muted);max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row[aria-current="true"] small{color:inherit;opacity:.85}
+.paste{padding:6px}
+@media (min-width:960px){
+ .navbar{display:none}
+ .panel,body.open .panel{display:block;flex:1;min-height:0;max-height:none;margin-top:0;overflow:auto;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:6px}
+}
+.side{position:relative}
+body.open .panel{position:absolute;left:0;right:0;top:calc(100% + 6px);margin-top:0;max-height:min(42dvh,320px);z-index:8;box-shadow:0 14px 40px rgba(10,20,50,.3)}
+#scrim{display:none}
+body.open #scrim{display:block;position:fixed;inset:0;z-index:7}
+.row{min-height:42px;padding:6px 12px;font-size:.95rem}
+.gh{padding:8px 10px 2px}
+.phead{padding:2px 4px 6px}
+.back{padding:4px 10px}
+.ctl{display:flex;gap:10px;align-items:center;margin-top:8px}
+.spd{flex:1;min-width:0;display:flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:1.5px solid var(--line);border-radius:14px;background:var(--card);font-weight:700}
+.spd input{flex:1;min-width:0;accent-color:var(--accent)}
+.spd output{min-width:2.4em;text-align:right}
+.seg{display:flex;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
+.seg button{font:inherit;font-weight:700;min-height:41px;padding:0 12px;border:0;background:transparent;color:var(--fg);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+@media (min-width:960px){
+ body.open .panel{position:static;max-height:none;box-shadow:none}
+ body.open #scrim{display:none}
+ .ctl{max-width:560px;margin:8px auto 0;width:100%}
+}
 </style>
 </head>
 <body>
@@ -167,12 +208,14 @@ body.sheet #bd{display:block;position:fixed;inset:0;z-index:5;background:rgba(8,
 </div>
 <div class="app">
  <aside class="side">
-  <div class="chips grp" id="groups"></div>
-  <div class="chips subs" id="subs"></div>
-  <div class="chips list" id="chips"></div>
-  <div class="paste" id="paste" hidden>
-   <textarea id="ta" rows="3" placeholder="Paste an English passage here"></textarea>
-   <button class="chip" id="use">Use this passage</button>
+  <button class="navbar" id="navbar" aria-label="Choose a passage"><span id="where"></span><span aria-hidden="true">▾</span></button>
+  <div class="panel" id="panel">
+   <div class="phead"><button class="back" id="back" hidden>‹ Back</button><strong id="ptitle">Library</strong></div>
+   <div id="plist"></div>
+   <div class="paste" id="paste" hidden>
+    <textarea id="ta" rows="4" placeholder="Paste an English passage here"></textarea>
+    <button class="chip" id="use">Use this passage</button>
+   </div>
   </div>
  </aside>
  <div class="work">
@@ -189,9 +232,13 @@ body.sheet #bd{display:block;position:fixed;inset:0;z-index:5;background:rgba(8,
    <div><button class="rb big" id="play" aria-label="Start"></button><span id="cap">Start</span></div>
    <div><button class="rb" id="listen" aria-label="Listen"></button><span id="lcap">Listen</span></div>
   </div>
-  <div class="two"><button class="wide" id="spd"></button><button class="wide" id="md"></button></div>
+  <div class="ctl">
+   <label class="spd"><span>Speed</span><input type="range" id="spd" min="0.5" max="2.5" step="0.5" value="1" aria-label="Speed"><output id="spv">1x</output></label>
+   <div class="seg" role="group" aria-label="Style"><button id="m1" aria-pressed="true">Reveal</button><button id="m2" aria-pressed="false">Highlight</button></div>
+  </div>
  </div>
 </div>
+<div id="scrim"></div>
 </main>
 
 <script>
@@ -204,6 +251,9 @@ const LONG2=[["Renting an apartment", "/æ/, /aʊ/, /ɪ/", "Hello, I saw your ad
 
 const WS=[["Opening", "Let’s get started. Thanks for joining on such short notice, everyone."], ["Agenda", "The agenda today is simple: progress updates, two risks, and next steps."], ["Opinion", "Sara, you’ve worked with this client before. What’s your take on their request?"], ["Cutting in", "Sorry to cut in, but could we go back to the budget for a second?"], ["Disagree", "I see your point, but I’m not sure the timeline is realistic."], ["Clarify", "Just to make sure I understand, you’re proposing we launch in March, not February?"], ["Notes", "I’ll write down the action items and send them out after the meeting."], ["Time", "We’re running out of time, so let’s park this issue and revisit it on Friday."], ["Summary", "To sum up, we agreed to cut the scope, hire one contractor and review progress weekly."], ["Closing", "Thanks, everyone. If there’s nothing else, we’ll wrap up here."], ["Answering", "Good morning, Finance department, Daniel speaking. How can I help you?"], ["Transfer", "One moment, please. I’ll transfer you to our sales team."], ["Message", "She’s in a meeting right now. Would you like to leave a message?"], ["Spelling", "Could you spell your surname for me, please? Is that M-O-R-A-N?"], ["Bad line", "I’m sorry, the line is breaking up. Could you repeat that more slowly?"], ["Follow up", "I’m following up on the invoice I sent last Monday. Have you had a chance to look at it?"], ["Attachment", "I’ve attached the revised proposal. Please let me know if anything is unclear."], ["Out of office", "I’m out of the office until Thursday, but I’ll reply as soon as I’m back."], ["Call back", "Sorry I missed your call. I was on another line. What can I do for you?"], ["End call", "Thanks for your time today. I’ll send a written summary by the end of the day."], ["Morning", "Morning! Did you have a good weekend? Mine was quiet, but I finally finished that book."], ["Coffee", "I’m heading to the kitchen. Can I get you a coffee or something?"], ["Lunch", "A few of us are ordering lunch. Do you want to join us?"], ["Help", "Do you have a minute? I’m stuck on this spreadsheet and could use a second pair of eyes."], ["Thanks", "Thanks so much for covering for me yesterday. I really owe you one."], ["New colleague", "You must be the new analyst. I’m Priya from procurement. Welcome to the team!"], ["Leaving", "I’m going to head out a bit early today. Let me know if anything urgent comes up."], ["Busy week", "Busy week, huh? I’ve got three deadlines and a client visit on Friday."], ["Printer", "The printer on our floor is jammed again. I’ll call the IT help desk."], ["Congrats", "Congratulations on your promotion! You absolutely deserve it."]];
 const WL=[["Opening a presentation", "Good morning, everyone, and thank you for coming. Today I’ll walk you through our quarterly results and our plans for the next six months. I’ll begin with the key numbers, then explain what worked and what didn’t. Please feel free to interrupt if something isn’t clear. We’ll leave time for questions at the end. Let’s get started."], ["Project update", "Here’s a quick update on the website project. We’ve completed the design, and testing is about seventy percent done. The main risk is the payment feature, which is two weeks behind schedule. To fix this, we’ve asked the vendor for extra support. If everything goes well, we can still launch on the original date."], ["Polite disagreement", "I appreciate the suggestion, and I understand why it’s attractive. However, I’m concerned about the cost, especially if we need extra training. Could we try a smaller pilot first? That would give us real data before we commit. I’m happy to prepare a short comparison for next week’s meeting if that helps."], ["Deadline extension", "Hi Mark, do you have a moment? I wanted to talk about the report due on Friday. I’ve run into a few data problems that need more time to fix. Would it be possible to extend the deadline until Tuesday? I’ll send a draft tomorrow so you can see my progress, and I’ll make sure the final version is accurate."], ["Scheduling a meeting", "I’d like to set up a meeting to discuss next quarter’s plan. Are you free on Wednesday afternoon or Thursday morning? It should take about forty-five minutes. If neither works, I can adjust. I’ll send a calendar invitation once we confirm. Please let me know who else should attend so we can include everyone."], ["Angry client", "I’m very sorry for the delay, Mr. Peterson, and I completely understand your frustration. Let me look into this right away. Could you tell me your order number? Thank you. It seems the shipment was held at customs. I’ll contact the carrier today and call you back before five with an exact delivery date."], ["Product pitch", "Thank you for your time today. Our software helps small teams manage projects without endless emails. You can assign tasks, track deadlines and share files in one place. Many of our clients save about five hours a week. If you’d like, I can arrange a free thirty-day trial so your team can test it."], ["Negotiating a price", "We’re very interested in working with you, but the quoted price is a little above our budget. Is there any flexibility if we sign a twelve-month contract? We could also increase the order size. If you can offer a ten percent discount, I’m confident we can finalize the agreement this week."], ["Follow-up email", "Dear Ms. Lopez, thank you for meeting with us yesterday. As discussed, I’m sending the revised proposal and a timeline for the first phase. Please review the pricing section and let me know if you have questions. I’d be glad to schedule a short call to go through the details whenever it suits you."], ["Rescheduling", "Hello, this is Karen from Brightline. I’m calling about our appointment on Monday at ten. Unfortunately, something urgent has come up and I need to reschedule. Would Tuesday afternoon be possible? I apologize for the inconvenience, and I really appreciate your flexibility."], ["Giving feedback", "Thanks for sending the draft. I like the structure, and the charts are very clear. One suggestion: the summary at the beginning is a bit long, so try shortening it to three sentences. Also, check the numbers on page four. Overall, it’s a strong piece of work, and I’m sure the final version will be excellent."], ["Asking for help", "Hi Nina, I hope you’re not too busy. I’m working on the monthly budget, and I can’t figure out why the totals don’t match. You’re much better with formulas than I am. Could you take a quick look at the file? I’d be really grateful, and I’m happy to return the favor anytime."], ["Too much work", "I’d like to talk about my current workload. Over the past month, I’ve taken on two extra projects, and it’s becoming difficult to meet every deadline. I want to deliver good quality, so could we prioritize my tasks together? Perhaps some can be shared with a colleague or postponed until next month."], ["Career talk", "Thank you for meeting with me. Over the last two years, I’ve led three major projects and trained several new employees. I’m very interested in taking on more responsibility, and I’d like to discuss a team leader role. Could you tell me what skills I should develop to be considered when a position opens?"], ["Farewell", "Today is my last day, and I wanted to thank all of you. I’ve learned so much here, and I’m grateful for your support and patience. I’ll miss our lunches and the Friday jokes. Please stay in touch. I’m only an email away, and I’d love to hear how the team grows."]];
+
+const WS2=[["Request file", "Could you send me the latest version of the contract when you get a chance?"], ["Review", "I’d appreciate it if you could review this before noon."], ["Cover a call", "Would you mind taking over the client call while I’m at the dentist?"], ["Praise", "Great job on the presentation. The examples really made it easy to follow."], ["Suggestion", "I think the first slide needs a clearer message. Maybe fewer words?"], ["Apology", "Sorry about the mistake. I’ll correct it and resend the file today."], ["Deadline", "Could we push the deadline to next Wednesday? The data isn’t ready yet."], ["Report done", "I’ve finished the report. Shall I send it to you or upload it to the shared folder?"], ["Need training", "I’m not familiar with this system. Could someone walk me through it?"], ["Double-check", "Let me double-check the numbers and get back to you by three."], ["Interview start", "Thank you for having me. I’m really excited about this opportunity."], ["Experience", "In my previous role, I managed a team of six and reduced costs by fifteen percent."], ["Strengths", "My biggest strength is organization, and I’m still working on public speaking."], ["Ask about team", "Could you tell me more about the team I’ll be working with?"], ["Annual leave", "I’d like to request three days of annual leave starting on the twelfth."], ["Sick day", "I’m feeling unwell, so I won’t be able to come in today."], ["Welcome", "Welcome aboard! Let me show you your desk and introduce you to the team."], ["Resign", "I’ve decided to resign, and my last working day will be the end of next month."], ["Hear back", "When can I expect to hear back about the position?"], ["Salary review", "I’d like to discuss my salary review. Could we schedule a time next week?"]];
+const WL2=[["Online meeting trouble", "Hi everyone, can you hear me? I think my microphone is muted. Let me try again. Okay, now I’m sharing my screen. Can you see the slides? If not, please tell me in the chat. I’m sorry about the delay. Before we begin, could everyone mute their microphones unless they’re speaking? That will help us avoid background noise."], ["Explaining a chart", "As you can see on this chart, sales rose steadily during the first half of the year. The sharp increase in May was caused by our new advertising campaign. After that, growth slowed slightly in the summer, which is normal for this season. Looking ahead, we expect another rise in autumn, so we’re preparing extra stock."], ["Answering questions", "That’s a great question, thank you. Let me answer it in two parts. First, the cost: we expect it to stay within the current budget. Second, the schedule: the new system will take about six weeks to install. If anyone has more questions, please send me an email, and I’ll reply by tomorrow."], ["Introducing a speaker", "Good afternoon, everyone. It’s my pleasure to introduce today’s guest, Dr. Amelia Brooks. She has more than fifteen years of experience in marketing research and has advised several international companies. She’ll talk about customer trends, and there will be time for questions afterwards. Please join me in welcoming Dr. Brooks."], ["Working remotely", "Hi Tom, I wanted to ask about working from home two days a week. My commute takes almost two hours a day, and I believe I’d be more productive with quiet time. I’ll stay available online and attend all important meetings in person. I’d be happy to try this for a month and review the results together."], ["Your strengths", "I’d describe myself as reliable and curious. In my last job, I noticed that our reports took too long to prepare, so I created a simple template that saved the team about three hours a week. I enjoy solving problems, and I work well with people from different departments. I’m eager to keep learning in this role."], ["Negotiating a salary", "Thank you for the offer. I’m very excited about joining the company. Based on my experience and the responsibilities of the role, I was hoping for a slightly higher salary. Would it be possible to discuss a figure closer to what we talked about earlier? I’m also open to discussing other benefits, such as flexible hours."], ["Requesting time off", "Hello Ms. Carter, I’d like to request five days of leave from the fifteenth to the nineteenth of next month for a family event. I’ve already arranged for Linda to handle my urgent tasks, and I’ll finish the monthly report before I go. Please let me know if you need any additional information."], ["Welcoming a new hire", "Hi Daniel, welcome to the team! Let’s start with a quick tour. This is the kitchen, and over there are the meeting rooms. Your laptop is ready, and IT will set up your email this morning. At noon, we’re taking you to lunch. If you have any questions, don’t hesitate to ask. We’re all happy to help."], ["Resigning politely", "Thank you for meeting with me. I’ve decided to leave the company at the end of next month. It wasn’t an easy decision because I’ve enjoyed working here and learned a great deal. I’ll make sure all my projects are handed over properly, and I’m happy to train my replacement. I truly appreciate your support."]];
 
 const $=id=>document.getElementById(id);
 const CATS=[];
@@ -226,15 +276,17 @@ CATS.push({g:"Short 2",n:"Consonants",items:S2.slice(18)});
 [["Services",[0,1,2,8,9,13]],["Work & city",[3,5,10,11]],["Leisure",[4,6,7,12,14]]].forEach(([n,ids])=>CATS.push({g:"Long 2",n:n,items:ids.map(i=>({chip:LONG2[i][0],text:LONG2[i][2],tag:"Long: "+LONG2[i][0]}))}));
 [["Meetings",0],["Phone & email",10],["Small talk",20]].forEach(([n,a])=>CATS.push({g:"Work Short",n:n,items:WS.slice(a,a+10).map(([c,x])=>({chip:c,text:x,tag:"Work: "+c}))}));
 [["Meetings",[0,1,2,3,4]],["Clients",[5,6,7,8,9]],["Teamwork",[10,11,12,13,14]]].forEach(([n,r])=>CATS.push({g:"Work Long",n:n,items:r.map(i=>({chip:WL[i][0],text:WL[i][1],tag:"Long: "+WL[i][0]}))}));
-["Short vowels","Long vowels","Diphthongs","Consonants 1","Consonants 2","-s, -ed","Contrast","Daily","Travel","Work","Life","Twister","Vowels","Consonants","Services","Work & city","Leisure","Meetings","Phone & email","Small talk","Meetings","Clients","Teamwork"].forEach((l,i)=>{CATS[i].s=l;});
-const SPEEDS=[["Slow",65],["Medium",90],["Fast",120],["Very fast",150]];
+[["Requests & feedback",0],["Interview & HR",10]].forEach(([n,a])=>CATS.push({g:"Work Short",n:n,items:WS2.slice(a,a+10).map(([c,x])=>({chip:c,text:x,tag:"Work: "+c}))}));
+[["Presentations",[0,1,2,3,4]],["Interviews & HR",[5,6,7,8,9]]].forEach(([n,r])=>CATS.push({g:"Work Long",n:n,items:r.map(i=>({chip:WL2[i][0],text:WL2[i][1],tag:"Long: "+WL2[i][0]}))}));
+["Short vowels","Long vowels","Diphthongs","Consonants 1","Consonants 2","-s, -ed","Contrast","Daily","Travel","Work","Life","All 10","Vowels","Consonants","Services","Work & city","Leisure","Meetings","Phone & email","Small talk","Meetings","Clients","Teamwork","Requests & feedback","Interview & HR","Presentations","Interviews & HR"].forEach((l,i)=>{CATS[i].s=l;});
+const SPEEDS=[["0.5x",65],["1x",130],["1.5x",195],["2x",260],["2.5x",325]];
 const IC={
  play:'<svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>',
  pause:'<svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path fill="currentColor" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
  redo:'<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>',
  vol:'<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M3 9v6h4l5 4V5L7 9zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>'
 };
-let ci=0,ii=0,wpmV=90,words=[],spans=[],idx=-1,timer=null,cdTimer=null,playing=false;
+let ci=0,ii=0,wpmV=130,words=[],spans=[],idx=-1,timer=null,cdTimer=null,playing=false;
 const stage=$("stage"),playBtn=$("play");
 
 function mk(parent,label,on,fn){const b=document.createElement("button");b.className="chip";b.textContent=label;b.setAttribute("aria-pressed",on);b.onclick=fn;parent.appendChild(b);}
@@ -261,7 +313,7 @@ function load(text,tag){
   words=text.trim().split(/\s+/);
   const p=$("text");p.textContent="";spans=[];
   words.forEach(w=>{const s=document.createElement("span");s.textContent=w;p.appendChild(s);p.appendChild(document.createTextNode(" "));spans.push(s);});
-  $("tag").textContent=tag;$("text").className="";idx=-1;paint();fit();
+  $("tag").textContent=tag;$("text").className="";$("text").parentElement.scrollTop=0;idx=-1;paint();fit();
 }
 function step(){
   idx++;paint();
@@ -285,7 +337,7 @@ function speak(){
   if(!("speechSynthesis" in window))return;
   if(speechSynthesis.speaking){stopSpeech();return;}
   const u=new SpeechSynthesisUtterance(words.join(" "));
-  u.lang="en-GB";u.rate=Math.min(1.3,Math.max(0.5,wpmV/130));
+  u.lang="en-GB";u.rate=Math.min(2.5,Math.max(0.5,wpmV/130));
   u.onend=u.onerror=()=>{$("lcap").textContent="Listen";};
   $("lcap").textContent="Stop";speechSynthesis.speak(u);
 }
@@ -294,49 +346,54 @@ playBtn.onclick=toggle;
 $("reset").innerHTML=IC.redo;$("reset").onclick=reset;
 $("listen").innerHTML=IC.vol;$("listen").onclick=speak;
 if(!("speechSynthesis" in window))$("listen").parentElement.hidden=true;
-$("use").onclick=()=>{const t=$("ta").value.trim();if(t){load(t,"Your passage");closeSheet();}};
+$("use").onclick=()=>{const t=$("ta").value.trim();if(t){load(t,"Your passage");collapse();}};
 document.addEventListener("keydown",e=>{
-  const t=document.activeElement,own=["play","reset","listen","use","prev","next","spd","md"].includes(t.id);
-  if(t.tagName==="TEXTAREA")return;
+  const t=document.activeElement,own=["play","reset","listen","use","prev","next","spd","m1","m2"].includes(t.id);
+  if(t.tagName==="TEXTAREA"||t.id==="spd")return;
   if(e.code==="Space"&&!own){e.preventDefault();toggle();}
   else if(e.code==="ArrowRight")nav(1);
   else if(e.code==="ArrowLeft")nav(-1);
 });
-const GROUPS=[["Work Short","Work Short"],["Work Long","Work Long"],["Short","Short"],["Short 2","Short 2"],["Long","Long"],["Long 2","Long 2"],["Twister","Twister"],["","Paste"]];
-let gi=0;
-function catsOf(g){return CATS.map((c,i)=>[c,i]).filter(([c])=>c.g===GROUPS[g][0]);}
-function drawGroups(){const el=$("groups");el.textContent="";GROUPS.forEach(([,l],g)=>mk(el,l,g===gi,()=>selectGroup(g)));}
-function drawSubs(){const el=$("subs"),list=gi===7?[]:catsOf(gi);el.textContent="";el.hidden=list.length<2;if(el.hidden)return;list.forEach(([c,i])=>mk(el,c.s,i===ci,()=>setCat(i)));}
-function setCat(i){ci=i;pick(0);drawSubs();}
-function selectGroup(g){gi=g;drawGroups();if(g===7){ci=-1;drawSubs();drawChips();clearStage();return;}setCat(catsOf(g)[0][1]);}
-function drawChips(){
-  const el=$("chips"),paste=ci<0;
-  el.textContent="";$("paste").hidden=!paste;el.hidden=paste;
-  $("prev").disabled=$("next").disabled=paste;
-  if(paste)return;
-  const items=CATS[ci].items,seen=new Set();
-  items.forEach((it,i)=>{if(seen.has(it.chip))return;seen.add(it.chip);mk(el,it.chip,items[ii].chip===it.chip,()=>pick(i));});
-  const a=el.querySelector('[aria-pressed="true"]');if(a)el.scrollTop=Math.max(0,a.offsetTop-el.clientHeight/2);
+const GN=[["Work Short","Work · Short"],["Work Long","Work · Long"],["Short","Pronunciation · Short"],["Short 2","Pronunciation · Short 2"],["Long","Pronunciation · Long"],["Long 2","Pronunciation · Long 2"],["Twister","Tongue twisters"]];
+let lv=0,pc=-1,holdUntil=0;
+function gh(t){const d=document.createElement("div");d.className="gh";d.textContent=t;$("plist").appendChild(d);}
+function row(t,sub,fn,cur){const b=document.createElement("button");b.className="row";b.setAttribute("aria-current",!!cur);const x=document.createElement("span");x.textContent=t;const y=document.createElement("small");y.textContent=sub;b.append(x,y);b.onclick=fn;$("plist").appendChild(b);}
+function peek(t){const w=t.split(" ");return w.slice(0,6).join(" ")+(w.length>6?"…":"");}
+function drawPanel(){
+  const pl=$("plist"),paste=lv===2;pl.textContent="";
+  $("paste").hidden=!paste;pl.hidden=paste;$("back").hidden=lv===0;
+  $("ptitle").textContent=lv===0?"Library":lv===1?CATS[pc].s:"Paste your own text";
+  if(lv===0){
+    GN.forEach(([g,name])=>{gh(name);CATS.forEach((c,i)=>{if(c.g===g)row(c.s,c.items.length+" passages",()=>{pc=i;lv=1;drawPanel();},i===ci);});});
+    gh("Your own text");row("Paste a passage","",()=>{ci=-1;clearStage();where();lv=2;drawPanel();},ci<0);
+  }else if(lv===1){
+    CATS[pc].items.forEach((it,i)=>row((i+1)+". "+it.chip,peek(it.text),()=>{ci=pc;pick(i);collapse();},ci===pc&&ii===i));
+  }
+  const a=document.querySelector('#plist [aria-current="true"]');if(a)$("panel").scrollTop=Math.max(0,a.offsetTop-70);
 }
-function pick(i){ii=i;const it=CATS[ci].items[i];load(it.text,it.tag);drawChips();}
-function nav(d){if(ci<0)return;const n=CATS[ci].items.length;pick((ii+d+n)%n);}
+function where(){
+  $("where").textContent=ci<0?"Your own text":CATS[ci].g+" › "+CATS[ci].s+" › "+CATS[ci].items[ii].chip;
+  $("prev").disabled=$("next").disabled=ci<0;
+  if(innerWidth>=960&&ci>=0){lv=1;pc=ci;drawPanel();}
+}
+function pick(i){ii=i;const it=CATS[ci].items[i];load(it.text,it.tag);where();}
+function nextCat(d){const l=[];CATS.forEach((c,i)=>{if(c.g===CATS[ci].g)l.push(i);});return l[(l.indexOf(ci)+d+l.length)%l.length];}
+function nav(d){if(ci<0)return;let j=ii+d;if(j>=CATS[ci].items.length){ci=nextCat(1);j=0;}else if(j<0){ci=nextCat(-1);j=CATS[ci].items.length-1;}pick(j);}
+function collapse(){document.body.classList.remove("open");setTimeout(fit,0);}
+function expand(){if(ci<0){lv=0;}else{lv=1;pc=ci;}drawPanel();document.body.classList.add("open");setTimeout(fit,0);}
 function clearStage(){halt();stopSpeech();words=[];spans=[];idx=-1;$("text").textContent="";$("tag").textContent="";paint();}
 function closeSheet(){document.body.classList.remove("sheet");setTimeout(fit,0);}
 function fit(){
   const t=$("text");if(!words.length)return;
   const avail=t.parentElement.clientHeight;
-  let lo=innerWidth>=960?26:20,hi=innerWidth>=960?54:42;
+  let lo=innerWidth>=960?30:24,hi=innerWidth>=960?54:42;
   while(hi-lo>.5){const m=(lo+hi)/2;t.style.fontSize=m+"px";if(t.offsetHeight>avail)hi=m;else lo=m;}
   t.style.fontSize=lo+"px";follow();
 }
 function follow(){
-  const t=$("text");if(!words.length){t.style.transform="";return;}
-  const avail=t.parentElement.clientHeight;
-  const over=t.offsetHeight-avail;
-  if(over<=0){t.style.transform="";return;}
-  const s=spans[Math.max(idx,0)];
-  const y=s?s.offsetTop+s.offsetHeight/2-avail/2:0;
-  t.style.transform="translateY("+(-Math.min(over,Math.max(0,y)))+"px)";
+  if(!words.length||idx<0||idx>=words.length||Date.now()<holdUntil)return;
+  const tv=$("text").parentElement,r=spans[idx].getBoundingClientRect(),v=tv.getBoundingClientRect();
+  if(r.bottom>v.bottom-16||r.top<v.top+8)tv.scrollTo({top:tv.scrollTop+(r.top-v.top)-v.height/3,behavior:"smooth"});
 }
 let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(fit,100);});
 if(document.fonts)document.fonts.ready.then(fit);
@@ -345,12 +402,20 @@ let tx=0,ty=0;
 stage.addEventListener("touchstart",e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
 stage.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;if(Math.abs(dx)>70&&Math.abs(dy)<45){e.preventDefault();nav(dx<0?1:-1);}});
 $("prev").onclick=()=>nav(-1);$("next").onclick=()=>nav(1);
-const MODES=[["reveal","Reveal"],["glow","Highlight"]];let mi=0;
-function drawSpeed(){$("spd").textContent="Speed: "+SPEEDS.find(x=>x[1]===wpmV)[0];}
-function drawMode(){$("md").textContent="Style: "+MODES[mi][1];stage.dataset.mode=MODES[mi][0];}
-$("spd").onclick=()=>{const i=SPEEDS.findIndex(x=>x[1]===wpmV);wpmV=SPEEDS[(i+1)%SPEEDS.length][1];drawSpeed();};
-$("md").onclick=()=>{mi=(mi+1)%MODES.length;drawMode();};
-drawSpeed();drawMode();selectGroup(0);
+$("spd").oninput=e=>{wpmV=Math.round(130*e.target.value);$("spv").textContent=e.target.value+"x";};
+function setMode(m){stage.dataset.mode=m;$("m1").setAttribute("aria-pressed",m==="reveal");$("m2").setAttribute("aria-pressed",m==="glow");}
+$("m1").onclick=()=>setMode("reveal");$("m2").onclick=()=>setMode("glow");
+$("scrim").onclick=collapse;
+$("navbar").onclick=()=>document.body.classList.contains("open")?collapse():expand();
+$("back").onclick=()=>{lv=0;drawPanel();};
+(()=>{const tv=$("text").parentElement;let d=null,mv=0,st=0;
+ const hold=()=>{holdUntil=Date.now()+2500;};
+ tv.addEventListener("wheel",hold,{passive:true});tv.addEventListener("touchmove",hold,{passive:true});
+ tv.addEventListener("mousedown",e=>{d=e.clientY;mv=0;st=tv.scrollTop;});
+ addEventListener("mousemove",e=>{if(d===null)return;const dy=e.clientY-d;mv=Math.max(mv,Math.abs(dy));if(mv>4){tv.scrollTop=st-dy;hold();}});
+ addEventListener("mouseup",()=>{d=null;});
+ tv.addEventListener("click",e=>{if(mv>4){e.stopPropagation();mv=0;}},true);})();
+setMode("reveal");ci=CATS.findIndex(c=>c.g==="Work Short");pick(0);
 </script>
 </body>
 </html>
