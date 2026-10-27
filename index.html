@@ -8,239 +8,178 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%A4%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap">
 <style>
-:root{--bg:#eef3fb;--card:#fff;--fg:#14203a;--muted:#5f6c86;--line:#d9e1f0;--accent:#2f6bff;--accent-fg:#fff;--st:#0f1b3d;--st2:#1b2f6b;--hi:#ffd23f;--hi-fg:#0f1b3d;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0f1d;--card:#131b30;--fg:#e8edf8;--muted:#98a5c0;--line:#26314d;--accent:#6a95ff;--accent-fg:#071126;--st:#0b1430;--st2:#16275a;--hi:#ffd23f;--hi-fg:#0f1b3d;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0a0f1d;--card:#131b30;--fg:#e8edf8;--muted:#98a5c0;--line:#26314d;--accent:#6a95ff;--accent-fg:#071126;--st:#0b1430;--st2:#16275a;--hi:#ffd23f;--hi-fg:#0f1b3d;color-scheme:dark}
+:root{--bg:#f3f5fa;--card:#fff;--fg:#121a2e;--muted:#5d6985;--line:#dde3f0;--hue:220;--accent:hsl(var(--hue) 75% 42%);--accent-fg:#fff;--st:hsl(var(--hue) 65% 14%);--st2:hsl(var(--hue) 70% 40%);--hi:#ffd23f;--hi-fg:#10163a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0f1d;--card:#131b30;--fg:#e8edf8;--muted:#98a5c0;--line:#26314d;--accent:hsl(var(--hue) 85% 68%);--accent-fg:#0b1020;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0a0f1d;--card:#131b30;--fg:#e8edf8;--muted:#98a5c0;--line:#26314d;--accent:hsl(var(--hue) 85% 68%);--accent-fg:#0b1020;color-scheme:dark}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--fg);font:500 16px/1.5 "Nunito",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-main{max-width:880px;margin:0 auto;padding:22px 16px 48px}
-h1{font-size:2rem;font-weight:800;margin:0;letter-spacing:-.01em}
-.sub{color:var(--muted);margin:2px 0 18px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.chip{font:inherit;font-weight:700;padding:8px 14px;min-height:40px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
-.chip:hover{border-color:var(--accent)}
-.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
-.tabs .chip{border-radius:12px}
-button:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.paste textarea{width:100%;margin-top:12px;padding:12px;font:inherit;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--fg)}
-.paste .chip{margin-top:8px;background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
-.stage{position:relative;overflow:hidden;margin-top:16px;border-radius:26px;background:linear-gradient(165deg,var(--st2),var(--st));color:#fff;padding:clamp(24px,5vw,48px) clamp(18px,5vw,48px) clamp(30px,5vw,48px);min-height:320px;display:flex;flex-direction:column;justify-content:center}
-.tag{position:absolute;top:16px;left:18px;font-size:.85rem;font-weight:700;color:#c9d4f5;background:rgba(255,255,255,.12);padding:4px 12px;border-radius:999px}
-#text{text-align:center;font-size:clamp(1.7rem,5.4vw,2.8rem);line-height:1.7;font-weight:800;margin:30px 0 8px}
-.w{display:inline-block;border-radius:12px;padding:0 8px;transition:opacity .2s,background-color .2s,transform .2s}
-.stage[data-mode="reveal"] .future{opacity:0}
-.stage[data-mode="glow"] .future{opacity:.3}
-.cur{background:var(--hi);color:var(--hi-fg);transform:scale(1.06)}
-.pb{position:absolute;left:0;right:0;bottom:0;height:7px;background:rgba(255,255,255,.14)}
-.pb i{display:block;height:100%;width:0;background:var(--hi);transition:width .2s}
-#cd{position:absolute;inset:0;display:grid;place-items:center;font-size:6.5rem;font-weight:800;color:var(--hi);background:linear-gradient(165deg,var(--st2),var(--st))}
-#cd[hidden]{display:none}
-.cnt{text-align:center;color:var(--muted);margin:12px 0 16px;font-weight:700}
-.dock{display:flex;justify-content:center;align-items:flex-start;gap:28px}
-.dock div{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted);font-size:.85rem;font-weight:700}
-.rb{width:56px;height:56px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--fg);display:grid;place-items:center;cursor:pointer;margin-top:10px}
-.rb.big{width:76px;height:76px;margin-top:0;background:var(--accent);color:var(--accent-fg);border-color:transparent;box-shadow:0 8px 22px rgba(47,107,255,.35)}
-.opt{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:20px}
-.opt>span{min-width:74px;color:var(--muted);font-weight:700}
-.opt .chips{margin:0}
-@media (prefers-reduced-motion:reduce){.w,.pb i,#text{transition:none}.cur{transform:none}}
-main{max-width:1180px}
-.app{display:grid;gap:18px}
-.chips.tabs{margin-top:0}
-.list{max-height:168px;overflow:auto;position:relative;padding:2px}
-.list .chip{padding:6px 12px;min-height:36px;font-size:.92rem}
-.nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 0 16px}
-.nav .cnt{margin:0;flex:1}
-.nav .chip{white-space:nowrap}
-@media (min-width:960px){
- .app{grid-template-columns:340px 1fr;align-items:start;gap:28px}
- .side{position:sticky;top:16px}
- .list{max-height:calc(100vh - 230px)}
- .work .stage{margin-top:0;min-height:420px}
- #text{font-size:clamp(2rem,3.2vw,3.1rem)}
-}
-html,body{height:100%}
-main{height:100dvh;display:flex;flex-direction:column;padding:12px 14px}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
-h1{font-size:1.35rem}
-.sub{display:none;margin:0 0 10px}
-.app{flex:1;min-height:0;display:flex;flex-direction:column;gap:0}
-.work{flex:1;min-height:0;min-width:0;display:flex;flex-direction:column}
-.work .stage{flex:1;min-height:0;margin-top:0;padding:50px 14px 18px}
-#text{margin:auto 0;position:relative;transition:transform .35s}
-.work .stage{justify-content:flex-start}
-.tv{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
-.topbar h1{font-size:1.2rem;white-space:nowrap}
-#open{white-space:nowrap}
-.w{padding:0 .28em}
-.stage[data-mode="glow"] .future{opacity:.4}
-.nav{margin:8px 0 6px}
-.dock{gap:22px}
-.rb{margin-top:6px}.rb.big{margin-top:0}
-.opt{margin-top:10px}.opt>span{min-width:64px}
-button:disabled{opacity:.4;cursor:not-allowed}
-.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.side{display:none}
-body.sheet .side{display:block;position:fixed;left:0;right:0;bottom:0;z-index:6;max-height:58dvh;overflow:auto;background:var(--card);border-radius:22px 22px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.3);padding:16px 14px calc(14px + env(safe-area-inset-bottom,0px))}
-#bd{display:none}
-body.sheet #bd{display:block;position:fixed;inset:0;z-index:5;background:rgba(8,14,30,.5)}
-.list{max-height:none}
-@media (min-width:960px){
- main{padding:18px 24px}
- .sub{display:block}
- .app{flex-direction:row;align-items:stretch;gap:28px}
- .side{display:flex;flex-direction:column;position:static;width:340px;flex:none;min-height:0;padding:0}
- .list{flex:1;min-height:0;max-height:none}
- .work .stage{padding:56px 40px 28px}
- #open,.sheet-head{display:none}
- .dock{gap:34px}
-}
-.topbar{display:block;margin-bottom:6px}
-.side{display:block;margin-bottom:8px}
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0}
-.tabs .chip{padding:8px 4px;font-size:.88rem;min-height:44px;border-radius:12px}
-.list{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;max-height:none;margin-top:8px;padding:2px 2px 6px}
-.list .chip{flex:none;min-height:42px;padding:8px 14px}
-.paste textarea{margin-top:8px}
-.nav,.opt,.sheet-head{display:none}
-.stage{cursor:pointer}
-.work .stage{padding:54px 34px 20px}
-.tag{max-width:calc(100% - 110px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cnt{position:absolute;top:16px;right:18px;margin:0;flex:none;font-size:.85rem;font-weight:700;color:#c9d4f5;background:rgba(255,255,255,.12);padding:4px 12px;border-radius:999px}
-.arr{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:30px;height:72px;border:0;border-radius:12px;background:rgba(255,255,255,.14);color:#fff;font-size:2rem;line-height:1;cursor:pointer;padding:0}
-.arr:hover{background:rgba(255,255,255,.28)}
-.arr.l{left:4px}.arr.r{right:4px}
-.arr:disabled{display:none}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.wide{font:inherit;font-weight:700;min-height:52px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
-.wide:hover{border-color:var(--accent)}
-.wide:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-@media (min-width:960px){
- .app{flex-direction:row;align-items:stretch;gap:28px}
- .side{display:flex;flex-direction:column;width:340px;flex:none;min-height:0;margin:0}
- .tabs{grid-template-columns:1fr 1fr}
- .list{flex-direction:row;flex-wrap:wrap;flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;align-content:flex-start}
- .work .stage{padding:60px 64px 28px}
- .arr{width:40px}
- .two{max-width:520px;margin-left:auto;margin-right:auto;width:100%}
-}
-#cat{display:block;width:100%;min-height:52px;font:inherit;font-weight:700;padding:0 14px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--fg)}
-#cat:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.list{flex-wrap:wrap;overflow-x:hidden;overflow-y:auto;max-height:150px;margin-top:10px}
-@media (min-width:960px){.list{max-height:none}#cat{min-height:48px}}
-#cat{display:none}
-.side .chip{min-height:36px;padding:5px 12px;font-size:.88rem}
-.grp{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0}
-.grp .chip{padding:5px 2px;border-radius:12px;font-size:.84rem;min-height:40px}
-.subs{gap:6px;margin-top:6px}
-.subs[hidden],.paste[hidden]{display:none}
-.list{gap:6px;margin-top:6px;max-height:118px}
-@media (min-width:960px){.list{max-height:none}}
-.grp .chip{font-size:.8rem;white-space:nowrap}
-.subs .chip{padding:4px 10px;font-size:.82rem;min-height:36px}
-.list .chip{padding:4px 9px;font-size:.84rem;min-height:36px}
-@media (max-width:959px){
- .topbar{display:none}
- main{padding-top:10px}
- .side{margin-bottom:6px}
- .dock{align-items:center;gap:20px}
- .dock div{font-size:0;gap:0}
- .rb{margin-top:0;width:50px;height:50px}
- .rb.big{width:66px;height:66px}
- .two{margin-top:8px}
- .wide{min-height:44px}
-}
-.grp{grid-template-columns:repeat(4,1fr)}
-.grp .chip{font-size:.78rem}
-.grp .chip{min-height:36px}
-.work .stage{margin-bottom:12px}
-.dock{margin-top:2px;padding-bottom:2px}
-.stage{flex:1 1 0}
-.tv{overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.4) transparent;user-select:none;-webkit-user-select:none;cursor:grab}
-.tv::-webkit-scrollbar{width:8px}
-.tv::-webkit-scrollbar-thumb{background:rgba(255,255,255,.35);border-radius:4px}
-.navbar{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:48px;padding:0 14px;font:inherit;font-weight:700;border-radius:14px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer;text-align:left}
-.navbar span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+main{max-width:1180px;height:100dvh;margin:0 auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--st2),var(--st));color:#fff;display:grid;place-items:center;flex:none}
+h1{font-size:1.15rem;font-weight:800;line-height:1.15;margin:0}
+.tagl{font-size:.8rem;color:var(--muted);line-height:1.2}
+.app{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px}
+.side{position:relative}
+.navbar{display:flex;align-items:center;gap:12px;width:100%;min-height:58px;padding:8px 14px;border-radius:16px;border:1.5px solid var(--line);background:var(--card);text-align:left}
+.nicon{width:38px;height:38px;border-radius:11px;background:var(--accent);color:var(--accent-fg);display:grid;place-items:center;flex:none}
+.wtxt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25}
+.wtxt b{font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wtxt small{font-size:.8rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .panel{display:none;position:relative}
-body.open .panel{display:block;margin-top:8px;max-height:44dvh;overflow:auto;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:6px}
-.phead{display:flex;align-items:center;gap:10px;padding:6px 6px 8px}
-.back{font:inherit;font-weight:700;padding:6px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
-.back[hidden]{display:none}
-.gh{font-size:.82rem;font-weight:800;color:var(--muted);padding:12px 10px 4px}
-.row{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:46px;padding:8px 12px;border:0;border-radius:10px;background:transparent;color:var(--fg);font:inherit;font-weight:700;text-align:left;cursor:pointer}
+body.open .panel{display:block;position:absolute;left:0;right:0;top:calc(100% + 6px);max-height:min(42dvh,320px);z-index:8;overflow:auto;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:6px;box-shadow:0 14px 40px rgba(10,20,50,.3)}
+#scrim{display:none}
+body.open #scrim{display:block;position:fixed;inset:0;z-index:7}
+.phead{display:flex;align-items:center;gap:10px;padding:2px 4px 6px}
+.back,.chip{padding:5px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);font-weight:700}
+.chip{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);margin-top:8px}
+.gh{font-size:.82rem;font-weight:800;color:var(--muted);padding:8px 10px 2px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:42px;padding:6px 12px;border:0;border-radius:10px;background:transparent;font-size:.95rem;font-weight:700;text-align:left}
 .row:hover{background:var(--bg)}
 .row[aria-current="true"]{background:var(--accent);color:var(--accent-fg)}
 .row small{font-weight:500;font-size:.82rem;color:var(--muted);max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .row[aria-current="true"] small{color:inherit;opacity:.85}
 .paste{padding:6px}
-@media (min-width:960px){
- .navbar{display:none}
- .panel,body.open .panel{display:block;flex:1;min-height:0;max-height:none;margin-top:0;overflow:auto;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:6px}
-}
-.side{position:relative}
-body.open .panel{position:absolute;left:0;right:0;top:calc(100% + 6px);margin-top:0;max-height:min(42dvh,320px);z-index:8;box-shadow:0 14px 40px rgba(10,20,50,.3)}
-#scrim{display:none}
-body.open #scrim{display:block;position:fixed;inset:0;z-index:7}
-.row{min-height:42px;padding:6px 12px;font-size:.95rem}
-.gh{padding:8px 10px 2px}
-.phead{padding:2px 4px 6px}
-.back{padding:4px 10px}
-.ctl{display:flex;gap:10px;align-items:center;margin-top:8px}
-.spd{flex:1;min-width:0;display:flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:1.5px solid var(--line);border-radius:14px;background:var(--card);font-weight:700}
-.spd input{flex:1;min-width:0;accent-color:var(--accent)}
-.spd output{min-width:2.4em;text-align:right}
-.seg{display:flex;border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:var(--card)}
-.seg button{font:inherit;font-weight:700;min-height:41px;padding:0 12px;border:0;background:transparent;color:var(--fg);cursor:pointer}
+.paste textarea{display:block;width:100%;padding:10px;font:inherit;color:var(--fg);border-radius:12px;border:1.5px solid var(--line);background:var(--bg)}
+.work{flex:1;min-height:0;min-width:0;display:flex;flex-direction:column}
+.stage{position:relative;overflow:hidden;flex:1 1 0;min-height:0;margin-bottom:12px;border-radius:28px;background:radial-gradient(120% 90% at 15% 0%,var(--st2),var(--st));color:#fff;padding:54px 36px 22px;display:flex;flex-direction:column;cursor:pointer}
+.tag{position:absolute;top:16px;left:18px;max-width:calc(100% - 110px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.85rem;font-weight:700;color:#d6defa;background:rgba(255,255,255,.14);padding:4px 12px;border-radius:999px}
+.cnt{position:absolute;top:16px;right:18px;font-size:.85rem;font-weight:700;color:#d6defa;background:rgba(255,255,255,.14);padding:4px 12px;border-radius:999px}
+.tv{flex:1;min-height:0;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.4) transparent;user-select:none;-webkit-user-select:none;cursor:grab}
+.tv::-webkit-scrollbar{width:8px}
+.tv::-webkit-scrollbar-thumb{background:rgba(255,255,255,.35);border-radius:4px}
+#text{margin:auto 0;position:relative;text-align:center;font-size:2rem;line-height:1.7;font-weight:800}
+.w{display:inline-block;border-radius:12px;padding:0 .28em;transition:opacity .2s,background-color .2s,transform .2s}
+.stage[data-mode="reveal"] .future{opacity:0}
+.stage[data-mode="reveal"].idle .future{opacity:.3}
+.stage[data-mode="glow"] .future{opacity:.4}
+.cur{background:var(--hi);color:var(--hi-fg);transform:scale(1.06)}
+.pb{position:absolute;left:0;right:0;bottom:0;height:7px;background:rgba(255,255,255,.16)}
+.pb i{display:block;height:100%;width:0;background:var(--hi);transition:width .2s}
+#cd{position:absolute;inset:0;display:grid;place-items:center;font-size:6.5rem;font-weight:800;color:var(--hi);background:radial-gradient(120% 90% at 15% 0%,var(--st2),var(--st))}
+.arr{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:30px;height:72px;border:0;border-radius:12px;background:rgba(255,255,255,.14);color:#fff;font-size:2rem;line-height:1;padding:0}
+.arr:hover{background:rgba(255,255,255,.28)}
+.arr.l{left:4px}.arr.r{right:4px}
+.arr:disabled{display:none}
+.dock{display:flex;justify-content:center;align-items:center;gap:20px}
+.dock div{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted);font-size:0;font-weight:700}
+.rb{width:50px;height:50px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--fg);display:grid;place-items:center}
+.rb.big{width:68px;height:68px;background:var(--accent);color:var(--accent-fg);border-color:transparent;box-shadow:0 8px 22px color-mix(in srgb,var(--accent) 40%,transparent)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.card2{display:flex;gap:10px;align-items:center;margin-top:10px;padding:8px;border-radius:16px;border:1.5px solid var(--line);background:var(--card)}
+.spd{flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:0 6px;font-weight:700}
+.spd>span{display:none}
+.spd input{flex:1;min-width:90px;accent-color:var(--accent)}
+.spd output{min-width:2.6em;text-align:right}
+.seg{display:flex;border-radius:11px;overflow:hidden;background:var(--bg)}
+.seg button{min-height:40px;padding:0 11px;border:0;background:transparent;font-size:.9rem;font-weight:700}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.tagl{display:none}
+@media (prefers-reduced-motion:reduce){.w,.pb i,#text{transition:none}.cur{transform:none}}
+@media (min-width:600px){.spd>span{display:inline}.tagl{display:block}}
 @media (min-width:960px){
- body.open .panel{position:static;max-height:none;box-shadow:none}
+ main{padding:20px 28px;gap:16px}
+ .app{flex-direction:row;gap:26px}
+ .side{width:340px;flex:none;display:flex;flex-direction:column;min-height:0}
+ .navbar{display:none}
+ .panel,body.open .panel{display:block;position:static;flex:1;min-height:0;max-height:none;overflow:auto;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:6px;box-shadow:none}
  body.open #scrim{display:none}
- .ctl{max-width:560px;margin:8px auto 0;width:100%}
+ .stage{padding:60px 64px 28px}
+ .arr{width:40px}
+ .dock{gap:34px}
+ .dock div{font-size:.85rem}
+ .rb.big{width:76px;height:76px}
+ .card2{max-width:560px;margin:10px auto 0;width:100%}
+ .seg button{font-size:1rem}
 }
+.stage::before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'%3E%3Crect x='22' y='26' width='100' height='56' rx='20'/%3E%3Cpath d='M46 82l-8 20 26-20'/%3E%3Crect x='268' y='196' width='112' height='60' rx='22'/%3E%3Cpath d='M338 256l10 20-28-20'/%3E%3Cpath d='M24 232q15-30 30 0t30 0t30 0t30 0'/%3E%3Ccircle cx='330' cy='62' r='32'/%3E%3Ccircle cx='330' cy='62' r='17'/%3E%3Cpath d='M180 40v36M196 28v60M212 40v36M228 52v12'/%3E%3C/svg%3E") center/cover no-repeat;opacity:.13;pointer-events:none}
+.tv,.arr,.tag,.cnt,.pb{z-index:1}
+
+.q{display:block;width:calc(100% - 8px);margin:0 4px 6px;padding:9px 12px;font:inherit;color:var(--fg);border-radius:12px;border:1.5px solid var(--line);background:var(--bg)}
+.grow{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:6px 12px;border:0;border-radius:10px;background:transparent;font-weight:800;text-align:left}
+.grow:hover{background:var(--bg)}
+.grow small{margin-left:auto;font-weight:500;font-size:.82rem;color:var(--muted)}
+.row.sub{padding-left:26px}
+.ri{width:1.5em;text-align:center;flex:none}
+.row span:not(.ri),.grow span:not(.ri){min-width:0}
+.card2{flex-direction:column;align-items:stretch;gap:8px}
+.r1,.r2{display:flex;align-items:center;gap:10px}
+.tog{min-height:40px;padding:0 14px;border-radius:11px;border:1.5px solid var(--line);background:var(--bg);font-weight:800}
+.tog[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.hue{flex:1;min-width:80px;-webkit-appearance:none;appearance:none;height:16px;border-radius:999px;border:0;padding:0;background:linear-gradient(90deg,hsl(0 85% 55%),hsl(60 85% 50%),hsl(120 70% 45%),hsl(180 75% 45%),hsl(240 80% 62%),hsl(300 75% 58%),hsl(360 85% 55%))}
+.hue::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:hsl(var(--hue) 80% 50%);border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.45);cursor:grab}
+.hue::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:hsl(var(--hue) 80% 50%);border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.45);cursor:grab}
+.hue::-moz-range-track{background:transparent}
+.w{vertical-align:top}
+.wd{display:block;font-weight:inherit}
+.ipa{display:none;font-style:normal;font-weight:600;font-size:max(.4em,11px);line-height:1.25;opacity:.9;letter-spacing:.01em}
+body.ipa-on .ipa{display:block}
+.ipa:empty{display:none!important}
+.row>span:not(.ri),.grow>span:not(.ri){flex:1;min-width:0;text-align:left}
+.stat{position:absolute;left:16px;bottom:14px;z-index:2;font-size:.78rem;font-weight:700;color:#d6defa;background:rgba(0,0,0,.28);padding:2px 10px;border-radius:999px;pointer-events:none}
+.stat:empty{display:none}
+.tv{padding-bottom:28px}
 </style>
 </head>
 <body>
 <main>
-<div class="topbar">
- <h1>Speaking: Read Along</h1>
- <p class="sub">Everyday speaking practice for office workers. Tap the text frame or the round button to start, and use the arrows to change passage.</p>
-</div>
-<div class="app">
- <aside class="side">
-  <button class="navbar" id="navbar" aria-label="Choose a passage"><span id="where"></span><span aria-hidden="true">▾</span></button>
-  <div class="panel" id="panel">
-   <div class="phead"><button class="back" id="back" hidden>‹ Back</button><strong id="ptitle">Library</strong></div>
-   <div id="plist"></div>
-   <div class="paste" id="paste" hidden>
-    <textarea id="ta" rows="4" placeholder="Paste an English passage here"></textarea>
-    <button class="chip" id="use">Use this passage</button>
+ <header class="top">
+  <div class="brand">
+   <span class="logo"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></span>
+   <div><h1>Read Along</h1><div class="tagl">Everyday speaking practice for office workers</div></div>
+  </div>
+ </header>
+ <div class="app">
+  <aside class="side">
+   <button class="navbar" id="navbar" aria-label="Choose a passage">
+    <span class="wtxt"><b id="wt"></b><small id="ws"></small></span>
+    <span aria-hidden="true">▾</span>
+   </button>
+   <div class="panel" id="panel">
+    <div class="phead"><button class="back" id="back" hidden>‹ Back</button><strong id="ptitle">Library</strong></div>
+    <input class="q" id="q" type="search" placeholder="Search all passages…" aria-label="Search passages" autocomplete="off">
+    <div id="plist"></div>
+    <div class="paste" id="paste" hidden>
+     <textarea id="ta" rows="4" placeholder="Paste an English passage here"></textarea>
+     <button class="chip" id="use">Use this passage</button>
+    </div>
+   </div>
+  </aside>
+  <div class="work">
+   <section class="stage idle" id="stage" data-mode="reveal">
+    <span class="tag" id="tag"></span><span class="cnt" id="cnt"></span>
+    <button class="arr l" id="prev" aria-label="Previous passage">‹</button>
+    <button class="arr r" id="next" aria-label="Next passage">›</button>
+    <div class="tv"><p id="text"></p></div>
+    <div class="pb"><i id="bar"></i></div>
+    <span class="stat" id="ipastat"></span>
+    <div id="cd" hidden></div>
+   </section>
+   <div class="dock">
+    <div><button class="rb" id="reset" aria-label="Restart"></button>Restart</div>
+    <div><button class="rb big" id="play" aria-label="Start"></button><span id="cap">Start</span></div>
+    <div><button class="rb" id="listen" aria-label="Listen"></button><span id="lcap">Listen</span></div>
+   </div>
+   <div class="card2">
+    <div class="r1">
+     <label class="spd" title="Speed"><span>Speed</span><input type="range" id="spd" min="0.5" max="2.5" step="0.1" value="1" aria-label="Speed"><output id="spv">1.0x</output></label>
+     <div class="seg" role="group" aria-label="Style"><button id="m1" aria-pressed="true">Reveal</button><button id="m2" aria-pressed="false">Highlight</button></div>
+    </div>
+    <div class="r2">
+     <button class="tog" id="ipa" aria-pressed="false" title="Show or hide IPA">IPA</button>
+     <div class="seg" role="group" aria-label="Accent"><button id="uk" aria-pressed="true">UK</button><button id="us" aria-pressed="false">US</button></div>
+     <input type="range" class="hue" id="hue" min="0" max="360" value="220" aria-label="Colour" title="Colour">
+    </div>
    </div>
   </div>
- </aside>
- <div class="work">
-  <section class="stage" id="stage" data-mode="reveal">
-   <span class="tag" id="tag"></span><span class="cnt" id="cnt"></span>
-   <button class="arr l" id="prev" aria-label="Previous passage">‹</button>
-   <button class="arr r" id="next" aria-label="Next passage">›</button>
-   <div class="tv"><p id="text"></p></div>
-   <div class="pb"><i id="bar"></i></div>
-   <div id="cd" hidden></div>
-  </section>
-  <div class="dock">
-   <div><button class="rb" id="reset" aria-label="Restart"></button>Restart</div>
-   <div><button class="rb big" id="play" aria-label="Start"></button><span id="cap">Start</span></div>
-   <div><button class="rb" id="listen" aria-label="Listen"></button><span id="lcap">Listen</span></div>
-  </div>
-  <div class="ctl">
-   <label class="spd"><span>Speed</span><input type="range" id="spd" min="0.5" max="2.5" step="0.5" value="1" aria-label="Speed"><output id="spv">1x</output></label>
-   <div class="seg" role="group" aria-label="Style"><button id="m1" aria-pressed="true">Reveal</button><button id="m2" aria-pressed="false">Highlight</button></div>
-  </div>
  </div>
-</div>
-<div id="scrim"></div>
+ <div id="scrim"></div>
 </main>
-
 <script>
 const SHORT=[["/ɪ/","Jim sits in the kitchen with his sister Kim. They drink milk and finish a big fish dinner."],["/ɪ/","Is it a big city? Yes, it is. Many visitors swim, sing and sit near the river in the village."],["/ɪ/","Bill is in the middle of a long ticket line. He is willing to wait a little bit."],["/e/","Ben left his red pen on the desk. ‘Send me a message when you get to the hotel,’ says his friend."],["/e/","Ten men spend the best weekend at the seaside. They rest, eat eggs and bread, and never forget breakfast."],["/e/","Jenny is ready for the test next Wednesday. She says, ‘Let me check every sentence again.’"],["/æ/","A fat black cat sat on Dad’s bag. ‘Get that cat!’ shouts Sam, and Dad claps his hands."],["/æ/","Anna has a happy family and a fantastic flat. Her handsome husband plays badminton at the gym."],["/æ/","On Saturday, Jack and Janet had a chat in a café. They talked about maths and their travel plans."],["/ɒ/","Tom got a job in a shop. He often stops for a hot cup of coffee and a chocolate."],["/ɒ/","Rob wants a long holiday. ‘It’s not a problem,’ says his boss, ‘but stop watching the clock.’"],["/ɒ/","Bob forgot his wallet in the shop. ‘Oh, what a lot of problems,’ he says."],["/ʌ/","My mother loves sunny Sundays. She comes to lunch with my brother and gives us some honey buns."],["/ʌ/","What a lovely country! The sun is up, a bus is coming, and some young students are having fun."],["/ʌ/","Don’t worry, Mum! The money’s under the cup, and the others are in the cupboard."],["/ʊ/","Look at this good book! A woman is cooking pudding and putting sugar in the bowl."],["/ʊ/","Could you push the wooden step, please? I should stand on it to reach the books."],["/ʊ/","The footballer took a good look at the full cookbook. He couldn’t put it down."],["/ə/","A teacher is talking about a banana, a sofa and a computer. ‘Again, please,’ says a student, ‘a little slower.’"],["/ə/","Today I’m going to the market with a friend of my father’s. We’ll buy some butter, a lemon and an apple."],["/ə/","The doctor asked the actor about an important picture of an animal. ‘Another moment,’ said the author."],["/iː/","We need three green beans, a piece of cheese and some tea. Please keep the receipt."],["/iː/","Pete is reading an easy ebook on the beach. He eats peaches and sees the sea."],["/iː/","Believe me, the team meets every week. Sheila speaks three languages, and she teaches people to speak easily."],["/ɑː/","It’s a calm, dark afternoon at the farm. Mark can’t start the car, so he asks his aunt for a lift to the park."],["/ɑː/","Art class is at the large market. ‘Pass the plants, Barbara, and don’t be so hard on yourself,’ says Charles."],["/ɑː/","Can you pass the vase and the glass, Father? I can’t reach the bath towels in the garden."],["/ɔː/","Paul’s daughter always walks to the shore in the morning. They talk, and they watch the small boats."],["/ɔː/","Of course, I’d like more sports news. Four of us are at the door, and the ball is on the floor."],["/ɔː/","“Bought and caught are short words,” says Laura. “In August, I thought a storm was coming.”"],["/uː/","Choose a blue shoe or a new suit? Ruth, it’s up to you! The school group goes to the zoo at noon."],["/uː/","June eats fruit soup and moves the food into the room. ‘Too cool,’ she says. ‘It’s true!’"],["/uː/","In the afternoon, we use two spoons to eat a cool, smooth fruit salad. What do you think, Lou?"],["/ɜː/","‘Turn to the third word,’ says the nurse. ‘I’m learning a lot at work, and it’s already my first Thursday.’"],["/ɜː/","Her thirtieth birthday is on Thursday, the third of June. We’ll search for a perfect present: a purple skirt or a pearl necklace."],["/ɜː/","The nurse has earned her certificate. ‘Excuse me,’ she says to the person in the shirt, ‘I prefer to work early.’"],["/eɪ/","On Saturday, Kate takes a train to the lake. They stay all day and play a game on the bay."],["/eɪ/","Wait, Amy! Eight cakes are on the plate, and the waiter says they are great."],["/aɪ/","Mike likes to ride his bike at night. ‘My life is nice,’ he smiles, ‘and the sky is bright.’"],["/aɪ/","Hi! I’d like to buy five ice creams, Ivy. Is that a nice price? Right now, I’m fine with the size."],["/ɔɪ/","Roy enjoys his toy boat. ‘Oil and water don’t mix,’ says the boy. ‘It makes a noise!’"],["/ɔɪ/","Joyce has a choice: join the coin club or avoid the noisy point of the voice contest."],["/əʊ/","Hello, Joe! Where did you go? I know it’s cold, so don’t go alone on the road. Phone me, OK?"],["/əʊ/","Oh no! I only broke the window of the old boat. Show Joe the hole, and tell him I’m sorry."],["/aʊ/","How about now? Wow! A brown cow is in the town, and a loud sound comes from the house."],["/aʊ/","How about going out now? There’s a crowd downtown, and it’s loud, but the mouse in the house is quiet."],["/ɪə/","Dear Pete, I’m here, near the pier. I hear cheers, and it’s clear this year will be a great one."],["/ɪə/","I have no idea why Mr Beard is so serious. He appears weird, and his career is nearly over."],["/eə/","Excuse me, where is the nearest chair? It’s over there, near the stairs, and you can share it with the parents."],["/eə/","Mary is aware of the airport rules. She is careful with her bear, her hair, and the square bag she’s wearing."],["/ʊə/","The tourist is curious about Europe. During the tour, she’s sure it’s a pure and secure place."],["/ʊə/","My cousin is a tour guide in Europe. He gets insurance during the tour, just to be secure."],["/θ/","Thank you for the thirty books! On Thursday, I think we’ll have three thick ones."],["/θ/","Beth brushes her teeth after every meal. Both her mouth and her thumb feel healthy after a month."],["/θ/","Is anything wrong? ‘Nothing,’ he said, ‘but I’m thirsty. I need something thick and healthy, with a thin straw.’"],["/ð/","This is my mother and that’s my father. These are my brothers, and those are their friends."],["/ð/","Do they like the weather there? ‘Rather,’ says the other father, ‘but together we’d rather go further south.’"],["/ð/","Those clothes are for them, and these are for the others. Neither of them wants to bother with the weather."],["/ʃ/","Shall we wash the shirts and shoes in the shower? ‘Sure,’ Sharon says, ‘and buy fresh shampoo at the shop.’"],["/ʃ/","There is an information session at the station. ‘Special delivery,’ says the musician, ‘for the Russian official.’"],["/ʒ/","What a pleasure! After a long decision, we sit at leisure and watch television on a casual evening."],["/tʃ/","Which child wants chicken and chips for lunch? ‘Cheese sandwiches, please,’ says the teacher, ‘each with a cheerful chat.’"],["/tʃ/","Watch out, Charlie! The children are catching a chicken near the church. Choose a chair and have a nice chat."],["/dʒ/","Jack enjoys juice and jam in June. ‘Just a bit,’ he says. ‘I judge my jelly by the jar.’"],["/dʒ/","George is a gentle engineer. In January, he managed a huge project in Japan and changed the village bridge."],["/ŋ/","I’m going to sing a long song this morning. Listen to the ringing, banging and singing: everything is going wrong."],["/ŋ/","Thanks for the invitation! We’re planning to bring bananas, drinks and something strong to the pink building on King Street."],["/l/","Lily likes little yellow lemons. Let’s leave the lovely salad on the table until lunch."],["/l/","Will you help me pull the heavy bell? It’s really cold, and I feel a little ill, but I’ll still follow the plan."],["/r/","Rita ran around the river, right through the rain, to rescue a red rabbit from the road."],["/r/","‘Try the red rice and the roasted carrots,’ says Rory in the restaurant. ‘It’s very different from our regular food.’"],["/v/","I have a very nice view of the river valley. Every Tuesday, Eve visits the village and delivers vegetables."],["/v/","Victor loves Vietnamese movies. Every evening, he stays in the living room and watches five of them, even on very busy days."],["/w/","Why would we walk to work on Wednesday? We want to watch the water and wait for the warm weather."],["/s/","Steve says the sun is so strong that he sits inside and sips a cold soda. Surely, summer is his best season."],["/s/","Pass the sauce, please, Sue. Is this salt or sugar? ‘It’s sweet, so it’s surely the sugar.’"],["/z/","Zoe visits the zoo every Saturday. ‘Those zebras are amazing,’ she says, ‘and the buzzing bees are crazy!’"],["/z/","The boys’ voices were noisy. His cousins are easy to please, and Rosie’s music is as loud as ours."],["/h/","Hello, Harry! How are you? I hope your whole family is happy and healthy at home."],["/j/","Yes, your university has a huge yard. Yesterday, a few young Europeans used the music room in the beautiful old building."],["/p/, /b/","Peter put a big blue bag by the bed. ‘Be polite, Barbara, but please pick up the paper, the pen and the pillow.’"],["/t/, /d/","Did Ted take the ticket today? ‘Don’t tell Dad,’ says Tina. ‘I tried, but I didn’t do it right.’"],["/k/, /g/","Kate got a gift: a gold clock. ‘Great!’ said Gary. ‘Can you get me a cup of coffee, a good cake and a glass of cold milk?’"],["/f/","Fifty-five friends fly to France in February. ‘It’s fantastic for a few photos,’ says Phil, ‘and the food is fresh and fine.’"],["/m/, /n/","Nick makes noodles every Monday morning. ‘Mmm, nice!’ says Mum. ‘Not many of my neighbours make them on their own.’"],["-s /s/","Kate drinks black tea and eats soups, cakes and biscuits. Her friend Jack walks to work and talks about books."],["-s /z/","Anna’s dogs and cars are on the roads. She reads magazines, plays games, and says hello to her friends, sons and daughters."],["-es /ɪz/","Alice washes dishes, watches TV, and fixes glasses. Dad catches buses, uses boxes, and teaches classes."],["-ed /t/","Yesterday, I walked, talked, washed, cooked and watched TV. I also helped my brother and stopped at the shop."],["-ed /d/","We played, learned, cleaned, opened, called and enjoyed the party. My friend arrived and showed me how she changed her hair."],["-ed /ɪd/","He wanted a rest, needed a break, and decided to visit his aunt. She waited at the station, and they started and ended the day in the garden."],["final sounds","Sit, wait, and eat. The black cap, the red hat, the big bag and the cup are on the desk."],["final sounds","I made soup and bread at night. The cup is full, the cat is fat, and the ham is hot."],["/ɪ/ – /iː/","Is it a ship or a sheep? Please sit on that seat, and don’t leave if you live near. The bit of cheese is cheap."],["/æ/ – /e/","The man and ten men sat on a bad bed. Pat had a pan, Pet had a pen. Say ‘bad, bed, bad, bed’ ten times."],["/ʌ/ – /ɑː/","Mark, cut the bun, but don’t cart the bread. It’s luck, not a lark: a hut in the park, a cup in the car."],["/l/ – /r/","Is it a light or a right? Lake or rake? Larry likes the right light, and Rita likes the red lorry."],["/s/ – /ʃ/","Sue sees a ship at the seaside. She says, ‘Sip the soup, then shop at the station. See you, Sheila!’"],["/θ/ – /s/, /t/","Is Tom sick or thick? Thank you for the three trees! I think the sink is full of thin soup."],["/v/ – /w/","Will visits the vet on a wet Wednesday. Vera wears a vest in the west, and she drinks wine near the vine."]];
 const LONG=[["Introducing myself","/ɪ/, /iː/, /ə/","Hi, everyone! My name is Linh, and I’m a teacher from a small city near the sea. I live with my family in a big house with a green garden. In my free time, I like reading, cooking and meeting new people. I think English is really important, so I practise a little every day. This is my first time speaking in this class, and I’m a bit nervous, but I’m very happy to be here."],["My daily routine","-s, -ed endings","I usually get up at six, wash my face and brush my teeth. Then I make breakfast: eggs, bread and a cup of tea. I leave home at seven and take the bus to work. At twelve, I have lunch with my colleagues. Yesterday, I worked until six, cooked dinner, watched a movie and talked to my mother on the phone. After that, I washed the dishes and went to bed."],["At the restaurant","/ʃ/, /tʃ/, /s/, /z/","Good evening! Can we have a table for six, please? We’d like fish and chips, chicken soup and a fresh salad. Could we have some juice, a glass of water and cheese sandwiches for the children? Is there a special dish today? Thank you, the service is excellent! Please bring the bill when we finish. And could we have some more sugar and a few spoons? It’s a nice place, and the staff are very polite."],["Asking for directions","/eə/, /ɪə/, /əʊ/","Excuse me, is there a bank near here? Yes, there’s one near the station. Go straight ahead, turn left at the corner and walk past the post office. It’s on your right, next to the café, opposite the park. Is it far? No, it’s only five minutes on foot. Oh, I see. Thanks a lot! You’re welcome. Have a nice day, and take care on the road!"],["Shopping for clothes","/ʃ/, /θ/, /ð/","I’m looking for a shirt and some shoes. Do you have this in a different size? These shoes are too small, and those trousers are too long. The cotton one is thinner, so I think I’ll take both. How much is the black jacket? That’s cheaper than the other one, thank you. I’ll pay with cash. Could I have a bag for them, please? Thanks for your help, and have a lovely Thursday!"],["My family","/ʌ/, /ɑː/, /ð/","There are five people in my family: my mother, my father, my brother, my grandmother and me. My mother is a nurse, and my father works in a bank. My brother is younger than I am, and he loves football and computer games. My grandmother lives with us, and she cooks wonderful meals on Sundays. We often have lunch together, and afterwards we talk, laugh and walk in the park. I’m proud of my lovely, warm family."],["The weather","/θ/, /ð/, /w/","The weather in my country is very different in the north and the south. In the north, it’s cold and wet in winter, with thick clouds and a strong wind. In the south, it’s warm and sunny, and the weather is rather hot in the summer. Whether it rains or not, I like to walk by the water. This Thursday, the forecast says it’ll be thirty degrees, so I’ll wear a thin shirt and bring a bottle of water."],["At the airport","/eɪ/, /aɪ/, /əʊ/","Hello! I’d like to check in for my flight to Rome. Here’s my passport and my ticket. Is it a window or an aisle seat? I’d like a window, please. Can I take this bag on the plane? Yes, it’s fine, but the other one is too heavy. Oh no! I’ll pay for it. Which gate is it? Gate eight. The flight is on time, so you’ll board at nine. Thank you, and have a nice trip!"],["A job interview","/dʒ/, /ʒ/, /ŋ/","Good morning! Thank you for inviting me. My name is George, and I’m an engineer with five years of experience. I enjoy managing projects and working with young people. Last year, I joined a big company in Japan, and I changed many things in the team. My strengths are leadership, planning and good judgment: I make decisions quickly and measure the results. I’m looking for a challenge, and I think this job is a great match."],["Making plans by phone","/ɒ/, /əʊ/, /aʊ/","Hello, Tom? It’s Rob. What’s on for the weekend? I’d love to go out and have a good time. How about a boat trip on Saturday? Oh, I forgot, I’ve got a lot of homework. Okay, so shall we go on Sunday? Good idea! I’ll phone Joe and Rowan, and we’ll meet downtown around noon. Don’t be late, and don’t forget your coat; it’s going to be cold! See you soon."],["At the doctor’s","/θ/, /ɔː/","Good morning, doctor. I’ve got a sore throat and a cough, and I think I have a bit of a fever. It started on Thursday, and it’s getting worse. I can’t swallow anything, and my mouth feels dry. Should I take something for it? The doctor says, ‘Drink plenty of water, rest for three or four days, and take these tablets after meals.’ Thank you, doctor. I’ll come back if it doesn’t get better by next week."],["My hobbies","/h/, /ŋ/, /iː/","Hello! I have a few hobbies, and I enjoy them very much. I like reading, swimming and listening to music. Every weekend, I go hiking in the hills with my friends. We climb to the top, eat lunch, and take photos of the beautiful scenery. In the evening, I often play the guitar and sing a few songs. I also like learning new things, so I’m taking a cooking class. Hobbies keep me happy and healthy."],["Describing a friend","/dʒ/, /ɜː/, /j/","My best friend is Jenny. She’s a young, friendly nurse, and she works in a big hospital. She’s thirty and has curly brown hair and a warm smile. Jenny is generous, funny and very hard-working. We usually meet at a café on Thursdays, and she always tells me interesting stories about her work. I’m lucky to have such a good friend."],["Cooking a meal","/k/, /g/, /f/, /v/","Let’s cook a good dinner for the family. First, we cut the carrots, the onions and a few green vegetables. Then we fry the chicken in a pan with garlic and a bit of oil. Add some rice, a glass of water and a little salt, and cover the pan. After fifteen minutes, the food is fresh, hot and full of flavour. Don’t forget to serve it with a cold glass of juice. Everyone loves it!"],["A busy day at school","/æ/, /ɑː/, /e/","It’s Monday, and I’m at school. The first class is maths, and the teacher asks a lot of hard questions. After that, we have art, and I paint a picture of a farm with a black cat and a red car. At lunch, I have pasta and a glass of water, and I chat with my classmates about our plans for the weekend. In the afternoon, we practise English in the classroom. I’m happy and a bit tired."],["Weekend plans","/j/, /w/, /v/","What are you doing this weekend? We’re having a party on Saturday, and you’re very welcome to come. We have a big yard and a view of the river. Everyone will bring something: Victor will bring some wine and vegetables, and Will will bring a cake. We’ll play games, watch a movie and have a lot of fun. Please arrive around seven, and wear something warm in case it gets windy."],["The lost wallet","/ɒ/, /ɔː/, -ed endings","Yesterday morning, I lost my wallet. I walked to the shop, talked to the owner and looked in my bag, but it wasn’t there. I called my boss, and he said, ‘Don’t worry, we’ll look for it.’ We searched the office, checked the floor and asked my colleagues. Then a cleaner shouted, ‘I found it!’ It was in the corner, behind the box of coffee. What a lot of stress! I’m so glad, and I thanked everybody."],["Healthy habits","/ɪ/, /θ/, /iː/","I think healthy habits are very important. Every morning, I drink a big glass of water and eat fresh fruit with a little cheese. I exercise three times a week: I swim, jog and sometimes cycle. I also sleep eight hours every night and avoid sweets and fizzy drinks. Both my mind and my body feel better, and I’m less stressed. It’s easy to begin: start with one small thing this month."],["Booking a hotel","/eɪ/, /əʊ/, /aʊ/","Hello, I’d like to book a room for two nights, please. We’ll arrive on Friday and leave on Sunday. Do you have a double room with a nice view? How much is it per night? Does the price include breakfast? Oh, that sounds great! Is there a pool and Wi-Fi? Could you send me the confirmation by email? My name is Joan Brown. Thank you so much!"],["My dreams for the future","/ɜː/, /f/, /uː/","In the future, I want to learn more and work abroad. First, I’d like to improve my English so that I can talk to people from many countries. Then I hope to travel, try new food, and make friends around the world. My dream is to start a school for children, because I believe education is the best way to change the future. I’ll work hard, stay positive and never give up. What are your dreams for the future?"]];
@@ -255,6 +194,68 @@ const WL=[["Opening a presentation", "Good morning, everyone, and thank you for 
 const WS2=[["Request file", "Could you send me the latest version of the contract when you get a chance?"], ["Review", "I’d appreciate it if you could review this before noon."], ["Cover a call", "Would you mind taking over the client call while I’m at the dentist?"], ["Praise", "Great job on the presentation. The examples really made it easy to follow."], ["Suggestion", "I think the first slide needs a clearer message. Maybe fewer words?"], ["Apology", "Sorry about the mistake. I’ll correct it and resend the file today."], ["Deadline", "Could we push the deadline to next Wednesday? The data isn’t ready yet."], ["Report done", "I’ve finished the report. Shall I send it to you or upload it to the shared folder?"], ["Need training", "I’m not familiar with this system. Could someone walk me through it?"], ["Double-check", "Let me double-check the numbers and get back to you by three."], ["Interview start", "Thank you for having me. I’m really excited about this opportunity."], ["Experience", "In my previous role, I managed a team of six and reduced costs by fifteen percent."], ["Strengths", "My biggest strength is organization, and I’m still working on public speaking."], ["Ask about team", "Could you tell me more about the team I’ll be working with?"], ["Annual leave", "I’d like to request three days of annual leave starting on the twelfth."], ["Sick day", "I’m feeling unwell, so I won’t be able to come in today."], ["Welcome", "Welcome aboard! Let me show you your desk and introduce you to the team."], ["Resign", "I’ve decided to resign, and my last working day will be the end of next month."], ["Hear back", "When can I expect to hear back about the position?"], ["Salary review", "I’d like to discuss my salary review. Could we schedule a time next week?"]];
 const WL2=[["Online meeting trouble", "Hi everyone, can you hear me? I think my microphone is muted. Let me try again. Okay, now I’m sharing my screen. Can you see the slides? If not, please tell me in the chat. I’m sorry about the delay. Before we begin, could everyone mute their microphones unless they’re speaking? That will help us avoid background noise."], ["Explaining a chart", "As you can see on this chart, sales rose steadily during the first half of the year. The sharp increase in May was caused by our new advertising campaign. After that, growth slowed slightly in the summer, which is normal for this season. Looking ahead, we expect another rise in autumn, so we’re preparing extra stock."], ["Answering questions", "That’s a great question, thank you. Let me answer it in two parts. First, the cost: we expect it to stay within the current budget. Second, the schedule: the new system will take about six weeks to install. If anyone has more questions, please send me an email, and I’ll reply by tomorrow."], ["Introducing a speaker", "Good afternoon, everyone. It’s my pleasure to introduce today’s guest, Dr. Amelia Brooks. She has more than fifteen years of experience in marketing research and has advised several international companies. She’ll talk about customer trends, and there will be time for questions afterwards. Please join me in welcoming Dr. Brooks."], ["Working remotely", "Hi Tom, I wanted to ask about working from home two days a week. My commute takes almost two hours a day, and I believe I’d be more productive with quiet time. I’ll stay available online and attend all important meetings in person. I’d be happy to try this for a month and review the results together."], ["Your strengths", "I’d describe myself as reliable and curious. In my last job, I noticed that our reports took too long to prepare, so I created a simple template that saved the team about three hours a week. I enjoy solving problems, and I work well with people from different departments. I’m eager to keep learning in this role."], ["Negotiating a salary", "Thank you for the offer. I’m very excited about joining the company. Based on my experience and the responsibilities of the role, I was hoping for a slightly higher salary. Would it be possible to discuss a figure closer to what we talked about earlier? I’m also open to discussing other benefits, such as flexible hours."], ["Requesting time off", "Hello Ms. Carter, I’d like to request five days of leave from the fifteenth to the nineteenth of next month for a family event. I’ve already arranged for Linda to handle my urgent tasks, and I’ll finish the monthly report before I go. Please let me know if you need any additional information."], ["Welcoming a new hire", "Hi Daniel, welcome to the team! Let’s start with a quick tour. This is the kitchen, and over there are the meeting rooms. Your laptop is ready, and IT will set up your email this morning. At noon, we’re taking you to lunch. If you have any questions, don’t hesitate to ask. We’re all happy to help."], ["Resigning politely", "Thank you for meeting with me. I’ve decided to leave the company at the end of next month. It wasn’t an easy decision because I’ve enjoyed working here and learned a great deal. I’ll make sure all my projects are handed over properly, and I’m happy to train my replacement. I truly appreciate your support."]];
 
+const WS3=[["Printer help", "Excuse me, do you know how to scan a document to my email?"], ["Parking", "Is there any parking space left, or should I use the street outside?"], ["Meeting room", "Is the small meeting room free at three? I need it for a quick call."], ["Guest Wi-Fi", "Could you share the Wi-Fi password for guests? We have a visitor today."], ["Access card", "I forgot my access card at home. Could you let me in, please?"], ["Lunch order", "I’ll have the chicken salad and a bottle of water, please."], ["Calendar", "Could you add me to the calendar invitation? I didn’t get it."], ["Lift", "Sorry, could you hold the lift for me? Which floor are you going to?"], ["Late arrival", "Sorry I’m late. The train was delayed, and the next one was packed."], ["Weekend plans", "Any plans for the long weekend? I’m thinking of visiting my parents."], ["Agree", "That sounds good to me. Let’s go ahead with the second option."], ["Not sure", "I’m not sure yet. Can I check with my team and let you know tomorrow?"], ["Priority", "Which task should I do first, the report or the client email?"], ["Busy", "I’m tied up until four, but I can talk after that if it’s urgent."], ["Repeat", "Sorry, I didn’t catch that. Could you say it again, please?"], ["Understood", "Got it, thanks. So the deadline is Thursday, and I need to include the charts."], ["Offer help", "If you’d like, I can take care of the booking so you can focus on the slides."], ["Decline politely", "Thank you for the invitation, but I already have another meeting then."], ["Reminder", "Just a quick reminder that the survey closes at the end of today."], ["Good news", "I’m happy to say that the client signed the agreement this morning."]];
+const WL3=[["Polite reminder", "Hi Ben, I hope your week is going well. I’m writing to remind you about the sales figures we agreed to share by Thursday. I know you’ve been busy, so I wanted to check if you need anything from me. Please let me know, and thanks again for your help."], ["Confirming an appointment", "Good morning, this is Julia from Hartman Consulting. I’m calling to confirm our meeting tomorrow at two thirty in your office. I’ll bring the contract and the latest budget. Could you let me know if the time still works? If not, I’m happy to adjust. Thank you."], ["Leaving a voicemail", "Hello, this is Michael Reyes from the logistics team. I’m calling about the shipment that was supposed to arrive today. Could you please call me back at your earliest convenience? You can reach me at my desk until six. I’ll also send you an email with the order details. Thank you."], ["Replying to an inquiry", "Dear Mr. Evans, thank you for your interest in our training courses. I’ve attached a brochure with dates and prices. The next session starts on the third of March, and there are still a few places available. If you’d like to register, simply reply to this email, and I’ll send you the form."], ["Apologizing for a delay", "Dear Ms. Wright, I sincerely apologize for the delay in sending the report. We found some errors in the data and wanted to correct them before sharing it. The final version will reach you by Friday at noon. Thank you for your patience, and please let me know if you have questions."], ["Requesting a quotation", "Hello, we’re planning to order about two hundred office chairs for our new building. Could you send us a quotation including delivery and installation? We’d also like to know the warranty period and your payment terms. If possible, please reply by the end of next week. Thank you very much."], ["Welcoming a visitor", "Good morning, Mr. Tanaka, and welcome to our office. Did you have a pleasant journey? Please come in. Can I offer you some tea or coffee? Our director will join us in five minutes. In the meantime, let me show you the meeting room where we’ll hold today’s discussion."], ["Presenting a proposal", "Thank you all for being here. Today I’d like to present our proposal for improving your customer service. It has three parts: a new training program, a simpler complaint system and monthly reports. I’ll explain the benefits and the costs for each part, and then we can discuss any concerns."], ["Handling a refund", "I’m sorry to hear the product didn’t meet your expectations. We’d be glad to arrange a refund. Could you please send us your order number and a photo of the item? Once we receive them, we’ll process the refund within five working days, and you’ll get a confirmation email."], ["Explaining a delay", "I’d like to update you on your order. Unfortunately, one of our suppliers is late, so the delivery will take three extra days. We know how important this is for your schedule, and we’re sorry for the inconvenience. To make up for it, we’ll cover the shipping costs."], ["Chasing a payment", "Hello, I’m calling from the accounts department about invoice number 2043, which was due last week. I’m sure it was just an oversight. Could you check the payment status for us? If you’ve already paid, please send the transfer receipt. Thank you for your cooperation."], ["Thanking a client", "On behalf of the whole team, I’d like to thank you for choosing us this year. Your feedback helped us improve our service, and your trust means a lot to us. We look forward to continuing our partnership and welcome any suggestions you may have for the future."], ["Assigning tasks", "Let’s go through who’s doing what. Olivia, please prepare the presentation slides by Wednesday. Raj, you’re in charge of contacting the suppliers. I’ll handle the budget and book the venue. If you run into any problems, tell me right away. We’ll check our progress again on Thursday morning."], ["Status report", "Here’s where we are this week. The first phase is complete, and we stayed within budget. The second phase started on Monday, but we’re waiting for approval from the legal team. That could delay us by a few days. I’ll keep you informed and send a written update on Friday."], ["Resolving a conflict", "I’ve noticed some tension between you two, and I’d like to help. Let’s each explain our view without interrupting. Then we’ll look for a solution that works for everyone. We all want this project to succeed, so let’s focus on the goal and treat each other with respect."], ["Praising a colleague", "I’d like to recognize Hannah for her excellent work this month. She handled three difficult clients, trained two new employees and still finished all her reports on time. Her positive attitude inspires everyone around her. Thank you, Hannah, and congratulations. Please join me in giving her a round of applause."], ["Budget approval", "Thank you for seeing me. I’d like to request approval for a budget of five thousand dollars to upgrade our laptops. The current ones are slow and cause delays every day. Based on my calculations, the upgrade will pay for itself within a year through improved productivity. I can share a detailed breakdown."], ["Explaining a new process", "Starting next month, all expense claims will be submitted online. First, log in to the company portal and upload your receipts. Then choose the category and send the form to your manager for approval. Payments will be made within seven days. I’ll hold a short training session on Monday to answer questions."], ["A business trip", "Next week I’m traveling to Singapore for a three-day conference. I’ll leave on Monday morning and return on Thursday evening. During my absence, Sam will handle urgent matters, and I’ll check my email twice a day. I’ve also booked a meeting with our local partners, so I’ll share the results afterwards."], ["Office relocation", "As you know, we’re moving to the new office on the first of June. Please pack your personal items by Friday, and label every box with your name and floor number. IT will move the computers over the weekend. On Monday, you’ll find your new desk waiting, along with a map of the building."], ["Working overtime", "Hi Grace, I know it’s late, and I’m sorry to ask this. The client moved the deadline to tomorrow morning, so we need to finish the report tonight. I’ve ordered dinner for everyone, and you can take a day off next week to make up for it. Thank you for your effort and understanding."], ["Training session", "Welcome to today’s workshop on time management. By the end of this session, you’ll know how to set priorities, plan your day and avoid common distractions. We’ll work in small groups and practice with real examples. Please ask questions at any time, and don’t forget to switch your phones to silent."], ["Team lunch invitation", "Hi everyone, we’re celebrating the successful launch with a team lunch this Friday at noon. We’ve booked a table at the Italian restaurant around the corner. Please let me know by Wednesday if you have any dietary requirements. It’s my treat, so come hungry, and bring your best stories."], ["A technical problem", "Hello, IT support? I’m having trouble with my computer. It keeps freezing every time I open the accounting software, and I’ve already restarted it twice. I have an important report to finish by noon. Could someone take a look as soon as possible? I’m at desk fourteen on the third floor."], ["Self-assessment", "Over the past year, I’ve met most of my targets and completed the customer database project ahead of schedule. I’m proud of the way I improved communication with the sales team. One area I’d like to work on is delegating tasks more effectively. I’d appreciate your feedback and any suggestions for training."], ["Networking event", "Hi, I’m Carlos. I work in business development for a software company. I’ve been in the industry for six years, mostly with small and medium clients. What about you? That sounds interesting. Here’s my card. I’d love to stay in touch and maybe grab a coffee sometime next week."], ["Asking for a reference", "Dear Professor Allen, I hope you’re well. I’m applying for a position at an international bank, and they’ve asked for a reference letter. Since you supervised my research project, I was wondering whether you’d be willing to write one. I can send my résumé and some notes. The deadline is the twentieth."], ["Accepting a job offer", "Dear Ms. Foster, thank you very much for offering me the position of marketing coordinator. I’m delighted to accept. As discussed, I can start on the first of next month. Please let me know what documents I should bring on my first day. I look forward to joining the team."], ["Handing over work", "Before I go on leave, I’d like to walk you through my current tasks. This folder contains the active contracts, and here’s the schedule for the monthly reports. The main contact at the supplier is Mr. Lee; he’s very helpful. If something urgent comes up, call me, but I’ll be mostly offline."], ["Starting a new project", "Welcome to the kickoff meeting for our new project. The goal is to launch the mobile app by September. We have a team of eight people and a budget approved by management. First, let’s agree on roles and deadlines. Then we’ll discuss possible risks and how we can avoid them. Let’s make this a success."]];
+
+let acc="uk";
+const IPA={};try{Object.assign(IPA,JSON.parse(localStorage.getItem("ipa1")||"{}"));}catch(e){}
+let cspBlocked=false,lastErr="";
+document.addEventListener("securitypolicyviolation",e=>{if(/dictionaryapi|datamuse/.test(e.blockedURI||"")){cspBlocked=true;setTimeout(ipaStat,0);}});
+const FAIL=new Set(),waiting=[];let busy=0,saveT=0;
+const parts=w=>w.toLowerCase().replace(/[’]/g,"'").split(/[-–—]/).map(x=>x.replace(/^[^a-z]+|[^a-z]+$/g,"")).filter(Boolean);
+function ipaOf(w){const ps=parts(w);if(!ps.length)return "";const out=[];for(const p of ps){const e=IPA[p];if(!e)return "";out.push(e[acc]||e.uk||e.us||"");}return out.every(Boolean)?"/"+out.join("-")+"/":"";}
+function applyIpa(){spans.forEach((s,i)=>{s.lastChild.textContent=document.body.classList.contains("ipa-on")?ipaOf(words[i]):"";});ipaStat();}
+const clean=t=>(t||"").replace(/^[\/\[]|[\/\]]$/g,"").trim();
+async function getJSON(u){const r=await fetch(u);if(r.status===404)return 404;if(!r.ok)throw new Error(r.status);return r.json();}
+async function viaDictionary(k){
+  const j=await getJSON("https://api.dictionaryapi.dev/v2/entries/en/"+encodeURIComponent(k));
+  if(j===404||!Array.isArray(j))return null;
+  let uk="",us="",any="";
+  for(const e of j)for(const p of(e.phonetics||[])){const t=clean(p.text);if(!t)continue;const a=(p.audio||"").toLowerCase();if(!any)any=t;if(a.includes("-uk")&&!uk)uk=t;if(a.includes("-us")&&!us)us=t;}
+  if(!any&&j[0]&&j[0].phonetic)any=clean(j[0].phonetic);
+  return any?{uk,us,any}:null;
+}
+const AR={AA:"ɑ",AE:"æ",AH:"ʌ",AO:"ɔ",AW:"aʊ",AY:"aɪ",B:"b",CH:"tʃ",D:"d",DH:"ð",EH:"ɛ",ER:"ɝ",EY:"eɪ",F:"f",G:"ɡ",HH:"h",IH:"ɪ",IY:"i",JH:"dʒ",K:"k",L:"l",M:"m",N:"n",NG:"ŋ",OW:"oʊ",OY:"ɔɪ",P:"p",R:"r",S:"s",SH:"ʃ",T:"t",TH:"θ",UH:"ʊ",UW:"u",V:"v",W:"w",Y:"j",Z:"z",ZH:"ʒ"};
+function arpaToIpa(s){return s.split(/\s+/).map(p=>{const m=p.match(/^([A-Z]+)([0-2])?$/);if(!m)return "";let x=AR[m[1]]||"";const st=m[2];if(m[1]==="AH"&&st==="0")x="ə";if(m[1]==="ER"&&st==="0")x="ɚ";return (st==="1"?"ˈ":st==="2"?"ˌ":"")+x;}).join("");}
+async function viaDatamuse(k){
+  const j=await getJSON("https://api.datamuse.com/words?sp="+encodeURIComponent(k)+"&md=r&ipa=1&max=1");
+  const e=Array.isArray(j)&&j[0];if(!e||e.word!==k||!e.tags)return null;
+  let t=e.tags.find(x=>x.startsWith("ipa_pron:"));if(t)return{us:t.slice(9).trim()};
+  t=e.tags.find(x=>x.startsWith("pron:"));return t?{us:arpaToIpa(t.slice(5).trim())}:null;
+}
+const NV="aeiouɑɔɪɛʊəæʌɒɜ";
+function toUK(s){
+  return s.replace(/ɝ/g,"ɜː").replace(/ɚ/g,"ə")
+   .replace(new RegExp("ɑ[rɹ](?!["+NV+"])","g"),"ɑː").replace(new RegExp("ɔ[rɹ](?!["+NV+"])","g"),"ɔː")
+   .replace(new RegExp("ɪ[rɹ](?!["+NV+"])","g"),"ɪə").replace(new RegExp("ɛ[rɹ](?!["+NV+"])","g"),"eə")
+   .replace(new RegExp("ʊ[rɹ](?!["+NV+"])","g"),"ʊə").replace(new RegExp("[rɹ](?!["+NV+"])","g"),"")
+   .replace(/oʊ/g,"əʊ").replace(/ɑ(?!ː)/g,"ɒ").replace(/ɛ/g,"e").replace(/ɔ(?![ːɪ])/g,"ɔː").replace(/ɹ/g,"r");
+}
+async function lookup(k){
+  let a=null,b=null,err=0;
+  try{a=await viaDictionary(k);}catch(e){err++;lastErr="dictionaryapi: "+(e&&e.message||e);}
+  if(!a||!a.uk||!a.us){try{b=await viaDatamuse(k);}catch(e){err++;lastErr="datamuse: "+(e&&e.message||e);}}
+  if(err>=2&&!a&&!b){FAIL.add(k);return;}
+  const us=(a&&(a.us||""))||(b&&b.us)||(a&&a.any)||"";
+  const uk=(a&&a.uk)||(b&&b.us?toUK(b.us):"")||(a&&a.any)||"";
+  IPA[k]=us||uk?{uk:uk||us,us:us||uk}:null;
+}
+function ipaStat(){
+  const el=$("ipastat");if(!document.body.classList.contains("ipa-on")||!words.length){el.textContent="";return;}
+  const ks=new Set();words.forEach(w=>parts(w).forEach(p=>ks.add(p)));let ok=0,no=0,fl=0;
+  ks.forEach(k=>{if(IPA[k])ok++;else if(IPA[k]===null)no++;else if(FAIL.has(k))fl++;});
+  const pend=ks.size-ok-no-fl;el.title=lastErr;
+  el.textContent=pend>0?"Loading IPA… "+(ok+no)+"/"+ks.size:(fl&&!ok?(cspBlocked?"This preview blocks outside requests, so IPA can’t load. Open the page from GitHub Pages or a normal browser tab.":location.protocol==="file:"?"Can’t reach the IPA service. If you opened the file directly, try the GitHub Pages link.":"Can’t reach the IPA service. Check your connection or any ad blocker."):"IPA ready"+(no?" · "+no+" not found":"")+(fl?" · "+fl+" failed":""));
+}
+function ipaQueue(){
+  if(!document.body.classList.contains("ipa-on"))return;
+  words.forEach(w=>parts(w).forEach(p=>FAIL.delete(p)));
+  const seen=new Set();words.forEach(w=>parts(w).forEach(p=>{if(IPA[p]===undefined&&!FAIL.has(p)&&!seen.has(p)&&!waiting.includes(p)){seen.add(p);waiting.push(p);}}));
+  pump();ipaStat();
+}
+function pump(){
+  while(busy<6&&waiting.length){const k=waiting.shift();busy++;lookup(k).then(()=>{busy--;applyIpa();ipaStat();clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem("ipa1",JSON.stringify(IPA));}catch(e){}},800);if(!busy&&!waiting.length&&!playing)setTimeout(fit,0);pump();});}
+}
 const $=id=>document.getElementById(id);
 const CATS=[];
 const S=SHORT.map(([f,x])=>({chip:f,text:x,tag:"Sound "+f}));
@@ -278,7 +279,9 @@ CATS.push({g:"Short 2",n:"Consonants",items:S2.slice(18)});
 [["Meetings",[0,1,2,3,4]],["Clients",[5,6,7,8,9]],["Teamwork",[10,11,12,13,14]]].forEach(([n,r])=>CATS.push({g:"Work Long",n:n,items:r.map(i=>({chip:WL[i][0],text:WL[i][1],tag:"Long: "+WL[i][0]}))}));
 [["Requests & feedback",0],["Interview & HR",10]].forEach(([n,a])=>CATS.push({g:"Work Short",n:n,items:WS2.slice(a,a+10).map(([c,x])=>({chip:c,text:x,tag:"Work: "+c}))}));
 [["Presentations",[0,1,2,3,4]],["Interviews & HR",[5,6,7,8,9]]].forEach(([n,r])=>CATS.push({g:"Work Long",n:n,items:r.map(i=>({chip:WL2[i][0],text:WL2[i][1],tag:"Long: "+WL2[i][0]}))}));
-["Short vowels","Long vowels","Diphthongs","Consonants 1","Consonants 2","-s, -ed","Contrast","Daily","Travel","Work","Life","All 10","Vowels","Consonants","Services","Work & city","Leisure","Meetings","Phone & email","Small talk","Meetings","Clients","Teamwork","Requests & feedback","Interview & HR","Presentations","Interviews & HR"].forEach((l,i)=>{CATS[i].s=l;});
+[["Everyday office",0],["Quick replies",10]].forEach(([n,a])=>CATS.push({g:"Work Short",n:n,items:WS3.slice(a,a+10).map(([c,x])=>({chip:c,text:x,tag:"Work: "+c}))}));
+[["Emails & calls",0],["Client & sales",6],["Team & management",12],["Workplace life",18],["Career",24]].forEach(([n,a])=>CATS.push({g:"Work Long",n:n,items:WL3.slice(a,a+6).map(([c,x])=>({chip:c,text:x,tag:"Long: "+c}))}));
+["Short vowels","Long vowels","Diphthongs","Consonants 1","Consonants 2","-s, -ed","Contrast","Daily","Travel","Work","Life","All 10","Vowels","Consonants","Services","Work & city","Leisure","Meetings","Phone & email","Small talk","Meetings","Clients","Teamwork","Requests & feedback","Interview & HR","Presentations","Interviews & HR","Everyday office","Quick replies","Emails & calls","Client & sales","Team & management","Workplace life","Career"].forEach((l,i)=>{CATS[i].s=l;});
 const SPEEDS=[["0.5x",65],["1x",130],["1.5x",195],["2x",260],["2.5x",325]];
 const IC={
  play:'<svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>',
@@ -300,6 +303,7 @@ function delay(w){
   return 60000/wpmV*m;
 }
 function paint(){
+  stage.classList.toggle("idle",idx<0);
   spans.forEach((s,i)=>{s.className="w "+(i<idx?"past":i===idx?"cur":"future");});
   const n=words.length,done=Math.min(idx+1,n);
   $("bar").style.width=(n?done/n*100:0)+"%";
@@ -312,7 +316,8 @@ function load(text,tag){
   halt();stopSpeech();
   words=text.trim().split(/\s+/);
   const p=$("text");p.textContent="";spans=[];
-  words.forEach(w=>{const s=document.createElement("span");s.textContent=w;p.appendChild(s);p.appendChild(document.createTextNode(" "));spans.push(s);});
+  words.forEach(w=>{const s=document.createElement("span"),a=document.createElement("b"),i=document.createElement("i");a.className="wd";a.textContent=w;i.className="ipa";s.append(a,i);p.appendChild(s);p.appendChild(document.createTextNode(" "));spans.push(s);});
+  applyIpa();ipaQueue();
   $("tag").textContent=tag;$("text").className="";$("text").parentElement.scrollTop=0;idx=-1;paint();fit();
 }
 function step(){
@@ -337,7 +342,7 @@ function speak(){
   if(!("speechSynthesis" in window))return;
   if(speechSynthesis.speaking){stopSpeech();return;}
   const u=new SpeechSynthesisUtterance(words.join(" "));
-  u.lang="en-GB";u.rate=Math.min(2.5,Math.max(0.5,wpmV/130));
+  u.lang=acc==="uk"?"en-GB":"en-US";const vs=speechSynthesis.getVoices(),vv=vs.find(x=>x.lang.replace("_","-").toLowerCase()===u.lang.toLowerCase());if(vv)u.voice=vv;u.rate=Math.min(2.5,Math.max(0.5,wpmV/130));
   u.onend=u.onerror=()=>{$("lcap").textContent="Listen";};
   $("lcap").textContent="Stop";speechSynthesis.speak(u);
 }
@@ -356,23 +361,40 @@ document.addEventListener("keydown",e=>{
 });
 const GN=[["Work Short","Work · Short"],["Work Long","Work · Long"],["Short","Pronunciation · Short"],["Short 2","Pronunciation · Short 2"],["Long","Pronunciation · Long"],["Long 2","Pronunciation · Long 2"],["Twister","Tongue twisters"]];
 let lv=0,pc=-1,holdUntil=0;
+const GI={};
+const CI={};
+const icon=c=>"";
+let og="Work Short";
+function mkrow(cls,t,sub,fn,cur,ic,exp){const b=document.createElement("button");b.className=cls;if(cur!==undefined)b.setAttribute("aria-current",!!cur);if(exp!==undefined)b.setAttribute("aria-expanded",!!exp);if(ic){const e=document.createElement("span");e.className="ri";e.textContent=ic;b.appendChild(e);}const x=document.createElement("span");x.textContent=t;const y=document.createElement("small");y.textContent=sub;b.append(x,y);b.onclick=fn;$("plist").appendChild(b);}
 function gh(t){const d=document.createElement("div");d.className="gh";d.textContent=t;$("plist").appendChild(d);}
-function row(t,sub,fn,cur){const b=document.createElement("button");b.className="row";b.setAttribute("aria-current",!!cur);const x=document.createElement("span");x.textContent=t;const y=document.createElement("small");y.textContent=sub;b.append(x,y);b.onclick=fn;$("plist").appendChild(b);}
+function row(t,sub,fn,cur,ic,isSub){mkrow("row"+(isSub?" sub":""),t,sub,fn,cur,ic);}
 function peek(t){const w=t.split(" ");return w.slice(0,6).join(" ")+(w.length>6?"…":"");}
+function jump(i,j){ci=i;$("q").value="";pick(j);collapse();}
 function drawPanel(){
-  const pl=$("plist"),paste=lv===2;pl.textContent="";
-  $("paste").hidden=!paste;pl.hidden=paste;$("back").hidden=lv===0;
+  const pl=$("plist"),q=$("q").value.trim().toLowerCase(),paste=lv===2&&!q;pl.textContent="";
+  $("paste").hidden=!paste;pl.hidden=paste;$("back").hidden=lv===0||!!q;
+  if(q){
+    $("ptitle").textContent="Results";let n=0;
+    CATS.forEach((c,i)=>c.items.forEach((it,j)=>{if(n<60&&(it.chip+" "+it.text+" "+c.s+" "+c.g).toLowerCase().includes(q)){n++;row(it.chip,c.g+" › "+c.s,()=>jump(i,j),ci===i&&ii===j,icon(c));}}));
+    if(!n)gh("No passage matches “"+$("q").value.trim()+"”");
+    return;
+  }
   $("ptitle").textContent=lv===0?"Library":lv===1?CATS[pc].s:"Paste your own text";
   if(lv===0){
-    GN.forEach(([g,name])=>{gh(name);CATS.forEach((c,i)=>{if(c.g===g)row(c.s,c.items.length+" passages",()=>{pc=i;lv=1;drawPanel();},i===ci);});});
+    GN.forEach(([g,name])=>{
+      const cs=[];CATS.forEach((c,i)=>{if(c.g===g)cs.push(i);});
+      const n=cs.reduce((x,i)=>x+CATS[i].items.length,0);
+      mkrow("grow",name,n,()=>{og=og===g?"":g;drawPanel();},undefined,GI[g],og===g);
+      if(og===g)cs.forEach(i=>row(CATS[i].s,CATS[i].items.length,()=>{pc=i;lv=1;drawPanel();},i===ci,icon(CATS[i]),true));
+    });
     gh("Your own text");row("Paste a passage","",()=>{ci=-1;clearStage();where();lv=2;drawPanel();},ci<0);
   }else if(lv===1){
-    CATS[pc].items.forEach((it,i)=>row((i+1)+". "+it.chip,peek(it.text),()=>{ci=pc;pick(i);collapse();},ci===pc&&ii===i));
+    CATS[pc].items.forEach((it,i)=>row((i+1)+". "+it.chip,peek(it.text),()=>jump(pc,i),ci===pc&&ii===i));
   }
   const a=document.querySelector('#plist [aria-current="true"]');if(a)$("panel").scrollTop=Math.max(0,a.offsetTop-70);
 }
 function where(){
-  $("where").textContent=ci<0?"Your own text":CATS[ci].g+" › "+CATS[ci].s+" › "+CATS[ci].items[ii].chip;
+  $("wt").textContent=ci<0?"Your own text":CATS[ci].items[ii].chip;$("ws").textContent=ci<0?"Paste a passage to read":CATS[ci].g+" › "+CATS[ci].s;
   $("prev").disabled=$("next").disabled=ci<0;
   if(innerWidth>=960&&ci>=0){lv=1;pc=ci;drawPanel();}
 }
@@ -402,12 +424,13 @@ let tx=0,ty=0;
 stage.addEventListener("touchstart",e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
 stage.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;if(Math.abs(dx)>70&&Math.abs(dy)<45){e.preventDefault();nav(dx<0?1:-1);}});
 $("prev").onclick=()=>nav(-1);$("next").onclick=()=>nav(1);
-$("spd").oninput=e=>{wpmV=Math.round(130*e.target.value);$("spv").textContent=e.target.value+"x";};
+$("spd").oninput=e=>{const x=+e.target.value;wpmV=Math.round(130*x);$("spv").textContent=x.toFixed(1)+"x";};
 function setMode(m){stage.dataset.mode=m;$("m1").setAttribute("aria-pressed",m==="reveal");$("m2").setAttribute("aria-pressed",m==="glow");}
 $("m1").onclick=()=>setMode("reveal");$("m2").onclick=()=>setMode("glow");
 $("scrim").onclick=collapse;
 $("navbar").onclick=()=>document.body.classList.contains("open")?collapse():expand();
-$("back").onclick=()=>{lv=0;drawPanel();};
+$("back").onclick=()=>{if(CATS[pc])og=CATS[pc].g;lv=0;drawPanel();};
+$("q").oninput=drawPanel;
 (()=>{const tv=$("text").parentElement;let d=null,mv=0,st=0;
  const hold=()=>{holdUntil=Date.now()+2500;};
  tv.addEventListener("wheel",hold,{passive:true});tv.addEventListener("touchmove",hold,{passive:true});
@@ -415,6 +438,16 @@ $("back").onclick=()=>{lv=0;drawPanel();};
  addEventListener("mousemove",e=>{if(d===null)return;const dy=e.clientY-d;mv=Math.max(mv,Math.abs(dy));if(mv>4){tv.scrollTop=st-dy;hold();}});
  addEventListener("mouseup",()=>{d=null;});
  tv.addEventListener("click",e=>{if(mv>4){e.stopPropagation();mv=0;}},true);})();
+(()=>{
+ const root=document.documentElement,get=(k,d)=>{try{return localStorage.getItem(k)||d;}catch(e){return d;}},put=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}};
+ const setHue=v=>{root.style.setProperty("--hue",v);$("hue").value=v;put("hue",v);};
+ $("hue").oninput=e=>setHue(e.target.value);setHue(get("hue","220"));
+ const setIpa=on=>{document.body.classList.toggle("ipa-on",on);$("ipa").setAttribute("aria-pressed",on);put("ipa",on?"1":"0");applyIpa();ipaQueue();setTimeout(fit,0);};
+ $("ipa").onclick=()=>setIpa(!document.body.classList.contains("ipa-on"));
+ const setAcc=a=>{acc=a;$("uk").setAttribute("aria-pressed",a==="uk");$("us").setAttribute("aria-pressed",a==="us");put("acc",a);stopSpeech();applyIpa();};
+ $("uk").onclick=()=>setAcc("uk");$("us").onclick=()=>setAcc("us");
+ acc=get("acc","uk");setAcc(acc);setIpa(get("ipa","0")==="1");
+})();
 setMode("reveal");ci=CATS.findIndex(c=>c.g==="Work Short");pick(0);
 </script>
 </body>
