@@ -23,12 +23,12 @@ Everyday English speaking practice for office workers: the words appear as you r
 
 ## Add or edit passages
 
-Open `index.html` and edit the lists at the top of the script: `SHORT`, `LONG`, `TW`, `SHORT2`, `LONG2` (pronunciation sets) and `WS`, `WS2`, `WS3`, `WL`, `WL2`, `WL3` (office sets).
+Open `index.html` and edit the lists at the top of the script: `SHORT`, `LONG`, `TW`, `SHORT2`, `LONG2` (pronunciation sets) and `WS`, `WS2`, `WS3`, `WL`, `WL2`, `WL3`, `WL4` (office sets).
 
 - `SHORT` and `SHORT2`: `["/ɪ/", "sentence"]`
 - `LONG` and `LONG2`: `["Title", "focus sounds", "passage"]`
 - `TW`: `["tongue twister", "focus sounds"]`
-- `WS`, `WS2`, `WS3`: `["Label", "sentence"]`, and `WL`, `WL2`, `WL3`: `["Title", "passage"]`
+- `WS`, `WS2`, `WS3`: `["Label", "sentence"]`, and `WL`, `WL2`, `WL3`, `WL4`: `["Title", "passage"]`
 
 The Listen button uses the voices installed on your device, so voices differ between devices.
 
