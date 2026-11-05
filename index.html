@@ -124,6 +124,30 @@ body.ipa-on .ipa{display:block}
 .stat{position:absolute;left:16px;bottom:14px;z-index:2;font-size:.78rem;font-weight:700;color:#d6defa;background:rgba(0,0,0,.28);padding:2px 10px;border-radius:999px;pointer-events:none}
 .stat:empty{display:none}
 .tv{padding-bottom:28px}
+.hbtns{display:flex;gap:8px}
+.hbtn{min-height:38px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);font-weight:800}
+.hbtn.pri{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.tools{position:absolute;top:12px;right:12px;z-index:3;display:flex;gap:6px}
+.tools button{min-height:32px;padding:0 11px;border-radius:999px;border:0;background:rgba(255,255,255,.18);color:#fff;font-size:.82rem;font-weight:800}
+.tools button:hover{background:rgba(255,255,255,.32)}
+.tag{max-width:calc(100% - 200px)}
+.cnt{top:auto;bottom:14px;right:16px}
+.stage{padding:50px 22px 22px}
+@media (min-width:960px){.stage{padding:56px 56px 30px}}
+.ipa{font-size:max(.62em,15px);font-weight:700;color:#ffe9a8;opacity:1;margin-top:2px}
+.cur .ipa{color:var(--hi-fg)}
+.work:fullscreen{background:var(--bg);padding:14px;max-width:none;width:100%}
+body.focus .top,body.focus .side{display:none}
+body.focus main{padding:6px;gap:0}
+body.focus .app{gap:0}
+dialog{border:0;border-radius:20px;padding:18px;width:min(460px,92vw);background:var(--card);color:var(--fg);box-shadow:0 20px 60px rgba(5,10,30,.5)}
+dialog::backdrop{background:rgba(5,10,30,.55)}
+dialog h2{margin:0 0 12px;font-size:1.15rem}
+dialog label{display:block;font-weight:700;margin-bottom:10px}
+dialog textarea,dialog select,dialog input{display:block;width:100%;margin-top:4px;padding:10px;font:inherit;font-weight:500;color:var(--fg);border:1.5px solid var(--line);border-radius:12px;background:var(--bg)}
+.frow{display:flex;gap:10px}.frow>*{flex:1;min-width:0}.frow.end{justify-content:flex-end;margin-top:6px}.frow.end>*{flex:none}
+.note{font-size:.85rem;color:var(--muted);margin:2px 0 10px}
+.note.err{color:#d6336c}
 </style>
 </head>
 <body>
@@ -133,6 +157,7 @@ body.ipa-on .ipa{display:block}
    <span class="logo"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z"/></svg></span>
    <div><h1>Read Along</h1><div class="tagl">Everyday speaking practice for office workers</div></div>
   </div>
+  <div class="hbtns"><button class="hbtn" id="setBtn">Settings</button></div>
  </header>
  <div class="app">
   <aside class="side">
@@ -152,7 +177,9 @@ body.ipa-on .ipa{display:block}
   </aside>
   <div class="work">
    <section class="stage idle" id="stage" data-mode="reveal">
-    <span class="tag" id="tag"></span><span class="cnt" id="cnt"></span>
+    <span class="tag" id="tag"></span>
+    <div class="tools"><button id="tm" aria-label="Smaller text" title="Smaller text">A−</button><button id="tp" aria-label="Larger text" title="Larger text">A+</button><button id="fsb" aria-label="Full screen" title="Full screen">Full</button></div>
+    <span class="cnt" id="cnt"></span>
     <button class="arr l" id="prev" aria-label="Previous passage">‹</button>
     <button class="arr r" id="next" aria-label="Next passage">›</button>
     <div class="tv"><p id="text"></p></div>
@@ -179,6 +206,12 @@ body.ipa-on .ipa{display:block}
   </div>
  </div>
  <div id="scrim"></div>
+ <dialog id="setDlg">
+  <h2>Voice</h2>
+  <label>Voice<select id="voice"></select></label>
+  <p class="note" id="vnote"></p>
+  <div class="frow end"><button class="hbtn" id="vTest">Test voice</button><button class="hbtn pri" id="sClose">Done</button></div>
+ </dialog>
 </main>
 <script>
 const SHORT=[["/ɪ/","Jim sits in the kitchen with his sister Kim. They drink milk and finish a big fish dinner."],["/ɪ/","Is it a big city? Yes, it is. Many visitors swim, sing and sit near the river in the village."],["/ɪ/","Bill is in the middle of a long ticket line. He is willing to wait a little bit."],["/e/","Ben left his red pen on the desk. ‘Send me a message when you get to the hotel,’ says his friend."],["/e/","Ten men spend the best weekend at the seaside. They rest, eat eggs and bread, and never forget breakfast."],["/e/","Jenny is ready for the test next Wednesday. She says, ‘Let me check every sentence again.’"],["/æ/","A fat black cat sat on Dad’s bag. ‘Get that cat!’ shouts Sam, and Dad claps his hands."],["/æ/","Anna has a happy family and a fantastic flat. Her handsome husband plays badminton at the gym."],["/æ/","On Saturday, Jack and Janet had a chat in a café. They talked about maths and their travel plans."],["/ɒ/","Tom got a job in a shop. He often stops for a hot cup of coffee and a chocolate."],["/ɒ/","Rob wants a long holiday. ‘It’s not a problem,’ says his boss, ‘but stop watching the clock.’"],["/ɒ/","Bob forgot his wallet in the shop. ‘Oh, what a lot of problems,’ he says."],["/ʌ/","My mother loves sunny Sundays. She comes to lunch with my brother and gives us some honey buns."],["/ʌ/","What a lovely country! The sun is up, a bus is coming, and some young students are having fun."],["/ʌ/","Don’t worry, Mum! The money’s under the cup, and the others are in the cupboard."],["/ʊ/","Look at this good book! A woman is cooking pudding and putting sugar in the bowl."],["/ʊ/","Could you push the wooden step, please? I should stand on it to reach the books."],["/ʊ/","The footballer took a good look at the full cookbook. He couldn’t put it down."],["/ə/","A teacher is talking about a banana, a sofa and a computer. ‘Again, please,’ says a student, ‘a little slower.’"],["/ə/","Today I’m going to the market with a friend of my father’s. We’ll buy some butter, a lemon and an apple."],["/ə/","The doctor asked the actor about an important picture of an animal. ‘Another moment,’ said the author."],["/iː/","We need three green beans, a piece of cheese and some tea. Please keep the receipt."],["/iː/","Pete is reading an easy ebook on the beach. He eats peaches and sees the sea."],["/iː/","Believe me, the team meets every week. Sheila speaks three languages, and she teaches people to speak easily."],["/ɑː/","It’s a calm, dark afternoon at the farm. Mark can’t start the car, so he asks his aunt for a lift to the park."],["/ɑː/","Art class is at the large market. ‘Pass the plants, Barbara, and don’t be so hard on yourself,’ says Charles."],["/ɑː/","Can you pass the vase and the glass, Father? I can’t reach the bath towels in the garden."],["/ɔː/","Paul’s daughter always walks to the shore in the morning. They talk, and they watch the small boats."],["/ɔː/","Of course, I’d like more sports news. Four of us are at the door, and the ball is on the floor."],["/ɔː/","“Bought and caught are short words,” says Laura. “In August, I thought a storm was coming.”"],["/uː/","Choose a blue shoe or a new suit? Ruth, it’s up to you! The school group goes to the zoo at noon."],["/uː/","June eats fruit soup and moves the food into the room. ‘Too cool,’ she says. ‘It’s true!’"],["/uː/","In the afternoon, we use two spoons to eat a cool, smooth fruit salad. What do you think, Lou?"],["/ɜː/","‘Turn to the third word,’ says the nurse. ‘I’m learning a lot at work, and it’s already my first Thursday.’"],["/ɜː/","Her thirtieth birthday is on Thursday, the third of June. We’ll search for a perfect present: a purple skirt or a pearl necklace."],["/ɜː/","The nurse has earned her certificate. ‘Excuse me,’ she says to the person in the shirt, ‘I prefer to work early.’"],["/eɪ/","On Saturday, Kate takes a train to the lake. They stay all day and play a game on the bay."],["/eɪ/","Wait, Amy! Eight cakes are on the plate, and the waiter says they are great."],["/aɪ/","Mike likes to ride his bike at night. ‘My life is nice,’ he smiles, ‘and the sky is bright.’"],["/aɪ/","Hi! I’d like to buy five ice creams, Ivy. Is that a nice price? Right now, I’m fine with the size."],["/ɔɪ/","Roy enjoys his toy boat. ‘Oil and water don’t mix,’ says the boy. ‘It makes a noise!’"],["/ɔɪ/","Joyce has a choice: join the coin club or avoid the noisy point of the voice contest."],["/əʊ/","Hello, Joe! Where did you go? I know it’s cold, so don’t go alone on the road. Phone me, OK?"],["/əʊ/","Oh no! I only broke the window of the old boat. Show Joe the hole, and tell him I’m sorry."],["/aʊ/","How about now? Wow! A brown cow is in the town, and a loud sound comes from the house."],["/aʊ/","How about going out now? There’s a crowd downtown, and it’s loud, but the mouse in the house is quiet."],["/ɪə/","Dear Pete, I’m here, near the pier. I hear cheers, and it’s clear this year will be a great one."],["/ɪə/","I have no idea why Mr Beard is so serious. He appears weird, and his career is nearly over."],["/eə/","Excuse me, where is the nearest chair? It’s over there, near the stairs, and you can share it with the parents."],["/eə/","Mary is aware of the airport rules. She is careful with her bear, her hair, and the square bag she’s wearing."],["/ʊə/","The tourist is curious about Europe. During the tour, she’s sure it’s a pure and secure place."],["/ʊə/","My cousin is a tour guide in Europe. He gets insurance during the tour, just to be secure."],["/θ/","Thank you for the thirty books! On Thursday, I think we’ll have three thick ones."],["/θ/","Beth brushes her teeth after every meal. Both her mouth and her thumb feel healthy after a month."],["/θ/","Is anything wrong? ‘Nothing,’ he said, ‘but I’m thirsty. I need something thick and healthy, with a thin straw.’"],["/ð/","This is my mother and that’s my father. These are my brothers, and those are their friends."],["/ð/","Do they like the weather there? ‘Rather,’ says the other father, ‘but together we’d rather go further south.’"],["/ð/","Those clothes are for them, and these are for the others. Neither of them wants to bother with the weather."],["/ʃ/","Shall we wash the shirts and shoes in the shower? ‘Sure,’ Sharon says, ‘and buy fresh shampoo at the shop.’"],["/ʃ/","There is an information session at the station. ‘Special delivery,’ says the musician, ‘for the Russian official.’"],["/ʒ/","What a pleasure! After a long decision, we sit at leisure and watch television on a casual evening."],["/tʃ/","Which child wants chicken and chips for lunch? ‘Cheese sandwiches, please,’ says the teacher, ‘each with a cheerful chat.’"],["/tʃ/","Watch out, Charlie! The children are catching a chicken near the church. Choose a chair and have a nice chat."],["/dʒ/","Jack enjoys juice and jam in June. ‘Just a bit,’ he says. ‘I judge my jelly by the jar.’"],["/dʒ/","George is a gentle engineer. In January, he managed a huge project in Japan and changed the village bridge."],["/ŋ/","I’m going to sing a long song this morning. Listen to the ringing, banging and singing: everything is going wrong."],["/ŋ/","Thanks for the invitation! We’re planning to bring bananas, drinks and something strong to the pink building on King Street."],["/l/","Lily likes little yellow lemons. Let’s leave the lovely salad on the table until lunch."],["/l/","Will you help me pull the heavy bell? It’s really cold, and I feel a little ill, but I’ll still follow the plan."],["/r/","Rita ran around the river, right through the rain, to rescue a red rabbit from the road."],["/r/","‘Try the red rice and the roasted carrots,’ says Rory in the restaurant. ‘It’s very different from our regular food.’"],["/v/","I have a very nice view of the river valley. Every Tuesday, Eve visits the village and delivers vegetables."],["/v/","Victor loves Vietnamese movies. Every evening, he stays in the living room and watches five of them, even on very busy days."],["/w/","Why would we walk to work on Wednesday? We want to watch the water and wait for the warm weather."],["/s/","Steve says the sun is so strong that he sits inside and sips a cold soda. Surely, summer is his best season."],["/s/","Pass the sauce, please, Sue. Is this salt or sugar? ‘It’s sweet, so it’s surely the sugar.’"],["/z/","Zoe visits the zoo every Saturday. ‘Those zebras are amazing,’ she says, ‘and the buzzing bees are crazy!’"],["/z/","The boys’ voices were noisy. His cousins are easy to please, and Rosie’s music is as loud as ours."],["/h/","Hello, Harry! How are you? I hope your whole family is happy and healthy at home."],["/j/","Yes, your university has a huge yard. Yesterday, a few young Europeans used the music room in the beautiful old building."],["/p/, /b/","Peter put a big blue bag by the bed. ‘Be polite, Barbara, but please pick up the paper, the pen and the pillow.’"],["/t/, /d/","Did Ted take the ticket today? ‘Don’t tell Dad,’ says Tina. ‘I tried, but I didn’t do it right.’"],["/k/, /g/","Kate got a gift: a gold clock. ‘Great!’ said Gary. ‘Can you get me a cup of coffee, a good cake and a glass of cold milk?’"],["/f/","Fifty-five friends fly to France in February. ‘It’s fantastic for a few photos,’ says Phil, ‘and the food is fresh and fine.’"],["/m/, /n/","Nick makes noodles every Monday morning. ‘Mmm, nice!’ says Mum. ‘Not many of my neighbours make them on their own.’"],["-s /s/","Kate drinks black tea and eats soups, cakes and biscuits. Her friend Jack walks to work and talks about books."],["-s /z/","Anna’s dogs and cars are on the roads. She reads magazines, plays games, and says hello to her friends, sons and daughters."],["-es /ɪz/","Alice washes dishes, watches TV, and fixes glasses. Dad catches buses, uses boxes, and teaches classes."],["-ed /t/","Yesterday, I walked, talked, washed, cooked and watched TV. I also helped my brother and stopped at the shop."],["-ed /d/","We played, learned, cleaned, opened, called and enjoyed the party. My friend arrived and showed me how she changed her hair."],["-ed /ɪd/","He wanted a rest, needed a break, and decided to visit his aunt. She waited at the station, and they started and ended the day in the garden."],["final sounds","Sit, wait, and eat. The black cap, the red hat, the big bag and the cup are on the desk."],["final sounds","I made soup and bread at night. The cup is full, the cat is fat, and the ham is hot."],["/ɪ/ – /iː/","Is it a ship or a sheep? Please sit on that seat, and don’t leave if you live near. The bit of cheese is cheap."],["/æ/ – /e/","The man and ten men sat on a bad bed. Pat had a pan, Pet had a pen. Say ‘bad, bed, bad, bed’ ten times."],["/ʌ/ – /ɑː/","Mark, cut the bun, but don’t cart the bread. It’s luck, not a lark: a hut in the park, a cup in the car."],["/l/ – /r/","Is it a light or a right? Lake or rake? Larry likes the right light, and Rita likes the red lorry."],["/s/ – /ʃ/","Sue sees a ship at the seaside. She says, ‘Sip the soup, then shop at the station. See you, Sheila!’"],["/θ/ – /s/, /t/","Is Tom sick or thick? Thank you for the three trees! I think the sink is full of thin soup."],["/v/ – /w/","Will visits the vet on a wet Wednesday. Vera wears a vest in the west, and she drinks wine near the vine."]];
@@ -197,13 +230,20 @@ const WL2=[["Online meeting trouble", "Hi everyone, can you hear me? I think my 
 const WS3=[["Printer help", "Excuse me, do you know how to scan a document to my email?"], ["Parking", "Is there any parking space left, or should I use the street outside?"], ["Meeting room", "Is the small meeting room free at three? I need it for a quick call."], ["Guest Wi-Fi", "Could you share the Wi-Fi password for guests? We have a visitor today."], ["Access card", "I forgot my access card at home. Could you let me in, please?"], ["Lunch order", "I’ll have the chicken salad and a bottle of water, please."], ["Calendar", "Could you add me to the calendar invitation? I didn’t get it."], ["Lift", "Sorry, could you hold the lift for me? Which floor are you going to?"], ["Late arrival", "Sorry I’m late. The train was delayed, and the next one was packed."], ["Weekend plans", "Any plans for the long weekend? I’m thinking of visiting my parents."], ["Agree", "That sounds good to me. Let’s go ahead with the second option."], ["Not sure", "I’m not sure yet. Can I check with my team and let you know tomorrow?"], ["Priority", "Which task should I do first, the report or the client email?"], ["Busy", "I’m tied up until four, but I can talk after that if it’s urgent."], ["Repeat", "Sorry, I didn’t catch that. Could you say it again, please?"], ["Understood", "Got it, thanks. So the deadline is Thursday, and I need to include the charts."], ["Offer help", "If you’d like, I can take care of the booking so you can focus on the slides."], ["Decline politely", "Thank you for the invitation, but I already have another meeting then."], ["Reminder", "Just a quick reminder that the survey closes at the end of today."], ["Good news", "I’m happy to say that the client signed the agreement this morning."]];
 const WL3=[["Polite reminder", "Hi Ben, I hope your week is going well. I’m writing to remind you about the sales figures we agreed to share by Thursday. I know you’ve been busy, so I wanted to check if you need anything from me. Please let me know, and thanks again for your help."], ["Confirming an appointment", "Good morning, this is Julia from Hartman Consulting. I’m calling to confirm our meeting tomorrow at two thirty in your office. I’ll bring the contract and the latest budget. Could you let me know if the time still works? If not, I’m happy to adjust. Thank you."], ["Leaving a voicemail", "Hello, this is Michael Reyes from the logistics team. I’m calling about the shipment that was supposed to arrive today. Could you please call me back at your earliest convenience? You can reach me at my desk until six. I’ll also send you an email with the order details. Thank you."], ["Replying to an inquiry", "Dear Mr. Evans, thank you for your interest in our training courses. I’ve attached a brochure with dates and prices. The next session starts on the third of March, and there are still a few places available. If you’d like to register, simply reply to this email, and I’ll send you the form."], ["Apologizing for a delay", "Dear Ms. Wright, I sincerely apologize for the delay in sending the report. We found some errors in the data and wanted to correct them before sharing it. The final version will reach you by Friday at noon. Thank you for your patience, and please let me know if you have questions."], ["Requesting a quotation", "Hello, we’re planning to order about two hundred office chairs for our new building. Could you send us a quotation including delivery and installation? We’d also like to know the warranty period and your payment terms. If possible, please reply by the end of next week. Thank you very much."], ["Welcoming a visitor", "Good morning, Mr. Tanaka, and welcome to our office. Did you have a pleasant journey? Please come in. Can I offer you some tea or coffee? Our director will join us in five minutes. In the meantime, let me show you the meeting room where we’ll hold today’s discussion."], ["Presenting a proposal", "Thank you all for being here. Today I’d like to present our proposal for improving your customer service. It has three parts: a new training program, a simpler complaint system and monthly reports. I’ll explain the benefits and the costs for each part, and then we can discuss any concerns."], ["Handling a refund", "I’m sorry to hear the product didn’t meet your expectations. We’d be glad to arrange a refund. Could you please send us your order number and a photo of the item? Once we receive them, we’ll process the refund within five working days, and you’ll get a confirmation email."], ["Explaining a delay", "I’d like to update you on your order. Unfortunately, one of our suppliers is late, so the delivery will take three extra days. We know how important this is for your schedule, and we’re sorry for the inconvenience. To make up for it, we’ll cover the shipping costs."], ["Chasing a payment", "Hello, I’m calling from the accounts department about invoice number 2043, which was due last week. I’m sure it was just an oversight. Could you check the payment status for us? If you’ve already paid, please send the transfer receipt. Thank you for your cooperation."], ["Thanking a client", "On behalf of the whole team, I’d like to thank you for choosing us this year. Your feedback helped us improve our service, and your trust means a lot to us. We look forward to continuing our partnership and welcome any suggestions you may have for the future."], ["Assigning tasks", "Let’s go through who’s doing what. Olivia, please prepare the presentation slides by Wednesday. Raj, you’re in charge of contacting the suppliers. I’ll handle the budget and book the venue. If you run into any problems, tell me right away. We’ll check our progress again on Thursday morning."], ["Status report", "Here’s where we are this week. The first phase is complete, and we stayed within budget. The second phase started on Monday, but we’re waiting for approval from the legal team. That could delay us by a few days. I’ll keep you informed and send a written update on Friday."], ["Resolving a conflict", "I’ve noticed some tension between you two, and I’d like to help. Let’s each explain our view without interrupting. Then we’ll look for a solution that works for everyone. We all want this project to succeed, so let’s focus on the goal and treat each other with respect."], ["Praising a colleague", "I’d like to recognize Hannah for her excellent work this month. She handled three difficult clients, trained two new employees and still finished all her reports on time. Her positive attitude inspires everyone around her. Thank you, Hannah, and congratulations. Please join me in giving her a round of applause."], ["Budget approval", "Thank you for seeing me. I’d like to request approval for a budget of five thousand dollars to upgrade our laptops. The current ones are slow and cause delays every day. Based on my calculations, the upgrade will pay for itself within a year through improved productivity. I can share a detailed breakdown."], ["Explaining a new process", "Starting next month, all expense claims will be submitted online. First, log in to the company portal and upload your receipts. Then choose the category and send the form to your manager for approval. Payments will be made within seven days. I’ll hold a short training session on Monday to answer questions."], ["A business trip", "Next week I’m traveling to Singapore for a three-day conference. I’ll leave on Monday morning and return on Thursday evening. During my absence, Sam will handle urgent matters, and I’ll check my email twice a day. I’ve also booked a meeting with our local partners, so I’ll share the results afterwards."], ["Office relocation", "As you know, we’re moving to the new office on the first of June. Please pack your personal items by Friday, and label every box with your name and floor number. IT will move the computers over the weekend. On Monday, you’ll find your new desk waiting, along with a map of the building."], ["Working overtime", "Hi Grace, I know it’s late, and I’m sorry to ask this. The client moved the deadline to tomorrow morning, so we need to finish the report tonight. I’ve ordered dinner for everyone, and you can take a day off next week to make up for it. Thank you for your effort and understanding."], ["Training session", "Welcome to today’s workshop on time management. By the end of this session, you’ll know how to set priorities, plan your day and avoid common distractions. We’ll work in small groups and practice with real examples. Please ask questions at any time, and don’t forget to switch your phones to silent."], ["Team lunch invitation", "Hi everyone, we’re celebrating the successful launch with a team lunch this Friday at noon. We’ve booked a table at the Italian restaurant around the corner. Please let me know by Wednesday if you have any dietary requirements. It’s my treat, so come hungry, and bring your best stories."], ["A technical problem", "Hello, IT support? I’m having trouble with my computer. It keeps freezing every time I open the accounting software, and I’ve already restarted it twice. I have an important report to finish by noon. Could someone take a look as soon as possible? I’m at desk fourteen on the third floor."], ["Self-assessment", "Over the past year, I’ve met most of my targets and completed the customer database project ahead of schedule. I’m proud of the way I improved communication with the sales team. One area I’d like to work on is delegating tasks more effectively. I’d appreciate your feedback and any suggestions for training."], ["Networking event", "Hi, I’m Carlos. I work in business development for a software company. I’ve been in the industry for six years, mostly with small and medium clients. What about you? That sounds interesting. Here’s my card. I’d love to stay in touch and maybe grab a coffee sometime next week."], ["Asking for a reference", "Dear Professor Allen, I hope you’re well. I’m applying for a position at an international bank, and they’ve asked for a reference letter. Since you supervised my research project, I was wondering whether you’d be willing to write one. I can send my résumé and some notes. The deadline is the twentieth."], ["Accepting a job offer", "Dear Ms. Foster, thank you very much for offering me the position of marketing coordinator. I’m delighted to accept. As discussed, I can start on the first of next month. Please let me know what documents I should bring on my first day. I look forward to joining the team."], ["Handing over work", "Before I go on leave, I’d like to walk you through my current tasks. This folder contains the active contracts, and here’s the schedule for the monthly reports. The main contact at the supplier is Mr. Lee; he’s very helpful. If something urgent comes up, call me, but I’ll be mostly offline."], ["Starting a new project", "Welcome to the kickoff meeting for our new project. The goal is to launch the mobile app by September. We have a team of eight people and a budget approved by management. First, let’s agree on roles and deadlines. Then we’ll discuss possible risks and how we can avoid them. Let’s make this a success."]];
 
-let acc="uk";
+let acc="uk",txtScale=1,voiceName="";
+const LOCAL={};"a:ə,an:ən,the:ðə,to:tə,of:əv,and:ənd,for:fə|fɚ,or:ɔː|ɔr,at:ət,as:əz,but:bət,that:ðæt,than:ðən,from:frəm,in:ɪn,on:ɒn|ɑn,with:wɪð,is:ɪz,are:ɑː|ɑr,was:wəz|wʌz,were:wə|wɚ,be:biː|bi,been:biːn|bɪn,am:æm,have:həv,has:həz,had:həd,do:duː,does:dʌz,did:dɪd,can:kən,could:kəd,would:wəd,should:ʃəd,will:wɪl,shall:ʃəl,must:məst,may:meɪ,might:maɪt,i:aɪ,you:juː,he:hiː,she:ʃiː,it:ɪt,we:wiː,they:ðeɪ,me:miː,him:hɪm,her:hɜː|hɝ,us:ʌs,them:ðəm,my:maɪ,your:jɔː|jʊr,our:aʊə|aʊɚ,their:ðeə|ðɛr,his:hɪz,its:ɪts,some:səm,any:ˈeni|ˈɛni,there:ðeə|ðɛr,here:hɪə|hɪr,what:wɒt|wʌt,where:weə|wɛr,when:wen|wɛn,who:huː,why:waɪ,how:haʊ,which:wɪtʃ,not:nɒt|nɑt,no:nəʊ|noʊ,so:səʊ|soʊ,if:ɪf,because:bɪˈkɒz|bɪˈkʌz,i'm:aɪm,i'll:aɪl,i'd:aɪd,i've:aɪv,you're:jɔː|jʊr,you'll:juːl,you've:juːv,you'd:juːd,he's:hiːz,she's:ʃiːz,it's:ɪts,we're:wɪə|wɪr,we'll:wiːl,we've:wiːv,we'd:wiːd,they're:ðeə|ðɛr,they'll:ðeɪl,they've:ðeɪv,that's:ðæts,there's:ðeəz|ðɛrz,here's:hɪəz|hɪrz,what's:wɒts|wʌts,who's:huːz,let's:lets|lɛts,don't:dəʊnt|doʊnt,doesn't:ˈdʌznt,didn't:ˈdɪdnt,can't:kɑːnt|kænt,couldn't:ˈkʊdnt,won't:wəʊnt|woʊnt,wouldn't:ˈwʊdnt,shouldn't:ˈʃʊdnt,isn't:ˈɪznt,aren't:ɑːnt|ɑrnt,wasn't:ˈwɒznt|ˈwʌznt,weren't:wɜːnt|wɝnt,haven't:ˈhævnt,hasn't:ˈhæznt,hadn't:ˈhædnt,o'clock:əˈklɒk|əˈklɑk".split(",").forEach(x=>{const i=x.indexOf(":"),k=x.slice(0,i),v=x.slice(i+1).split("|");LOCAL[k]=[v[0],v[1]||v[0]];});
+const keyOf=p=>LOCAL[p]?"":p.replace(/'s$/,"");
 const IPA={};try{Object.assign(IPA,JSON.parse(localStorage.getItem("ipa1")||"{}"));}catch(e){}
 let cspBlocked=false,lastErr="";
 document.addEventListener("securitypolicyviolation",e=>{if(/dictionaryapi|datamuse/.test(e.blockedURI||"")){cspBlocked=true;setTimeout(ipaStat,0);}});
 const FAIL=new Set(),waiting=[];let busy=0,saveT=0;
 const parts=w=>w.toLowerCase().replace(/[’]/g,"'").split(/[-–—]/).map(x=>x.replace(/^[^a-z]+|[^a-z]+$/g,"")).filter(Boolean);
-function ipaOf(w){const ps=parts(w);if(!ps.length)return "";const out=[];for(const p of ps){const e=IPA[p];if(!e)return "";out.push(e[acc]||e.uk||e.us||"");}return out.every(Boolean)?"/"+out.join("-")+"/":"";}
+function ipaPart(p){
+  const L=LOCAL[p];if(L)return L[acc==="uk"?0:1];
+  if(/'s$/.test(p)){const b=ipaPart(p.slice(0,-2));if(b)return b+(/[pkftθ]$/.test(b)?"s":/(?:[szʃʒ]|tʃ|dʒ)$/.test(b)?"ɪz":"z");return "";}
+  const e=IPA[p];return e?(e[acc]||e.uk||e.us||""):"";
+}
+function ipaOf(w){const ps=parts(w);if(!ps.length)return "";const out=ps.map(ipaPart);return out.every(Boolean)?"/"+out.join("-")+"/":"";}
 function applyIpa(){spans.forEach((s,i)=>{s.lastChild.textContent=document.body.classList.contains("ipa-on")?ipaOf(words[i]):"";});ipaStat();}
 const clean=t=>(t||"").replace(/^[\/\[]|[\/\]]$/g,"").trim();
 async function getJSON(u){const r=await fetch(u);if(r.status===404)return 404;if(!r.ok)throw new Error(r.status);return r.json();}
@@ -242,15 +282,15 @@ async function lookup(k){
 }
 function ipaStat(){
   const el=$("ipastat");if(!document.body.classList.contains("ipa-on")||!words.length){el.textContent="";return;}
-  const ks=new Set();words.forEach(w=>parts(w).forEach(p=>ks.add(p)));let ok=0,no=0,fl=0;
+  const ks=new Set();words.forEach(w=>parts(w).forEach(p=>{const k=keyOf(p);if(k)ks.add(k);}));let ok=0,no=0,fl=0;
   ks.forEach(k=>{if(IPA[k])ok++;else if(IPA[k]===null)no++;else if(FAIL.has(k))fl++;});
   const pend=ks.size-ok-no-fl;el.title=lastErr;
   el.textContent=pend>0?"Loading IPA… "+(ok+no)+"/"+ks.size:(fl&&!ok?(cspBlocked?"This preview blocks outside requests, so IPA can’t load. Open the page from GitHub Pages or a normal browser tab.":location.protocol==="file:"?"Can’t reach the IPA service. If you opened the file directly, try the GitHub Pages link.":"Can’t reach the IPA service. Check your connection or any ad blocker."):"IPA ready"+(no?" · "+no+" not found":"")+(fl?" · "+fl+" failed":""));
 }
 function ipaQueue(){
   if(!document.body.classList.contains("ipa-on"))return;
-  words.forEach(w=>parts(w).forEach(p=>FAIL.delete(p)));
-  const seen=new Set();words.forEach(w=>parts(w).forEach(p=>{if(IPA[p]===undefined&&!FAIL.has(p)&&!seen.has(p)&&!waiting.includes(p)){seen.add(p);waiting.push(p);}}));
+  words.forEach(w=>parts(w).forEach(p=>FAIL.delete(keyOf(p))));
+  const seen=new Set();words.forEach(w=>parts(w).forEach(p=>{const k=keyOf(p);if(k&&IPA[k]===undefined&&!FAIL.has(k)&&!seen.has(k)&&!waiting.includes(k)){seen.add(k);waiting.push(k);}}));
   pump();ipaStat();
 }
 function pump(){
@@ -341,13 +381,29 @@ function start(){
 function toggle(){if(playing){halt();paint();}else start();}
 function reset(){halt();idx=-1;paint();stopSpeech();}
 function stopSpeech(){if("speechSynthesis" in window)speechSynthesis.cancel();$("lcap").textContent="Listen";}
+const voices=()=>("speechSynthesis" in window?speechSynthesis.getVoices():[]).filter(v=>/^en[-_]/i.test(v.lang));
+const vlang=()=>acc==="uk"?"en-gb":"en-us";
+function vscore(v){const n=v.name;let x=0;if(/natural|neural/i.test(n))x+=50;if(/online/i.test(n))x+=20;if(/google/i.test(n))x+=15;if(/samantha|daniel|serena|karen|moira|jenny|aria|sonia|ryan|libby|guy|ava|emma|brian|andrew|oliver|kate/i.test(n))x+=10;if(!v.localService)x+=5;return x;}
+function pickVoice(){const vs=voices().filter(v=>v.lang.replace("_","-").toLowerCase()===vlang());const m=vs.find(v=>v.name===voiceName);return m||vs.sort((a,b)=>vscore(b)-vscore(a))[0]||null;}
+function fillVoices(){
+  const sel=$("voice");if(!sel)return;
+  const vs=voices().filter(v=>v.lang.replace("_","-").toLowerCase()===vlang()).sort((a,b)=>vscore(b)-vscore(a));
+  sel.textContent="";const o=document.createElement("option");o.value="";o.textContent="Auto (best available)";sel.appendChild(o);
+  vs.forEach(v=>{const x=document.createElement("option");x.value=v.name;x.textContent=v.name;sel.appendChild(x);});
+  sel.value=vs.some(v=>v.name===voiceName)?voiceName:"";
+  $("vnote").textContent=vs.length?vs.length+" "+(acc==="uk"?"UK":"US")+" voice(s) found. For the most natural sound, try Microsoft Edge (look for “Natural” voices) or Chrome.":"No "+(acc==="uk"?"UK":"US")+" English voice found on this device.";
+}
+function say(text){
+  if(!("speechSynthesis" in window))return;
+  speechSynthesis.cancel();
+  const sents=text.match(/[^.!?]+[.!?]*["”’')]*\s*/g)||[text],v=pickVoice(),rate=Math.min(2,Math.max(0.6,wpmV/130));
+  $("lcap").textContent="Stop";
+  sents.forEach((t,i)=>{const u=new SpeechSynthesisUtterance(t.trim());u.lang=acc==="uk"?"en-GB":"en-US";if(v)u.voice=v;u.rate=rate;u.pitch=1;if(i===sents.length-1)u.onend=u.onerror=()=>{$("lcap").textContent="Listen";};speechSynthesis.speak(u);});
+}
 function speak(){
   if(!("speechSynthesis" in window))return;
-  if(speechSynthesis.speaking){stopSpeech();return;}
-  const u=new SpeechSynthesisUtterance(words.join(" "));
-  u.lang=acc==="uk"?"en-GB":"en-US";const vs=speechSynthesis.getVoices(),vv=vs.find(x=>x.lang.replace("_","-").toLowerCase()===u.lang.toLowerCase());if(vv)u.voice=vv;u.rate=Math.min(2.5,Math.max(0.5,wpmV/130));
-  u.onend=u.onerror=()=>{$("lcap").textContent="Listen";};
-  $("lcap").textContent="Stop";speechSynthesis.speak(u);
+  if(speechSynthesis.speaking||speechSynthesis.pending){stopSpeech();return;}
+  say(words.join(" "));
 }
 
 playBtn.onclick=toggle;
@@ -359,6 +415,7 @@ document.addEventListener("keydown",e=>{
   const t=document.activeElement,own=["play","reset","listen","use","prev","next","spd","m1","m2"].includes(t.id);
   if(t.tagName==="TEXTAREA"||t.id==="spd")return;
   if(e.code==="Space"&&!own){e.preventDefault();toggle();}
+  else if(e.code==="Escape"&&document.body.classList.contains("focus")){document.body.classList.remove("focus");setTimeout(fit,100);}
   else if(e.code==="ArrowRight")nav(1);
   else if(e.code==="ArrowLeft")nav(-1);
 });
@@ -411,9 +468,9 @@ function closeSheet(){document.body.classList.remove("sheet");setTimeout(fit,0);
 function fit(){
   const t=$("text");if(!words.length)return;
   const avail=t.parentElement.clientHeight;
-  let lo=innerWidth>=960?30:24,hi=innerWidth>=960?54:42;
+  const full=!!document.fullscreenElement||document.body.classList.contains("focus");let lo=(innerWidth>=960?30:24),hi=(innerWidth>=960?64:48)*(full?1.5:1);
   while(hi-lo>.5){const m=(lo+hi)/2;t.style.fontSize=m+"px";if(t.offsetHeight>avail)hi=m;else lo=m;}
-  t.style.fontSize=lo+"px";follow();
+  t.style.fontSize=Math.max(14,lo*txtScale)+"px";follow();
 }
 function follow(){
   if(!words.length||idx<0||idx>=words.length||Date.now()<holdUntil)return;
@@ -441,17 +498,37 @@ $("q").oninput=drawPanel;
  addEventListener("mousemove",e=>{if(d===null)return;const dy=e.clientY-d;mv=Math.max(mv,Math.abs(dy));if(mv>4){tv.scrollTop=st-dy;hold();}});
  addEventListener("mouseup",()=>{d=null;});
  tv.addEventListener("click",e=>{if(mv>4){e.stopPropagation();mv=0;}},true);})();
+const store=(k,d)=>{try{return localStorage.getItem(k)||d;}catch(e){return d;}},save=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}};
+function toggleFull(){
+  const el=document.querySelector(".work");
+  if(document.fullscreenElement){document.exitFullscreen();return;}
+  if(document.body.classList.contains("focus")){document.body.classList.remove("focus");setTimeout(fit,100);return;}
+  if(el.requestFullscreen){el.requestFullscreen().catch(()=>{document.body.classList.add("focus");setTimeout(fit,100);});}
+  else{document.body.classList.add("focus");setTimeout(fit,100);}
+}
+document.addEventListener("fullscreenchange",()=>{$("fsb").textContent=document.fullscreenElement?"Exit":"Full";setTimeout(fit,150);});
+$("fsb").onclick=toggleFull;
+const setScale=v=>{txtScale=Math.min(1.8,Math.max(0.7,Math.round(v*10)/10));save("scale",String(txtScale));fit();};
+txtScale=parseFloat(store("scale","1"))||1;
+$("tm").onclick=()=>setScale(txtScale-0.1);$("tp").onclick=()=>setScale(txtScale+0.1);
+$("setBtn").onclick=()=>{fillVoices();$("setDlg").showModal();};
+$("voice").onchange=e=>{voiceName=e.target.value;save("voice",voiceName);};
+$("vTest").onclick=()=>say("Hello! This is how I sound. Is it clear and natural to you?");
+$("sClose").onclick=()=>{speechSynthesis&&speechSynthesis.cancel();$("setDlg").close();};
+if("speechSynthesis" in window)speechSynthesis.addEventListener("voiceschanged",fillVoices);
+voiceName=store("voice","");
 (()=>{
  const root=document.documentElement,get=(k,d)=>{try{return localStorage.getItem(k)||d;}catch(e){return d;}},put=(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}};
  const setHue=v=>{root.style.setProperty("--hue",v);$("hue").value=v;put("hue",v);};
  $("hue").oninput=e=>setHue(e.target.value);setHue(get("hue","220"));
  const setIpa=on=>{document.body.classList.toggle("ipa-on",on);$("ipa").setAttribute("aria-pressed",on);put("ipa",on?"1":"0");applyIpa();ipaQueue();setTimeout(fit,0);};
  $("ipa").onclick=()=>setIpa(!document.body.classList.contains("ipa-on"));
- const setAcc=a=>{acc=a;$("uk").setAttribute("aria-pressed",a==="uk");$("us").setAttribute("aria-pressed",a==="us");put("acc",a);stopSpeech();applyIpa();};
+ const setAcc=a=>{acc=a;fillVoices();$("uk").setAttribute("aria-pressed",a==="uk");$("us").setAttribute("aria-pressed",a==="us");put("acc",a);stopSpeech();applyIpa();};
  $("uk").onclick=()=>setAcc("uk");$("us").onclick=()=>setAcc("us");
  acc=get("acc","uk");setAcc(acc);setIpa(get("ipa","0")==="1");
 })();
-setMode("reveal");ci=CATS.findIndex(c=>c.g==="Work Short");pick(0);
+setMode("reveal");ci=-1;lv=2;clearStage();where();drawPanel();
+if(innerWidth<960)document.body.classList.add("open");else $("ta").focus();
 </script>
 </body>
 </html>

@@ -12,7 +12,7 @@ Everyday English speaking practice for office workers: the words appear as you r
 - Style: Reveal (words appear) or Highlight (words light up)
 - Colour slider: drag the round handle along the rainbow bar to pick any colour (remembered in the browser)
 - Long passages scroll: mouse wheel, drag with the mouse, or swipe on a phone
-- Paste your own passage from the Library
+- The page opens on **Paste a passage**: paste any English text and press Use this passage. The Library is one tap away (Back, or the bar at the top on phones)
 - Shortcuts: Space to start or pause, left and right arrows to change passage. On phones, tap the frame to start and swipe left or right to change passage
 
 ## Publish with GitHub Pages
@@ -31,6 +31,12 @@ Open `index.html` and edit the lists at the top of the script: `SHORT`, `LONG`, 
 - `WS`, `WS2`, `WS3`: `["Label", "sentence"]`, and `WL`, `WL2`, `WL3`, `WL4`: `["Title", "passage"]`
 
 The Listen button uses the voices installed on your device, so voices differ between devices.
+
+
+## Voice, text size and full screen
+
+- **Settings** (Voice) has a Voice list for the current accent (UK or US). The Listen button reads sentence by sentence with the chosen voice. Quality depends on the voices on your device: Microsoft Edge has very natural "Natural" voices, Chrome has Google voices.
+- **A−** and **A+** change the text size. **Full** opens the reading area in full screen (on iPhone it switches to a focus mode instead). Press Esc to leave focus mode.
 
 ## If IPA does not appear
 
